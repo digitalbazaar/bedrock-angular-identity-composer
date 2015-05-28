@@ -12,7 +12,7 @@ define([
 
 'use strict';
 
-var module = angular.module('bedrock.identity-composer', []);
+var module = angular.module('bedrock-identity-composer', []);
 
 module.directive(identityComposer);
 

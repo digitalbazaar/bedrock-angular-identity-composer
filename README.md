@@ -31,7 +31,7 @@ sufficient to make the module available to your application.
 To manually add **bedrock-angular-identity-composer** as a dependency:
 
 ```js
-angular.module('myapp', ['bedrock.identity-composer']);
+angular.module('myapp', ['bedrock-identity-composer']);
 ```
 
 <!-- ## How It Works
