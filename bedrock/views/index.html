@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% set pageTitle = "Test" %}
+
+{% block content %}
+
+{% raw %}
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <h1>Credential Consumer Examples</h1>
+    <div ng-controller="brTestFormController as model">
+      <div class="btn-group" role="group" aria-label="...">
+        <button
+          ng-repeat="consumer in model.consumerDefinition track by $index"
+          ng-click="model.selectConsumer($index)">
+          {{ consumer.description }}
+        </button>
+      </div>
+      <h2>{{ model.selectedConsumerDescription }}</h2>
+      <br-identity-composer
+        ng-if="model.consumerQuery.length > 0"
+        br-credential-data="model.allCredentials"
+        br-consumer-query="model.consumerQuery">
+      </br-identity-composer>
+    </div>
+  </div>
+</div>
+
+{% endraw %}
+{% endblock %}
