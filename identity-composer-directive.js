@@ -5,7 +5,7 @@
  *
  * @author Dave Longley
  */
-define(['angular', 'jsonld'], function(angular, jsonld) {
+define(['angular', 'jsonld', 'underscore'], function(angular, jsonld, _) {
 
 'use strict';
 
@@ -20,12 +20,12 @@ function brIdentityComposer(brTestFormLibraryService) {
     /* jshint multistr: true */
     template: '\
       <div> \
-        <div ng-if="displaySelected"> \
+        <div ng-if="identity"> \
           <h2>This is the credential information that will be sent to the \
             credential consumer.</h2> \
-          <pre>{{selectedCredentials | json}}</pre> \
+          <pre>{{identity | json}}</pre> \
         </div> \
-        <div ng-if="!displaySelected"> \
+        <div ng-if="!identity"> \
           <h3>A credential consumer is requesting the following information:</h3> \
           <p> \
             Click each item and select a credential you would like to use \
@@ -34,30 +34,30 @@ function brIdentityComposer(brTestFormLibraryService) {
           <div class="btn-group" role="group"> \
             <button ng-repeat="(property, value) in consumerQuery" \
               type="button" class="btn btn-default" \
-              ng-click="selectType(property)"> \
-              <span ng-if="credentialMeta[property].selected === -1" \
+              ng-click="showChoice(property)"> \
+              <span ng-if="!choices[property].selected" \
                 class="fa fa-question-circle"></span> \
-              <span ng-if="credentialMeta[property].selected !== -1" \
+              <span ng-if="choices[property].selected" \
                 class="fa fa-check-circle text-success"></span> \
               {{property}} \
             </button> \
             <button \
               type="button" class="btn btn-default" \
-              ng-disabled="selectionIncomplete" \
-              ng-click="showSelected()">Done</button> \
+              ng-disabled="!composed" \
+              ng-click="showIdentity()">Done</button> \
           </div> \
-          <div ng-repeat="(key, credentialType) in credentialData track by key"> \
-            <div ng-show="credentialMeta[key].show"> \
+          <div ng-repeat="(key, choice) in choices track by key"> \
+            <div ng-show="choice.show"> \
               <h1>{{key}} Header</h1> \
               <div class="input-group" \
-                ng-repeat="credential in credentialType.credentials track by $index"> \
+                ng-repeat="credential in choice.credentials track by $index"> \
                 <span class="input-group-addon"> \
-                  <input ng-model="credentialMeta[key].selected" \
-                    type="radio" value="{{$index}}"> \
+                  <input type="radio" \
+                    ng-model="choice.selected" ng-value="credential"> \
                 </span> \
                 <br-form \
                   br-model="credential" \
-                  br-groups="credentialType.groups" \
+                  br-groups="choice.groups" \
                   br-options="{editable: false}"></br-form> \
               </div> \
             </div> \
@@ -68,124 +68,100 @@ function brIdentityComposer(brTestFormLibraryService) {
   };
 
   function Link(scope, element, attrs) {
-    scope.init = function() {
-      scope.credentialMeta = {};
-      scope.selectionIncomplete = true;
-      scope.displaySelected = false;
-      scope.selectedCredentials = [];
-      scope.credentialData = {};
-
-      for(var property in scope.consumerQuery) {
-        scope.credentialMeta[property] = {};
-        scope.credentialMeta[property].show = false;
-        scope.credentialMeta[property].selected = -1;
-
-        scope.credentialData[property] = {};
-        scope.credentialData[property].credentials = [];
-        scope.credentialData[property].groups = [];
-        // locate credentials that match the query terms
-        scope.credentials.forEach(function(credential) {
-          if(jsonld.hasProperty(credential.claim, property)) {
-            scope.credentialData[property].credentials.push(credential);
-          }
-        });
+    scope.$watch(function() {return scope.consumerQuery}, function() {
+      if(scope.consumerQuery) {
+        init();
       }
+    }, true);
 
-      // TODO: remove brTestFormLibraryService; only used for testing
+    scope.$watch(function() {return scope.choices}, function() {
+      if(scope.choices) {
+        updateChoices();
+      }
+    }, true);
+
+    scope.showChoice = function(property) {
+      hideAllChoices();
+      scope.choices[property].show = true;
+    };
+
+    scope.showIdentity = function() {
+      hideAllChoices();
+      // TODO: add identity `id` and context
+      scope.identity = {};
+      scope.identity.credentials = _.uniq(
+        _.map(scope.choices, function(choice) {
+          return choice.selected;
+        }));
+    };
+
+    function init() {
+      // TODO: credentials need to be compacted to appropriate context
+      // either here or externally
+      // TODO: consumer needs to be compacted to appropriate context, here
+      // or externally
+
+      // TODO: remove brTestFormLibraryService; only used for testing,
+      // determine how to build groups without it
       brTestFormLibraryService.getLibrary().then(function(library) {
+        scope.choices = {};
+        scope.identity = null;
+        scope.composed = false;
         scope.library = library;
-        for(var property in scope.credentialData) {
-          var credentialTypes = [];
-          scope.credentialData[property].credentials.forEach(
-            function(credential) {
-            jsonld.getValues(credential, 'type').forEach(function(type) {
-              if(credentialTypes.indexOf(type) === -1) {
-                credentialTypes.push(type);
-              }
-            });
+
+        // build choice information
+        for(var property in scope.consumerQuery) {
+          var info = scope.choices[property] = {
+            show: false,
+            selected: null
+          };
+          // filter credentials that match the query property
+          info.credentials = scope.credentials.filter(function(credential) {
+            return jsonld.hasProperty(credential.claim, property);
           });
-          for(var type in credentialTypes) {
-            var group = library.groups[credentialTypes[type]];
-            if(group) {
-              scope.credentialData[property].groups.push(group);
-            }
-          }
+          // pick out groups that match credential types
+          var types = _.flatten(_.map(info.credentials, function(credential) {
+            return jsonld.getValues(credential, 'type');
+          }));
+          info.groups = _.values(_.pick(library.groups, types));
         }
+
         scope.$apply();
       });
-    };
+    }
 
-    scope.makeSelection = function(typeName, id) {
-      var index = scope.credentialData[typeName].credentials
-        .map(function(credential) {return credential.id;}).indexOf(id);
-      scope.credentialMeta[typeName].selected = index;
-    };
-
-    scope.updateSelected = function() {
+    function updateChoices() {
+      // for every selected credential, mark other choices as selected
+      // if the selected credential also contains the property for the choice
       for(var property in scope.consumerQuery) {
-        if(angular.isDefined(scope.credentialMeta) &&
-          scope.credentialMeta[property].selected > -1) {
-          var selectedCredentialIndex = scope
-            .credentialMeta[property].selected;
-          var selectedCredential = scope
-            .credentialData[property].credentials[selectedCredentialIndex];
-          for(var propertyInner in scope.consumerQuery) {
-            if(property !== propertyInner &&
-              jsonld.hasProperty(selectedCredential.claim, propertyInner)) {
-              if(scope.credentialMeta[propertyInner].selected == -1) {
-                scope.makeSelection(propertyInner, selectedCredential.id);
-              }
-            }
+        if(!scope.choices[property].selected) {
+          return;
+        }
+        var selected = scope.choices[property].selected;
+        for(var otherProperty in scope.consumerQuery) {
+          if(otherProperty !== property &&
+            jsonld.hasProperty(selected.claim, otherProperty) &&
+            !scope.choices[otherProperty].selected) {
+            scope.choices[otherProperty].selected = selected;
           }
         }
       }
-    };
 
-    scope.checkAll = function() {
-      for(var type in scope.credentialMeta) {
-        if(scope.credentialMeta[type].selected === -1 ) {
-          return true;
-        }
-      }
-      return false;
-    };
+      // track if a full identity has now been composed
+      scope.composed = isComposed();
+    }
 
-    scope.$watch(function() {return scope.credentialMeta}, function() {
-      scope.selectionIncomplete = scope.checkAll();
-      scope.updateSelected();
-    }, true);
+    function hideAllChoices() {
+      _.each(scope.choices, function(choice) {
+        choice.show = false;
+      });
+    }
 
-    scope.$watch(function() {return scope.consumerQuery}, function() {
-      scope.init();
-    }, true);
-
-    scope.hideAllCredentialTypes = function() {
-      for(var typeIndex in scope.credentialMeta) {
-        scope.credentialMeta[typeIndex].show = false;
-      }
-    };
-
-    scope.selectType = function(type) {
-      scope.hideAllCredentialTypes();
-      scope.credentialMeta[type].show = true;
-    };
-
-    scope.showSelected = function() {
-      scope.hideAllCredentialTypes();
-      for(var property in scope.consumerQuery) {
-        var selectedCredentialIndex =
-          scope.credentialMeta[property].selected;
-        var selectedCredential = scope
-          .credentialData[property].credentials[selectedCredentialIndex];
-        var matches = scope.selectedCredentials.filter(function(credential) {
-          return credential.id === selectedCredential.id;
-        });
-        if(matches.length === 0) {
-          scope.selectedCredentials.push(selectedCredential);
-        }
-      }
-      scope.displaySelected = true;
-    };
+    function isComposed() {
+      return _.every(_.values(scope.choices), function(choice) {
+        return choice.selected;
+      });
+    }
   }
 }
 
