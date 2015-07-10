@@ -17,7 +17,7 @@ function factory() {
     consumerQuery: ['ageOver', 'address']
   }, {
     description: 'Health Insurance Quote',
-    consumerQuery: ['birthDate', 'height', 'weight', "isSmoker"]
+    consumerQuery: ['birthDate', 'height', 'weight', 'isSmoker']
   }];
 
   self.selectConsumer = function(index) {
