@@ -13,9 +13,11 @@ define(['angular', 'jsonld', 'underscore'], function(angular, jsonld, _) {
 function brIdentityComposer(brTestFormLibraryService) {
   return {
     restrict: 'E',
+    require: 'ngModel',
     scope: {
       credentials: '=brCredentials',
-      consumerQuery: '=brConsumerQuery'
+      consumerQuery: '=brConsumerQuery',
+      identity: '=ngModel'
     },
     /* jshint multistr: true */
     template: '\

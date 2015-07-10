@@ -8,6 +8,9 @@ function factory() {
 
   var CONTEXT_URL = 'https://w3id.org/identity/v1';
 
+  // composed identity
+  self.identity = null;
+
   // TODO: reenable contexts
   self.consumers = [{
     description: 'Social Media Login',
