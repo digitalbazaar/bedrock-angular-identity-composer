@@ -5,28 +5,37 @@ define([], function() {
 /* @ngInject */
 function factory() {
   var self = this;
-  self.consumerQuery = [];
-  self.selectedConsumerDescription = '';
 
-  // TODO: replace consumerQuery arrays with JSON-LD
-  self.consumerDefinition = [{
+  var CONTEXT_URL = 'https://w3id.org/identity/v1';
+
+  // TODO: reenable contexts
+  self.consumers = [{
     description: 'Social Media Login',
-    consumerQuery: ['email']
+    query: {
+      //'@context': CONTEXT_URL,
+      email: ""
+    }
   }, {
     description: 'Over 21 Purchase',
-    consumerQuery: ['ageOver', 'address']
+    query: {
+      //'@context': CONTEXT_URL,
+      ageOver: "",
+      address: ""
+    }
   }, {
     description: 'Health Insurance Quote',
-    consumerQuery: ['birthDate', 'height', 'weight', 'isSmoker']
+    query: {
+      //'@context': CONTEXT_URL,
+      birthDate: "",
+      height: "",
+      weight: "",
+      isSmoker: ""
+    }
   }];
 
-  self.selectConsumer = function(index) {
-    self.consumerQuery = self.consumerDefinition[index].consumerQuery;
-    self.selectedConsumerDescription =
-      self.consumerDefinition[index].description;
-  };
+  self.consumer = self.consumers[0];
 
-  self.allCredentials = [{
+  self.credentials = [{
     "@context": "https://w3id.org/identity/v1",
     "id": "urn:credential-1",
     "type": ["Credential", "EmailCredential"],

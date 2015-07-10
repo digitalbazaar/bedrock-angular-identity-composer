@@ -14,7 +14,7 @@ function brIdentityComposer(brTestFormLibraryService) {
   return {
     restrict: 'E',
     scope: {
-      allCredentials: '=brCredentialData',
+      credentials: '=brCredentials',
       consumerQuery: '=brConsumerQuery'
     },
     /* jshint multistr: true */
@@ -32,14 +32,14 @@ function brIdentityComposer(brTestFormLibraryService) {
             to fulfill the request. \
           </p> \
           <div class="btn-group" role="group"> \
-            <button ng-repeat="type in consumerQuery" \
+            <button ng-repeat="(property, value) in consumerQuery" \
               type="button" class="btn btn-default" \
-              ng-click="selectType(type)"> \
-              <span ng-if="credentialMeta[type].selected === -1" \
+              ng-click="selectType(property)"> \
+              <span ng-if="credentialMeta[property].selected === -1" \
                 class="fa fa-question-circle"></span> \
-              <span ng-if="credentialMeta[type].selected !== -1" \
+              <span ng-if="credentialMeta[property].selected !== -1" \
                 class="fa fa-check-circle text-success"></span> \
-              {{type}} \
+              {{property}} \
             </button> \
             <button \
               type="button" class="btn btn-default" \
@@ -73,52 +73,42 @@ function brIdentityComposer(brTestFormLibraryService) {
       scope.selectionIncomplete = true;
       scope.displaySelected = false;
       scope.selectedCredentials = [];
-
-      for(var type in scope.consumerQuery) {
-        var currentType = scope.consumerQuery[type];
-        scope.credentialMeta[currentType] = {};
-        scope.credentialMeta[currentType].show = false;
-        scope.credentialMeta[currentType].selected = -1;
-      }
-
       scope.credentialData = {};
 
-      for(var type in scope.consumerQuery) {
-        var currentType = scope.consumerQuery[type];
-        scope.credentialData[currentType] = {};
-        scope.credentialData[currentType].credentials = [];
-        scope.credentialData[currentType].groups = [];
-        // locate credentials that matche the query terms
-        for(var credential in scope.allCredentials) {
-          if(jsonld.hasProperty(
-            scope.allCredentials[credential].claim,
-            scope.consumerQuery[type])) {
-            scope.credentialData[currentType].credentials.push(
-              scope.allCredentials[credential]);
-          }
-        };
-      };
+      for(var property in scope.consumerQuery) {
+        scope.credentialMeta[property] = {};
+        scope.credentialMeta[property].show = false;
+        scope.credentialMeta[property].selected = -1;
 
+        scope.credentialData[property] = {};
+        scope.credentialData[property].credentials = [];
+        scope.credentialData[property].groups = [];
+        // locate credentials that match the query terms
+        scope.credentials.forEach(function(credential) {
+          if(jsonld.hasProperty(credential.claim, property)) {
+            scope.credentialData[property].credentials.push(credential);
+          }
+        });
+      }
+
+      // TODO: remove brTestFormLibraryService; only used for testing
       brTestFormLibraryService.getLibrary().then(function(library) {
         scope.library = library;
-        for(var typedCollection in scope.credentialData) {
+        for(var property in scope.credentialData) {
           var credentialTypes = [];
-          for(var credential in scope
-            .credentialData[typedCollection].credentials) {
-            var currentCredential = scope
-              .credentialData[typedCollection].credentials[credential];
-            for(var credentialType in currentCredential.type) {
-              if(credentialTypes.indexOf(
-                currentCredential.type[credentialType]) == -1) {
-                credentialTypes.push(
-                  currentCredential.type[credentialType]
-                );
+          scope.credentialData[property].credentials.forEach(
+            function(credential) {
+            jsonld.getValues(credential, 'type').forEach(function(type) {
+              if(credentialTypes.indexOf(type) === -1) {
+                credentialTypes.push(type);
               }
-            }
-          }
+            });
+          });
           for(var type in credentialTypes) {
-            scope.credentialData[typedCollection].groups.push(
-              library.groups[credentialTypes[type]]);
+            var group = library.groups[credentialTypes[type]];
+            if(group) {
+              scope.credentialData[property].groups.push(group);
+            }
           }
         }
         scope.$apply();
@@ -132,24 +122,21 @@ function brIdentityComposer(brTestFormLibraryService) {
     };
 
     scope.updateSelected = function() {
-      for(var type in scope.consumerQuery) {
-        var typeName = scope.consumerQuery[type];
+      for(var property in scope.consumerQuery) {
         if(angular.isDefined(scope.credentialMeta) &&
-          scope.credentialMeta[typeName].selected > -1) {
-            var selectedCredentialIndex = scope
-              .credentialMeta[typeName].selected;
-            var selectedCredential = scope
-              .credentialData[typeName].credentials[selectedCredentialIndex];
-            for(var typeInner in scope.consumerQuery) {
-              if(type !== typeInner &&
-                jsonld.hasProperty(
-                  selectedCredential.claim, scope.consumerQuery[typeInner])) {
-                  var typeInnerName = scope.consumerQuery[typeInner];
-                  if(scope.credentialMeta[typeInnerName].selected == -1) {
-                    scope.makeSelection(typeInnerName, selectedCredential.id);
-                  }
+          scope.credentialMeta[property].selected > -1) {
+          var selectedCredentialIndex = scope
+            .credentialMeta[property].selected;
+          var selectedCredential = scope
+            .credentialData[property].credentials[selectedCredentialIndex];
+          for(var propertyInner in scope.consumerQuery) {
+            if(property !== propertyInner &&
+              jsonld.hasProperty(selectedCredential.claim, propertyInner)) {
+              if(scope.credentialMeta[propertyInner].selected == -1) {
+                scope.makeSelection(propertyInner, selectedCredential.id);
               }
             }
+          }
         }
       }
     };
@@ -185,12 +172,11 @@ function brIdentityComposer(brTestFormLibraryService) {
 
     scope.showSelected = function() {
       scope.hideAllCredentialTypes();
-      for(var type in scope.consumerQuery) {
-        var typeName = scope.consumerQuery[type];
+      for(var property in scope.consumerQuery) {
         var selectedCredentialIndex =
-          scope.credentialMeta[typeName].selected;
+          scope.credentialMeta[property].selected;
         var selectedCredential = scope
-          .credentialData[typeName].credentials[selectedCredentialIndex];
+          .credentialData[property].credentials[selectedCredentialIndex];
         var matches = scope.selectedCredentials.filter(function(credential) {
           return credential.id === selectedCredential.id;
         });
