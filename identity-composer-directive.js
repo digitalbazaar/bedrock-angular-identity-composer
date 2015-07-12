@@ -49,7 +49,7 @@ function brIdentityComposer(brTestFormLibraryService) {
               ng-click="showIdentity()">Done</button> \
           </div> \
           <div ng-repeat="(key, choice) in choices track by key"> \
-            <div ng-if="choice.show"> \
+            <div ng-show="choice.show"> \
               <h1>{{key}} Header</h1> \
               <div class="input-group" \
                 ng-repeat="credential in choice.credentials track by $index"> \
@@ -57,7 +57,7 @@ function brIdentityComposer(brTestFormLibraryService) {
                   <input type="radio" \
                     ng-model="choice.selected" ng-value="credential"> \
                 </span> \
-                <br-form \
+                <br-form br-lazy-compile="choice.show" \
                   br-model="credential" \
                   br-groups="choice.groups" \
                   br-options="{editable: false}"></br-form> \
