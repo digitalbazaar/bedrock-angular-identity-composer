@@ -49,7 +49,7 @@ function brIdentityComposer(brTestFormLibraryService) {
               ng-click="showIdentity()">Done</button> \
           </div> \
           <div ng-repeat="(key, choice) in choices track by key"> \
-            <div ng-show="choice.show"> \
+            <div ng-if="choice.show"> \
               <h1>{{key}} Header</h1> \
               <div class="input-group" \
                 ng-repeat="credential in choice.credentials track by $index"> \
