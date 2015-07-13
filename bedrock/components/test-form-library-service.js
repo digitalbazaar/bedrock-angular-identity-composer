@@ -197,9 +197,6 @@ function factory(brFormLibraryService) {
         "type": "PropertyGroup",
         "layout": [
           {
-            "property": "id"
-          },
-          {
             "property": "email"
           }
         ]
