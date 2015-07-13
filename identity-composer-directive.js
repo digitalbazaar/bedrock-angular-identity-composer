@@ -56,6 +56,7 @@ function brIdentityComposer(brTestFormLibraryService) {
                   ng-class="{\'br-credential-selected\': choice.selected === credential}" \
                   ng-repeat="credential in choice.credentials track by $index" \
                   ng-click="choice.selected = credential"> \
+                  <!-- TODO: replace br-form with br-angular-credential --> \
                   <br-form br-lazy-compile="choice.show" \
                     br-model="credential" \
                     br-groups="choice.groups" \
