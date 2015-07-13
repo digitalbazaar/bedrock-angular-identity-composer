@@ -48,29 +48,64 @@ function brIdentityComposer(brTestFormLibraryService) {
               ng-disabled="!composed" \
               ng-click="showIdentity()">Done</button> \
           </div> \
-          <div ng-repeat="(key, choice) in choices track by key"> \
+          <div ng-repeat="(property, choice) in choices track by property"> \
             <div ng-show="choice.show"> \
-              <h4>Select a credential for <strong>{{key}}</strong>:</h4> \
+              <h4>Select a credential for <strong>{{property}}</strong>:</h4> \
               <ul class="list-unstyled"> \
                 <li class="br-selectable well" \
-                  ng-class="{\'br-credential-selected\': choice.selected === credential}" \
-                  ng-repeat="credential in choice.credentials track by $index" \
-                  ng-click="choice.selected = credential"> \
-                  <!-- TODO: replace br-form with br-angular-credential --> \
-                  <br-form br-lazy-compile="choice.show" \
-                    br-model="credential" \
-                    br-groups="choice.groups" \
-                    br-options="{editable: false}"></br-form> \
+                  ng-class="{\'br-selected\': choice.selected === option.credential}" \
+                  ng-repeat="option in choice.options track by $index" \
+                  ng-click="choice.selected = option.credential"> \
+                  <!-- TODO: replace with br-credential-thumbnail --> \
+                  <div class="section"> \
+                    <h3 class="headline" style="margin-top: 5px"> \
+                      {{option.credential.name || \'Credential\'}} \
+                      <span class="btn-group pull-right"> \
+                        <button type="button" \
+                          class="btn btn-default" \
+                          ng-click="$event.stopPropagation(); showCredential(option)"> \
+                          <i class="fa fa-trophy fa-lg"></i> \
+                        </button> \
+                      </span> \
+                    </h3> \
+                  </div> \
+                  <div> \
+                    <pre>{{property}}: {{option.credential.claim[property] | json}}</pre> \
+                    <!-- <br-form br-lazy-compile="choice.show" \
+                      br-model="option.credential.claim" \
+                      br-groups="option.groups" \
+                      br-options="{editable: false}"></br-form> --> \
+                  </div> \
                 </li> \
               </ul> \
             </div> \
           </div> \
+          <!-- TODO: remove once br-credential-thumbnail is available --> \
+          <stackable-modal stackable="modal.show" \
+            br-lazy-compile="modal.show" \
+            br-lazy-id="br-identity-composer-modal"> \
+            <br-modal br-title="Credential Details"> \
+              <div name="br-modal-body"> \
+                <!-- TODO: replace br-form with br-credential --> \
+                <br-form br-lazy-compile="modal.show" \
+                  br-model="modal.credential" \
+                  br-groups="modal.groups" \
+                  br-options="{editable: false}"></br-form> \
+              </div> \
+              <div name="br-modal-footer"> \
+                <button type="button" \
+                  class="btn btn-default stackable-cancel">Close</button> \
+              </div> \
+            </br-modal> \
+          </stackable-modal> \
         </div> \
       </div>',
     link: Link
   };
 
   function Link(scope, element, attrs) {
+    scope.modal = {show: false};
+
     scope.$watch(function() {return scope.consumerQuery}, function() {
       if(scope.consumerQuery) {
         init();
@@ -98,6 +133,13 @@ function brIdentityComposer(brTestFormLibraryService) {
         }));
     };
 
+    // TODO: remove once br-credential-thumbnail is available
+    scope.showCredential = function(option) {
+      scope.modal.show = true;
+      scope.modal.credential = option.credential;
+      scope.modal.groups = option.credentialGroups;
+    };
+
     function init() {
       // TODO: credentials need to be compacted to appropriate context
       // either here or externally
@@ -105,7 +147,8 @@ function brIdentityComposer(brTestFormLibraryService) {
       // or externally
 
       // TODO: remove brTestFormLibraryService; only used for testing,
-      // determine how to build groups without it
+      // determine how to build groups without it or integrate it
+      // into the module instead of implementing it as a test service
       brTestFormLibraryService.getLibrary().then(function(library) {
         scope.choices = {};
         scope.identity = null;
@@ -118,15 +161,24 @@ function brIdentityComposer(brTestFormLibraryService) {
             show: false,
             selected: null
           };
-          // filter credentials that match the query property
-          choice.credentials = scope.credentials.filter(function(credential) {
-            return jsonld.hasProperty(credential.claim, property);
-          });
-          // pick out groups that match credential types
-          var types = _.flatten(_.map(choice.credentials, function(credential) {
-            return jsonld.getValues(credential, 'type');
-          }));
-          choice.groups = _.values(_.pick(library.groups, types));
+          // TODO: build groups to use to display just the requested
+          // information
+          var groups = [];
+          // build options for this choice
+          choice.options = _.chain(scope.credentials).filter(
+            function(credential) {
+              return jsonld.hasProperty(credential.claim, property);
+            }).map(function(credential) {
+              // TODO: should be handled by br-credential instead
+              // pick out groups that match credential types
+              var types = _.flatten(jsonld.getValues(credential, 'type'));
+              var credentialGroups = _.values(_.pick(library.groups, types));
+              return {
+                credential: credential,
+                credentialGroups: credentialGroups,
+                groups: groups
+              };
+            }).value();
         }
 
         scope.$apply();

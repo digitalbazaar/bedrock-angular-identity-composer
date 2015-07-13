@@ -14,7 +14,8 @@
   ],
   "dependencies": {
     "bedrock-angular": "^1.1.0",
-    "bedrock-angular-form": "^1.4.0",
+    "bedrock-angular-form": "^1.5.0",
+    "bedrock-angular-modal": "^1.0.0",
     "underscore": "~1.7.0"
   }
 }
