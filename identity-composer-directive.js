@@ -52,7 +52,7 @@ function brIdentityComposer(brTestFormLibraryService) {
             <div ng-show="choice.show"> \
               <h4>Select a credential for <strong>{{key}}</strong>:</h4> \
               <ul class="list-unstyled"> \
-                <li class="br-credential-hover well" \
+                <li class="br-selectable well" \
                   ng-class="{\'br-credential-selected\': choice.selected === credential}" \
                   ng-repeat="credential in choice.credentials track by $index" \
                   ng-click="choice.selected = credential"> \
@@ -114,19 +114,19 @@ function brIdentityComposer(brTestFormLibraryService) {
 
         // build choice information
         for(var property in scope.consumerQuery) {
-          var info = scope.choices[property] = {
+          var choice = scope.choices[property] = {
             show: false,
             selected: null
           };
           // filter credentials that match the query property
-          info.credentials = scope.credentials.filter(function(credential) {
+          choice.credentials = scope.credentials.filter(function(credential) {
             return jsonld.hasProperty(credential.claim, property);
           });
           // pick out groups that match credential types
-          var types = _.flatten(_.map(info.credentials, function(credential) {
+          var types = _.flatten(_.map(choice.credentials, function(credential) {
             return jsonld.getValues(credential, 'type');
           }));
-          info.groups = _.values(_.pick(library.groups, types));
+          choice.groups = _.values(_.pick(library.groups, types));
         }
 
         scope.$apply();

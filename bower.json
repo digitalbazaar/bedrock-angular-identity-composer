@@ -13,6 +13,7 @@
     "bedrock/views"
   ],
   "dependencies": {
+    "bedrock-angular": "^1.1.0",
     "bedrock-angular-form": "^1.4.0",
     "underscore": "~1.7.0"
   }
