@@ -1,7 +1,7 @@
 {
   "name": "bedrock-angular-identity-composer",
   "version": "0.0.1-dev",
-  "main": ["./identity-composer.js"],
+  "main": ["./identity-composer.js", "./identity-composer.less"],
   "moduleType": ["amd"],
   "ignore": [
     "bedrock/bower.json",

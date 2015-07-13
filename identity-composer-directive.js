@@ -50,18 +50,18 @@ function brIdentityComposer(brTestFormLibraryService) {
           </div> \
           <div ng-repeat="(key, choice) in choices track by key"> \
             <div ng-show="choice.show"> \
-              <h1>{{key}} Header</h1> \
-              <div class="input-group" \
-                ng-repeat="credential in choice.credentials track by $index"> \
-                <span class="input-group-addon"> \
-                  <input type="radio" \
-                    ng-model="choice.selected" ng-value="credential"> \
-                </span> \
-                <br-form br-lazy-compile="choice.show" \
-                  br-model="credential" \
-                  br-groups="choice.groups" \
-                  br-options="{editable: false}"></br-form> \
-              </div> \
+              <h4>Select a credential for <strong>{{key}}</strong>:</h4> \
+              <ul class="list-unstyled"> \
+                <li class="br-credential-hover well" \
+                  ng-class="{\'br-credential-selected\': choice.selected === credential}" \
+                  ng-repeat="credential in choice.credentials track by $index" \
+                  ng-click="choice.selected = credential"> \
+                  <br-form br-lazy-compile="choice.show" \
+                    br-model="credential" \
+                    br-groups="choice.groups" \
+                    br-options="{editable: false}"></br-form> \
+                </li> \
+              </ul> \
             </div> \
           </div> \
         </div> \
