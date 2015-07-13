@@ -106,6 +106,7 @@ function factory(brFormLibraryService) {
       {
         "id": "VerifiedAddressCredential",
         "type": "PropertyGroup",
+        "label": "Verified Address",
         "layout": [
           {
             "property": "claim",
@@ -116,7 +117,7 @@ function factory(brFormLibraryService) {
       {
         "id": "AgeOverCredential",
         "type": "PropertyGroup",
-        "label": "Age Verification",
+        "label": "Verified Age",
         "layout": [
           {
             "property": "claim",
@@ -141,7 +142,7 @@ function factory(brFormLibraryService) {
       {
         "id": "EmailCredential",
         "type": "PropertyGroup",
-        "label": "Certified Email Address",
+        "label": "Verified Email",
         "layout": [
           {
             "property": "claim",
@@ -195,6 +196,9 @@ function factory(brFormLibraryService) {
         "id": "EmailClaimPropertyGroup",
         "type": "PropertyGroup",
         "layout": [
+          {
+            "property": "id"
+          },
           {
             "property": "email"
           }
