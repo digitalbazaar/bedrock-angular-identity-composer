@@ -106,13 +106,13 @@ function brIdentityComposer(brTestFormLibraryService) {
   function Link(scope, element, attrs) {
     scope.modal = {show: false};
 
-    scope.$watch(function() {return scope.consumerQuery}, function() {
+    scope.$watch(function() {return scope.consumerQuery;}, function() {
       if(scope.consumerQuery) {
         init();
       }
     }, true);
 
-    scope.$watch(function() {return scope.choices}, function() {
+    scope.$watch(function() {return scope.choices;}, function() {
       if(scope.choices) {
         updateChoices();
       }
