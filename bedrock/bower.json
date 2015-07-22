@@ -7,6 +7,7 @@
     "bedrock-angular-alert": "^1.0.0",
     "bedrock-angular-form": "^1.4.0",
     "bedrock-angular-lazy-compile": "^1.0.0",
+    "bedrock-angular-modal": "^1.0.0",
     "bedrock-angular-resource": "^1.0.0",
     "chai": "^3.0.0",
     "mocha": "^2.2.5",
