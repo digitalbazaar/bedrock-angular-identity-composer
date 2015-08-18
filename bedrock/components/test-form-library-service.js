@@ -71,7 +71,7 @@ function factory(brFormLibraryService) {
         "id": "birthDate",
         "type": "Property",
         "label": "Date of Birth",
-        "range": "String"
+        "range": "Date"
       },
       {
         "id": "bloodType",
