@@ -17,11 +17,14 @@
           {{consumer.description}}
         </button>
       </div>
-      <h2>{{model.consumer.description}}</h2>
+      <h2 ng-show="model.consumer">{{model.consumer.description}}</h2>
       <br-identity-composer
-        ng-model="model.identity"
+        ng-show="model.consumer"
+        br-library="model.library"
         br-credentials="model.credentials"
-        br-consumer-query="model.consumer.query">
+        br-consumer-query="model.consumer.query"
+        br-id="model.id"
+        ng-model="model.identity">
       </br-identity-composer>
     </div>
   </div>

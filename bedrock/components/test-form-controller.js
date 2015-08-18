@@ -3,12 +3,19 @@ define([], function() {
 'use strict';
 
 /* @ngInject */
-function factory() {
+function factory(brTestFormLibraryService) {
   var self = this;
 
   var CONTEXT_URL = 'https://w3id.org/identity/v1';
 
+  // library
+  self.library = null;
+  brTestFormLibraryService.getLibrary().then(function(library) {
+    self.library = library;
+  });
+
   // composed identity
+  self.id = 'did:2750995a-d4da-48bd-8d28-1ed73bb0d2da';
   self.identity = null;
 
   // TODO: reenable contexts
@@ -36,7 +43,7 @@ function factory() {
     }
   }];
 
-  self.consumer = self.consumers[0];
+  self.consumer = null; //self.consumers[0];
 
   self.credentials = [{
     "@context": "https://w3id.org/identity/v1",

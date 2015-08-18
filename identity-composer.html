@@ -1,0 +1,78 @@
+<div>
+  <div ng-if="identity">
+    <h2>This is the credential information that will be sent to the
+      credential consumer.</h2>
+    <pre>{{identity | json}}</pre>
+  </div>
+  <div ng-if="!identity">
+    <h3>A credential consumer is requesting the following information:</h3>
+    <p>
+      Click each item and select a credential you would like to use
+      to fulfill the request.
+    </p>
+    <div class="btn-group" role="group">
+      <button ng-repeat="(property, value) in consumerQuery"
+        type="button" class="btn btn-default"
+        ng-click="showChoice(property)">
+        <span ng-if="!choices[property].selected"
+          class="fa fa-question-circle"></span>
+        <span ng-if="choices[property].selected"
+          class="fa fa-check-circle text-success"></span>
+        {{property}}
+      </button>
+      <button
+        type="button" class="btn btn-default"
+        ng-disabled="!composed"
+        ng-click="showIdentity()">Done</button>
+    </div>
+    <div ng-repeat="(property, choice) in choices track by property">
+      <div ng-show="choice.show">
+        <h4>Select a credential for <strong>{{property}}</strong>:</h4>
+        <ul class="list-unstyled">
+          <li class="br-selectable well"
+            ng-class="{'br-selected': choice.selected === option.credential}"
+            ng-repeat="option in choice.options track by $index"
+            ng-click="choice.selected = option.credential">
+            <!-- TODO: replace with br-credential-thumbnail -->
+            <div class="section">
+              <h3 class="headline" style="margin-top: 5px">
+                {{option.credential.name || 'Credential'}}
+                <span class="btn-group pull-right">
+                  <button type="button"
+                    class="btn btn-default"
+                    ng-click="$event.stopPropagation(); showCredential(option)">
+                    <i class="fa fa-trophy fa-lg"></i>
+                  </button>
+                </span>
+              </h3>
+            </div>
+            <div>
+              <!--<pre>{{property}}: {{option.credential.claim[property] | json}}</pre>-->
+              <br-form br-lazy-compile="choice.show"
+                br-model="option.credential"
+                br-groups="option.credentialGroups"
+                br-options="{editable: false}"></br-form>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- TODO: remove once br-credential-thumbnail is available -->
+    <stackable-modal stackable="modal.show"
+      br-lazy-compile="modal.show"
+      br-lazy-id="br-identity-composer-modal">
+      <br-modal br-title="Credential Details">
+        <div name="br-modal-body">
+          <br-credential
+            br-credential="modal.credential"
+            br-groups="modal.groups"
+            br-show-actions="false"></br-credential>
+        </div>
+        <div name="br-modal-footer">
+          <button type="button"
+            class="btn btn-default stackable-cancel">Close</button>
+        </div>
+      </br-modal>
+    </stackable-modal>
+  </div>
+</div>
