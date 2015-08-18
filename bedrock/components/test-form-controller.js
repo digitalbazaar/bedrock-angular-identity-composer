@@ -82,7 +82,7 @@ function factory() {
     "claim": {
       "id": "did:2750995a-d4da-48bd-8d28-1ed73bb0d2da",
       "address": {
-      "type": "PostalAddress",
+        "type": "PostalAddress",
         "streetAddress": "1006 Elm St",
         "addressLocality": "Dallas",
         "addressRegion": "TX",
@@ -228,10 +228,10 @@ function factory() {
       "email": "did:2750995a-d4da-48bd-8d28-1ed73bb0d2da@example.com"
     },
     "signature": {
-    "type": "GraphSignature2012",
-    "created": "2015-06-17T13:06:01Z",
-    "creator": "https://authorization.dev:33443/idp/keys/1",
-    "signatureValue": "ARt2Sx3azDTDVb3pXJDlthEdpaq/4qLNmxkGrLCOtQOydeHOzbZVTHA5bdqujpvkvJpclacAWYOFVjWTXpt6/g=="
+      "type": "GraphSignature2012",
+      "created": "2015-06-17T13:06:01Z",
+      "creator": "https://authorization.dev:33443/idp/keys/1",
+      "signatureValue": "ARt2Sx3azDTDVb3pXJDlthEdpaq/4qLNmxkGrLCOtQOydeHOzbZVTHA5bdqujpvkvJpclacAWYOFVjWTXpt6/g=="
     }
   };
 }
