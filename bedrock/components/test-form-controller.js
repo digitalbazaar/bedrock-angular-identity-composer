@@ -47,7 +47,7 @@ function factory() {
     "issued": "2015-06-17T13:06:01Z",
     "claim": {
       "id": "did:2750995a-d4da-48bd-8d28-1ed73bb0d2da",
-      "email": "did:2750995a-d4da-48bd-8d28-1ed73bb0d2da@example.com"
+      "email": "2750995a-d4da-48bd-8d28-1ed73bb0d2da@example.com"
     },
     "signature": {
       "type": "GraphSignature2012",
