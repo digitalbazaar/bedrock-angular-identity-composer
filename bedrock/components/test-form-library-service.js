@@ -135,7 +135,7 @@ function factory(brFormLibraryService) {
             "propertyGroup": "PhysicalExaminationPropertyGroup"
           },
           {
-            "property": "issued",
+            "property": "issued"
           }
         ]
       },
