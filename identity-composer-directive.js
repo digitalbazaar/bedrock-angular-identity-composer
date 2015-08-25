@@ -49,7 +49,7 @@ function brIdentityComposer() {
       }
       scope.identity.credential = _.uniq(
         _.map(scope.choices, function(choice) {
-          return choice.selected;
+          return {'@graph': choice.selected};
         }));
     };
 
