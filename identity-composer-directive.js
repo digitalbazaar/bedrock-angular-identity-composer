@@ -19,7 +19,8 @@ function brIdentityComposer() {
       credentials: '=brCredentials',
       consumerQuery: '=brConsumerQuery',
       id: '=brId',
-      identity: '=ngModel'
+      identity: '=ngModel',
+      doneCallback: '&brCallback'
     },
     /* jshint multistr: true */
     templateUrl: requirejs.toUrl(
@@ -39,8 +40,9 @@ function brIdentityComposer() {
       scope.choices[property].show = true;
     };
 
+    // TODO: If current flow is maintained then this function should be renamed
     scope.showIdentity = function() {
-      hideAllChoices();
+      // hideAllChoices();
       scope.identity = {
         '@context': 'https://w3id.org/identity/v1'
       };
@@ -51,6 +53,7 @@ function brIdentityComposer() {
         _.map(scope.choices, function(choice) {
           return {'@graph': choice.selected};
         }));
+      scope.doneCallback(scope.identity);
     };
 
     // TODO: remove once br-credential-thumbnail is available
