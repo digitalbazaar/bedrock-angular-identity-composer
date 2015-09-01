@@ -5,6 +5,7 @@ var bedrock = require('bedrock');
 var fs = require('fs');
 var path = require('path');
 
+require('bedrock-credential-vocabs');
 require('bedrock-express');
 require('bedrock-protractor');
 require('bedrock-views');

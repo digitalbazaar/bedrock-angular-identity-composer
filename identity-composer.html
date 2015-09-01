@@ -6,14 +6,14 @@
       to fulfill the request.
     </p>
     <div class="btn-group" role="group">
-      <button ng-repeat="(property, value) in consumerQuery"
+      <button ng-repeat="(property, choice) in choices"
         type="button" class="btn btn-default"
         ng-click="showChoice(property)">
-        <span ng-if="!choices[property].selected"
+        <span ng-if="!choice.selected"
           class="fa fa-question-circle"></span>
-        <span ng-if="choices[property].selected"
+        <span ng-if="choice.selected"
           class="fa fa-check-circle text-success"></span>
-        {{property}}
+        {{choice.label}}
       </button>
       <button
         type="button" class="btn btn-default"
@@ -22,7 +22,7 @@
     </div>
     <div ng-repeat="(property, choice) in choices track by property">
       <div ng-show="choice.show">
-        <h4>Select a credential for <strong>{{property}}</strong>:</h4>
+        <h4>Select a credential for <strong>{{choice.label}}</strong>:</h4>
         <ul class="list-unstyled">
           <li class="br-selectable well"
             ng-class="{'br-selected': choice.selected === option.credential}"
@@ -42,12 +42,14 @@
               </h3>
             </div>
             <div>
-              <!--<pre>{{property}}: {{option.credential.claim[property] | json}}</pre>-->
-              <br-form br-lazy-compile="choice.show"
-                br-model="option.credential"
-                br-groups="option.credentialGroups"
-                br-options="{editable: false}"></br-form>
+              <br-credential
+                br-credential="option.credential"
+                br-show-actions="false"></br-credential>
             </div>
+          </li>
+          <li class="well"
+            ng-if="choice.options.length == 0">
+            <strong>No credentials found.</strong>
           </li>
         </ul>
       </div>
@@ -60,7 +62,6 @@
         <div name="br-modal-body">
           <br-credential
             br-credential="modal.credential"
-            br-groups="modal.groups"
             br-show-actions="false"></br-credential>
         </div>
         <div name="br-modal-footer">

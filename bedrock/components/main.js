@@ -7,8 +7,8 @@ define([
 'use strict';
 
 var module = angular.module(
-  'bedrock-angular-form-test',
-  ['bedrock.alert', 'bedrock.form', 'bedrock-identity-composer']);
+  'bedrock-angular-identity-composer-test',
+  ['bedrock.form', 'bedrock-identity-composer']);
 
 module.controller(brTestFormController);
 module.service(brTestFormLibraryService);

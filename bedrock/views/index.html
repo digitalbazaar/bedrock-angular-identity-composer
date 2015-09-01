@@ -12,7 +12,9 @@
     <div ng-controller="brTestFormController as model">
       <div class="btn-group" role="group">
         <button
+          class="btn btn-default"
           ng-repeat="consumer in model.consumers track by $index"
+          ng-disabled="model.loading"
           ng-click="model.consumer = consumer">
           {{consumer.description}}
         </button>
@@ -20,6 +22,7 @@
       <h2 ng-show="model.consumer">{{model.consumer.description}}</h2>
       <br-identity-composer
         ng-show="model.consumer"
+        br-loading="model.loading"
         br-library="model.library"
         br-credentials="model.credentials"
         br-consumer-query="model.consumer.query"

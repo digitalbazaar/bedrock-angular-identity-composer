@@ -10,11 +10,12 @@ define(['angular', 'jsonld', 'underscore'], function(angular, jsonld, _) {
 'use strict';
 
 /* @ngInject */
-function brIdentityComposer() {
+function brIdentityComposer($rootScope, brCredentialLibraryService) {
   return {
     restrict: 'E',
     require: 'ngModel',
     scope: {
+      loading: '=brLoading',
       library: '=brLibrary',
       credentials: '=brCredentials',
       consumerQuery: '=brConsumerQuery',
@@ -29,7 +30,12 @@ function brIdentityComposer() {
   };
 
   function Link(scope, element, attrs) {
+    var CONTEXT = [
+      'https://w3id.org/identity/v1',
+      'https://w3id.org/credentials/v1'
+    ];
     scope.modal = {show: false};
+    scope.loading = false;
 
     scope.$watch(function() {return scope.library;}, init, true);
     scope.$watch(function() {return scope.consumerQuery;}, init, true);
@@ -44,7 +50,7 @@ function brIdentityComposer() {
     scope.showIdentity = function() {
       // hideAllChoices();
       scope.identity = {
-        '@context': 'https://w3id.org/identity/v1'
+        '@context': CONTEXT
       };
       if(scope.id) {
         scope.identity.id = scope.id;
@@ -64,53 +70,99 @@ function brIdentityComposer() {
     };
 
     function init() {
-      if(!scope.library || !scope.consumerQuery) {
+      scope.loading = true;
+      scope.processed = {};
+      scope.choices = {};
+      scope.identity = null;
+      scope.composed = false;
+
+      if(!scope.library) {
+        brCredentialLibraryService.getLibrary()
+          .then(function(library) {
+            scope.library = library;
+            console.info('[Identity Composer] Using default library.',
+              scope.library);
+          });
+      }
+      if(!scope.consumerQuery) {
+        console.warn('[Identity Composer] No query.');
+        scope.loading = false;
         return;
       }
 
-      // TODO: credentials need to be compacted to appropriate context
-      // either here or externally
-      // TODO: consumer needs to be compacted to appropriate context, here
-      // or externally
+      // compact credentials
+      var credentialPromise = Promise.all(scope.credentials.map(
+        function(credential) {
+        return jsonld.promises.compact(credential, {'@context': CONTEXT});
+      }))
+      .then(function(compacted) {
+        scope.processed.credentials = compacted;
+        return compacted;
+      });
+
+      // compact query
+      var queryPromise = jsonld.promises.compact(
+        scope.consumerQuery, {'@context': CONTEXT})
+      .then(function(compacted) {
+        scope.processed.consumerQuery = compacted;
+        return compacted;
+      });
+
+      Promise.all([credentialPromise, queryPromise])
+        .then(function(results) {
+          var credentials = results[0];
+          var query = results[1];
+          // build choice information
+          for(var property in query) {
+            if(property === '@context') {
+              continue;
+            }
+            var choice = scope.choices[property] = {
+              label: property,
+              show: false,
+              selected: null
+            };
+            if(property in scope.library.properties) {
+              var propertyInfo = scope.library.properties[property];
+              if('label' in propertyInfo) {
+                scope.choices[property].label = propertyInfo.label;
+              }
+            }
+            // TODO: build groups to use to display just the requested
+            // information
+            var groups = [];
+            // build options for this choice
+            choice.options = _.chain(credentials)
+              .filter(function(credential) {
+                return jsonld.hasProperty(credential.claim, property);
+              })
+              .map(function(credential) {
+                // TODO: should be handled by br-credential instead
+                // pick out groups that match credential types
+                var types =
+                  _.flatten(jsonld.getValues(credential, 'type'));
+                var credentialGroups =
+                  _.values(_.pick(scope.library.groups, types));
+                return {
+                  credential: credential,
+                  credentialGroups: credentialGroups,
+                  groups: groups
+                };
+              })
+              .value();
+          }
+        }).catch(function(err) {
+          // FIXME: show on UI?
+          console.error('[Identity Composer] Error:', err);
+        }).then(function() {
+          scope.loading = false;
+          $rootScope.$apply();
+        });
 
       // FIXME: this TODO partly handled. review and update
       // TODO: remove brTestFormLibraryService; only used for testing,
       // determine how to build groups without it or integrate it
       // into the module instead of implementing it as a test service
-
-      scope.choices = {};
-      scope.identity = null;
-      scope.composed = false;
-
-      // build choice information
-      for(var property in scope.consumerQuery) {
-        var choice = scope.choices[property] = {
-          show: false,
-          selected: null
-        };
-        // TODO: build groups to use to display just the requested
-        // information
-        var groups = [];
-        // build options for this choice
-        choice.options = _.chain(scope.credentials)
-          .filter(function(credential) {
-            return jsonld.hasProperty(credential.claim, property);
-          })
-          .map(function(credential) {
-            // TODO: should be handled by br-credential instead
-            // pick out groups that match credential types
-            var types =
-              _.flatten(jsonld.getValues(credential, 'type'));
-            var credentialGroups =
-              _.values(_.pick(scope.library.groups, types));
-            return {
-              credential: credential,
-              credentialGroups: credentialGroups,
-              groups: groups
-            };
-          })
-          .value();
-      }
     }
 
     function updateChoices() {
@@ -120,12 +172,15 @@ function brIdentityComposer() {
 
       // for every selected credential, mark other choices as selected
       // if the selected credential also contains the property for the choice
-      for(var property in scope.consumerQuery) {
+      for(var property in scope.processed.consumerQuery) {
+        if(property === '@context') {
+          continue;
+        }
         if(!scope.choices[property].selected) {
           return;
         }
         var selected = scope.choices[property].selected;
-        for(var otherProperty in scope.consumerQuery) {
+        for(var otherProperty in scope.processed.consumerQuery) {
           if(otherProperty !== property &&
             jsonld.hasProperty(selected.claim, otherProperty) &&
             !scope.choices[otherProperty].selected) {
