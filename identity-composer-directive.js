@@ -176,10 +176,10 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         if(property === '@context') {
           continue;
         }
-        if(!scope.choices[property].selected) {
-          return;
-        }
         var selected = scope.choices[property].selected;
+        if(!selected) {
+          continue;
+        }
         for(var otherProperty in scope.processed.consumerQuery) {
           if(otherProperty !== property &&
             jsonld.hasProperty(selected.claim, otherProperty) &&
