@@ -16,7 +16,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
     require: 'ngModel',
     scope: {
       loading: '=brLoading',
-      library: '=brLibrary',
+      library: '=?brLibrary',
       credentials: '=brCredentials',
       consumerQuery: '=brConsumerQuery',
       id: '=brId',
