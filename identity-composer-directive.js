@@ -13,15 +13,12 @@ define(['angular', 'jsonld', 'underscore'], function(angular, jsonld, _) {
 function brIdentityComposer($rootScope, brCredentialLibraryService) {
   return {
     restrict: 'E',
-    require: 'ngModel',
     scope: {
-      loading: '=brLoading',
-      library: '=?brLibrary',
-      credentials: '=brCredentials',
       consumerQuery: '=brConsumerQuery',
-      id: '=brId',
-      identity: '=ngModel',
-      doneCallback: '&brCallback'
+      doneCallback: '&brCallback',
+      identity: '=brIdentity',
+      library: '=?brLibrary',
+      loading: '=?brLoading'
     },
     /* jshint multistr: true */
     templateUrl: requirejs.toUrl(
@@ -46,22 +43,6 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
       scope.choices[property].show = true;
     };
 
-    // TODO: If current flow is maintained then this function should be renamed
-    scope.showIdentity = function() {
-      // hideAllChoices();
-      scope.identity = {
-        '@context': CONTEXT
-      };
-      if(scope.id) {
-        scope.identity.id = scope.id;
-      }
-      scope.identity.credential = _.uniq(
-        _.map(scope.choices, function(choice) {
-          return {'@graph': choice.selected};
-        }));
-      scope.doneCallback(scope.identity);
-    };
-
     // TODO: remove once br-credential-thumbnail is available
     scope.showCredential = function(option) {
       scope.modal.show = true;
@@ -69,11 +50,23 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
       scope.modal.groups = option.credentialGroups;
     };
 
+    scope.done = function() {
+      var identity = {
+        '@context': CONTEXT,
+        id: scope.identity.id
+      };
+      identity.credential = _.uniq(
+        _.map(scope.choices, function(choice) {
+          return {'@graph': choice.selected};
+        }));
+      scope.doneCallback({identity: identity});
+    };
+
     function init() {
       scope.loading = true;
       scope.processed = {};
       scope.choices = {};
-      scope.identity = null;
+      scope.output = null;
       scope.composed = false;
 
       if(!scope.library) {
@@ -90,8 +83,14 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         return;
       }
 
+      // FIXME: frame identity and frame credentials first
+      // (use one frame once possible), ensure claims are embedded
+      var credentials = jsonld.getValues(scope.identity, 'credential').map(
+        function(credential) {
+          return credential['@graph'];
+        });
       // compact credentials
-      var credentialPromise = Promise.all(scope.credentials.map(
+      var credentialPromise = Promise.all(credentials.map(
         function(credential) {
         return jsonld.promises.compact(credential, {'@context': CONTEXT});
       }))

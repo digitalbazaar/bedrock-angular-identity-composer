@@ -24,10 +24,6 @@ function factory(brTestFormLibraryService) {
   });
   */
 
-  // composed identity
-  self.id = 'did:2750995a-d4da-48bd-8d28-1ed73bb0d2da';
-  self.identity = null;
-
   // TODO: reenable contexts
   self.consumers = [{
     description: 'Social Media Login',
@@ -55,7 +51,7 @@ function factory(brTestFormLibraryService) {
 
   self.consumer = null; //self.consumers[0];
 
-  self.credentials = [{
+  var credentials = [{
     "@context": [
       "https://w3id.org/identity/v1",
       "https://w3id.org/credentials/v1",
@@ -288,29 +284,14 @@ function factory(brTestFormLibraryService) {
     }
   }];
 
-  self.sampleCredential = {
-    "@context": [
-      "https://w3id.org/identity/v1",
-      "https://w3id.org/credentials/v1",
-      {
-        "br": "urn:bedrock:"
-      }
-    ],
-    "type": ["Credential", "br:test:EmailCredential"],
-    "name": "Verified Email Credential",
-    "image": "https://images.com/verified-email-badge",
-    "issued": "2015-06-17T13:06:01Z",
-    "claim": {
-      "id": "did:2750995a-d4da-48bd-8d28-1ed73bb0d2da",
-      "email": "did:2750995a-d4da-48bd-8d28-1ed73bb0d2da@example.com"
-    },
-    "signature": {
-      "type": "GraphSignature2012",
-      "created": "2015-06-17T13:06:01Z",
-      "creator": "https://authorization.dev:33443/idp/keys/1",
-      "signatureValue": "ARt2Sx3azDTDVb3pXJDlthEdpaq/4qLNmxkGrLCOtQOydeHOzbZVTHA5bdqujpvkvJpclacAWYOFVjWTXpt6/g=="
-    }
+  // input identity
+  self.identity = {
+    '@context': 'https://w3id.org/identity/v1',
+    id: 'did:2750995a-d4da-48bd-8d28-1ed73bb0d2da',
   };
+  self.identity.credential = credentials.map(function(credential) {
+    return {'@graph': credential};
+  });
 }
 
 return {brTestFormController: factory};

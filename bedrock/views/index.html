@@ -15,19 +15,22 @@
           class="btn btn-default"
           ng-repeat="consumer in model.consumers track by $index"
           ng-disabled="model.loading"
-          ng-click="model.consumer = consumer">
+          ng-click="model.output = null; model.consumer = consumer">
           {{consumer.description}}
         </button>
       </div>
       <h2 ng-show="model.consumer">{{model.consumer.description}}</h2>
+      <div ng-if="model.output">
+        <p>The composed identity:</p>
+        <pre>{{model.output | json}}</pre>
+      </div>
       <br-identity-composer
-        ng-show="model.consumer"
-        br-loading="model.loading"
-        br-library="model.library"
-        br-credentials="model.credentials"
+        ng-show="model.consumer && !model.output"
         br-consumer-query="model.consumer.query"
-        br-id="model.id"
-        ng-model="model.identity">
+        br-identity="model.identity"
+        br-library="model.library"
+        br-loading="model.loading"
+        br-callback="model.output = identity">
       </br-identity-composer>
     </div>
   </div>
