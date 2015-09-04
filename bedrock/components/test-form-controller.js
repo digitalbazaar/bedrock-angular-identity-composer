@@ -241,7 +241,10 @@ function factory(brTestFormLibraryService) {
     "issued": "2013-06-17T11:11:11Z",
     "claim": {
       "id": "did:2750995a-d4da-48bd-8d28-1ed73bb0d2da",
-      "schema:birthDate": "1977-06-17T08:15:00Z",
+      "schema:birthDate": {
+        "@type": "xsd:dateTime",
+        "@value": "1977-06-17T08:15:00Z"
+      },
       "schema:birthPlace": {
         "address": {
           "type": "PostalAddress",
