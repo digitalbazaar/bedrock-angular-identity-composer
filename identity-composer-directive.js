@@ -69,12 +69,15 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
       scope.output = null;
       scope.composed = false;
 
-      if(!scope.library) {
-        brCredentialLibraryService.getLibrary()
+      var libraryPromise;
+      if(scope.library) {
+        libraryPromise = Promise.resolve(scope.library);
+      } else {
+        libraryPromise = brCredentialLibraryService.getLibrary()
           .then(function(library) {
             scope.library = library;
-            console.info('[Identity Composer] Using default library.',
-              scope.library);
+            console.info(
+              '[Identity Composer] Using default library.', scope.library);
           });
       }
       if(!scope.consumerQuery) {
@@ -90,27 +93,24 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
           return credential['@graph'];
         });
       // compact credentials
-      var credentialPromise = Promise.all(credentials.map(
-        function(credential) {
+      var credentialPromise = Promise.all(credentials.map(function(credential) {
         return jsonld.promises.compact(credential, {'@context': CONTEXT});
-      }))
-      .then(function(compacted) {
+      })).then(function(compacted) {
         scope.processed.credentials = compacted;
         return compacted;
       });
 
       // compact query
       var queryPromise = jsonld.promises.compact(
-        scope.consumerQuery, {'@context': CONTEXT})
-      .then(function(compacted) {
+        scope.consumerQuery, {'@context': CONTEXT}).then(function(compacted) {
         scope.processed.consumerQuery = compacted;
         return compacted;
       });
 
-      Promise.all([credentialPromise, queryPromise])
+      Promise.all([libraryPromise, credentialPromise, queryPromise])
         .then(function(results) {
-          var credentials = results[0];
-          var query = results[1];
+          var credentials = results[1];
+          var query = results[2];
           // build choice information
           for(var property in query) {
             if(property === '@context') {
