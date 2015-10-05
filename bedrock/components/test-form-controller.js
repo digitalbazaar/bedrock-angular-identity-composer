@@ -47,6 +47,27 @@ function factory(brTestFormLibraryService) {
       'schema:weight': '',
       'br:test:isSmoker': ''
     }
+  }, {
+    description: 'International Travel',
+    query: {
+      '@context': CONTEXT,
+      'schema:birthDate': '',
+      'schema:birthPlace': ''
+    }
+  }, {
+    description: 'No claims fulflilled',
+    query: {
+      '@context': CONTEXT,
+      'schema:citizenship': ''
+    }
+  }, {
+    description: 'Some claims fulflilled',
+    query: {
+      '@context': CONTEXT,
+      'schema:birthDate': '',
+      'schema:birthPlace': '',
+      'schema:citizenship': ''
+    }
   }];
 
   self.consumer = null; //self.consumers[0];
@@ -285,7 +306,60 @@ function factory(brTestFormLibraryService) {
       "creator": "https://authorization.dev:33443/idp/keys/1",
       "signatureValue": "ARt2Sx3azDTDVb3pXJDlthEdpaq/4qLNmxkGrLCOtQOydeHOzbZVTHA5bdqujpvkvJpclacAWYOFVjWTXpt6/g=="
     }
-  }];
+  }, {
+    "@context": [
+      "https://w3id.org/identity/v1",
+      "https://w3id.org/credentials/v1",
+      {
+        "br": "urn:bedrock:"
+      }
+    ],
+    "id": "urn:credential-10",
+    "type": [
+      "Credential",
+      "br:test:PassportCredential"
+    ],
+    "name": "Passport",
+    "issued": "2014-01-17T11:11:11Z",
+    "issuer": "urn:issuer:test",
+    "image": "http://simpleicon.com/wp-content/uploads/global_1-128x128.png",
+    "claim": {
+      "name": "Pat Doe",
+      "image": "http://simpleicon.com/wp-content/uploads/business-woman-2-128x128.png",
+      "schema:birthDate": {
+        "@value": "1980-01-01T00:00:00Z",
+        "@type": "xsd:dateTime"
+      },
+      "schema:gender": "female",
+      "schema:height": "65in",
+      "br:test:eyeColor": "blue",
+      "schema:nationality": {
+        "name": "United States"
+      },
+      "address": {
+        "type": "PostalAddress",
+        "streetAddress": "1 Main St.",
+        "addressLocality": "Blacksburg",
+        "addressRegion": "Virginia",
+        "postalCode": "24060",
+        "addressCountry": "US"
+      },
+      "br:test:passport": {
+        "type": "br:test:Passport",
+        "name": "Test Passport",
+        "br:test:documentId": "01001100001110000",
+        "issuer": "https://us.gov",
+        "issued": "2010-01-07T01:02:03Z",
+        "expires": "2020-01-07T01:02:03Z"
+      }
+    },
+    "signature": {
+      "type": "GraphSignature2012",
+      "created": "2015-01-09T01:02:03Z",
+      "creator": "https://idp.identus.dev:38443/i/demo/keys/1",
+      "signatureValue": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLM=="
+    }
+}];
 
   // input identity
   self.identity = {

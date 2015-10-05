@@ -3,4 +3,73 @@
  *
  * Copyright (c) 2015 Digital Bazaar, Inc. All rights reserved.
  */
-@import "../bedrock-angular/less/app.less";
+/*@import "../bedrock-angular/less/app.less";*/
+
+
+.selectable-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.selectable-container-border {
+    margin-top: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.property-container {
+    color: #777777;
+}
+
+.credential-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-height: 150px;
+}
+
+.cred-edit-container {
+    max-height: 400px;
+    min-height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.edit-header {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.edit-header {
+  -webkit-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+   overflow: hidden;
+   max-height: 80px;
+   opacity: 1;
+}
+.edit-header.ng-hide {
+  max-height: 0px;
+  opacity: 0;
+}
+
+
+.credential-property.ng-enter {
+  -webkit-transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1); 
+}
+.credential-property.ng-enter, .credential-property.ng-leave.ng-leave-active {
+  opacity: 0; 
+}
+.credential-property.ng-leave, .credential-property.ng-enter.ng-enter-active {
+  opacity: 1; 
+}
+
+.credential-property.ng-enter {
+  -webkit-transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1); 
+}
+.credential-property.ng-enter, .credential-property.ng-leave.ng-leave-active {
+  opacity: 0; 
+}
+.credential-property.ng-leave, .credential-property.ng-enter.ng-enter-active {
+  opacity: 1; 
+}
