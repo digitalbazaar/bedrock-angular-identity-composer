@@ -78,6 +78,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
             scope.library = library;
             console.info(
               '[Identity Composer] Using default library.', scope.library);
+            return library;
           });
       }
       if(!scope.consumerQuery) {
