@@ -57,7 +57,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
       };
       identity.credential = _.uniq(
         _.map(scope.choices, function(choice) {
-          return {'@graph': choice.selected};
+          return {'@graph': choice.selected || {}};
         }));
       scope.doneCallback({identity: identity});
     };
@@ -120,7 +120,8 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
             var choice = scope.choices[property] = {
               label: property,
               show: false,
-              selected: null
+              selected: null,
+              optional: isOptional(query[property])
             };
             if(property in scope.library.properties) {
               var propertyInfo = scope.library.properties[property];
@@ -201,8 +202,15 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
 
     function isComposed() {
       return _.every(_.values(scope.choices), function(choice) {
-        return choice.selected;
+        return choice.selected || choice.optional;
       });
+    }
+
+    function isOptional(queryValue) {
+      if(!angular.isObject(queryValue)) {
+        return;
+      }
+      return queryValue['cred:isOptional'] === true;
     }
   }
 }
