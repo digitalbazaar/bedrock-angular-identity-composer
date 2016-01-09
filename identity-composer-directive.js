@@ -34,19 +34,16 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
     scope.modal = {show: false};
     scope.loading = false;
 
-    scope.selectedPage = true;
-
     scope.page = 'front';
+
     scope.selectedCredentials = [];
     scope.allCredentials = [];
 
     scope.claimsPartiallyFulfillable = false;
 
-
     scope.$watch(function() {return scope.library;}, init, true);
     scope.$watch(function() {return scope.consumerQuery;}, init, true);
     scope.$watch(function() {return scope.requestedProperties;}, updateFulfilledProperties, true);
-
 
     scope.prefillProperties = function() {
       scope.page = 'front';
@@ -83,7 +80,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
       for(var key in scope.requestedProperties) {
         var requestedProperty = scope.requestedProperties[key];
         if(!requestedProperty.fulfillable) {
-          scope.page = 'unfulfillable'
+          scope.page = 'unfulfillable';
         }
       }
     };
@@ -96,8 +93,8 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         }
       }
       return false;
-    }
-    
+    };
+
     scope.back = function() {
       if(scope.isReplacing()) {
         for(var key in scope.selectedCredentials) {
@@ -111,11 +108,10 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
           scope.page = 'front';
         }
       }
-    }
+    };
 
     scope.clickItem = function(credential) {
       // Mark the clicked credential editing, and hide all other credentials
-      scope.selectedPage = false;
       credential.hidden = false;
       credential.editing = true;
       for(var key in scope.selectedCredentials) {
@@ -125,13 +121,14 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
     };
 
     scope.claimsForCredential = function(credential) {
-      // This only pulls in claims at the top level, and does not recover nested claims
+      // This only pulls in claims at the top level, and does not
+      // recover nested claims.
       var claims = [];
       for(var key in credential.claim) {
         if(key === 'id' || key === 'image') {
           continue;
         }
-        claims.push(key)
+        claims.push(key);
       }
       return claims;
     };
@@ -140,7 +137,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
       var claims = scope.claimsForCredential(credential);
 
       var requestedClaims = scope.requestedProperties;
-
+      // TODO: Replace filtering logic with lodash.
       var excessClaims = [];
       for(var key in claims) {
         var claim = claims[key];
@@ -149,7 +146,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         }
       }
       return excessClaims;
-    }
+    };
 
     scope.htmlClaims = function() {
       var html = '<h6>The site is requesting the following information:</h6>';
@@ -158,7 +155,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         html = html + '<h6>' + claim.label + '</h6>';
       }
       return html;
-    }
+    };
 
     // This is used to populate an html tooltip with valid html claims
     scope.htmlClaimsForCredential = function(credential) {
@@ -169,7 +166,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         html = html + '<h6>' + scope.labelForProperty(claim) + '</h6>';
       }
       return html;
-    }
+    };
 
     scope.htmlExcessClaimsForCredential = function(credential) {
       var claims = scope.fulfillsExcessClaims(credential);
@@ -179,39 +176,41 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         html = html + '<h6>' + scope.labelForProperty(claim) + '</h6>';
       }
       return html;
-    }
+    };
 
     scope.replacementCredentials = function(credential) {
       var substituteCredentials = [];
-      // TODO: This doesn't really handle queries that take in a specific value 
-      // request, because it only looks if credentials have matching keys 
+      // TODO: This doesn't really handle queries that take in a specific value
+      // request, because it only looks if credentials have matching keys
       // (but shouldn't the consumer be verifying the returned values anyway?)
 
       // Get all of the passed in credential's claims
       var claims = scope.claimsForCredential(credential);
-      // Filter the passed in claims that match with the properties requested in the query.
+      // Filter the passed in claims that match with the properties requested
+      // in the query.
       var requestedClaims = claims.filter(function(claim) {
-                                            return jsonld.hasProperty(scope.requestedProperties, claim);
-                                          });
-      // Filter through all of the user's credentials, returning those that fulfill the requested claims
+        return jsonld.hasProperty(scope.requestedProperties, claim);
+      });
+      // Filter through all of the user's credentials, returning those that
+      // fulfill the requested claims.
       for(var key in requestedClaims) {
         var property = requestedClaims[key];
-        substituteCredentials = substituteCredentials.concat(scope.allCredentials
-                                                            .filter(function(substituteCredential) {
-                                                                     // The credential fulfills the requested claim
-                                                              return jsonld.hasProperty(substituteCredential.claim, property) &&
-                                                                     // The credential is not already in the substitute list 
-                                                                     substituteCredentials.indexOf(substituteCredential) === -1 &&
-                                                                     substituteCredential !== credential;
-                                                            }));
+        substituteCredentials = substituteCredentials.concat(scope.allCredentials.filter(
+          function(substituteCredential) {
+            // The credential fulfills the requested claim/
+            return jsonld.hasProperty(substituteCredential.claim, property) &&
+              // The credential is not already in the substitute list.
+              substituteCredentials.indexOf(substituteCredential) === -1 &&
+              substituteCredential !== credential;
+          }));
       }
       return substituteCredentials;
-    }
+    };
 
     scope.hasReplaceableCredentials = function(credential) {
       var replaceableCredentials = scope.replacementCredentials(credential);
       return replaceableCredentials.length !== 0;
-    }
+    };
 
     scope.done = function() {
       var identity = {
@@ -239,11 +238,11 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         }
       }
       return property;
-    }
+    };
 
     scope.cancelButtonPressed = function() {
       // TODO: Escape page
-    }
+    };
 
     function init() {
       scope.loading = true;
@@ -298,10 +297,6 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
 
           scope.allCredentials = credentials;
 
-          for(var credential in credentials) {
-            credentials[credential].cache = {};
-          }
-
           // build choice information
           for(var property in query) {
             if(property === '@context') {
@@ -314,9 +309,6 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
               optional: isOptional(query[property])
             };
             scope.requestedProperties[property].label = scope.labelForProperty(property);
-            
-            // TODO: build groups to use to display just the requested
-            // information
             var groups = [];
             // build options for this choice
             choice.options = _.chain(credentials)
@@ -324,8 +316,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
                 return jsonld.hasProperty(credential.claim, property);
               })
               .map(function(credential) {
-                // TODO: should be handled by br-credential instead
-                // pick out groups that match credential types
+                // Pick out groups that match credential types
                 var types =
                   _.flatten(jsonld.getValues(credential, 'type'));
                 var credentialGroups =
@@ -358,8 +349,8 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         return;
       }
 
-      // for every selected credential, mark other choices as selected
-      // if the selected credential also contains the property for the choice
+      // For every selected credential, mark other choices as selected
+      // if the selected credential also contains the property for the choice.
       for(var property in scope.processed.consumerQuery) {
         if(property === '@context') {
           continue;
@@ -377,14 +368,8 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         }
       }
 
-      // track if a full identity has now been composed
+      // Track if a full identity has now been composed
       scope.composed = isComposed();
-    }
-
-    function claimsFilteredByQuery(claims, query) {
-      return claims.filter(function(claim) {
-                                          return jsonld.hasProperty(query, claim);
-                                        });
     }
 
     function isComposed() {
@@ -394,6 +379,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
     }
 
     function isOptional(queryValue) {
+      // TODO: I don't think we handle optional queries
       if(!angular.isObject(queryValue)) {
         return;
       }
