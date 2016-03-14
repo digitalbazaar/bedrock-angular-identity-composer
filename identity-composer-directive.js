@@ -1,7 +1,7 @@
 /*!
  * Identity Composer.
  *
- * Copyright (c) 2015 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2015-2016 Digital Bazaar, Inc. All rights reserved.
  *
  * @author Dave Longley
  */
@@ -43,7 +43,9 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
 
     scope.$watch(function() {return scope.library;}, init, true);
     scope.$watch(function() {return scope.consumerQuery;}, init, true);
-    scope.$watch(function() {return scope.requestedProperties;}, updateFulfilledProperties, true);
+    scope.$watch(
+      function() {return scope.requestedProperties;},
+      updateFulfilledProperties, true);
 
     scope.prefillProperties = function() {
       scope.page = 'front';
@@ -58,7 +60,8 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
           // TODO: Select which option to take more wisely
           var selectedOption = curChoice.options[0];
           curChoice.selected = selectedOption.credential;
-          if(scope.selectedCredentials.indexOf(selectedOption.credential) === -1) {
+          if(scope.selectedCredentials.indexOf(
+            selectedOption.credential) === -1) {
             scope.selectedCredentials.push(selectedOption.credential);
           }
           updateFulfilledProperties();
@@ -195,8 +198,8 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
       // fulfill the requested claims.
       for(var key in requestedClaims) {
         var property = requestedClaims[key];
-        substituteCredentials = substituteCredentials.concat(scope.allCredentials.filter(
-          function(substituteCredential) {
+        substituteCredentials = substituteCredentials.concat(
+          scope.allCredentials.filter(function(substituteCredential) {
             // The credential fulfills the requested claim/
             return jsonld.hasProperty(substituteCredential.claim, property) &&
               // The credential is not already in the substitute list.
@@ -228,7 +231,8 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
 
     scope.labelForProperty = function(property) {
       if(!scope.library.properties) {
-        console.log('library not loaded, failed to retrieve label for property');
+        console.log(
+          'library not loaded, failed to retrieve label for property');
         return property;
       }
       if(property in scope.library.properties) {
@@ -308,7 +312,8 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
               selected: null,
               optional: isOptional(query[property])
             };
-            scope.requestedProperties[property].label = scope.labelForProperty(property);
+            scope.requestedProperties[property].label =
+              scope.labelForProperty(property);
             var groups = [];
             // build options for this choice
             choice.options = _.chain(credentials)

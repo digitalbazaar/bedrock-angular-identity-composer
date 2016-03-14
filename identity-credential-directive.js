@@ -1,11 +1,11 @@
 /*!
  * Identity Credential.
  *
- * Copyright (c) 2015 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2015-2016 Digital Bazaar, Inc. All rights reserved.
  *
  * @author Alex Lamar
  */
-define(['angular', 'jsonld', 'underscore'], function(angular, jsonld, _) {
+define(['angular', 'jsonld', 'underscore'], function(angular, jsonld) {
 
 'use strict';
 
@@ -19,7 +19,7 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
       selectedCredentials: '=brSelectedCredentials',
       allCredentials: '=brAllCredentials',
       query: '=brQuery',
-      library: '=?brLibrary',
+      library: '=?brLibrary'
     },
     /* jshint multistr: true */
     templateUrl: requirejs.toUrl(
@@ -128,10 +128,11 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
       // that can be fully fulfilled by the given claims.
       for(var key in scope.selectedCredentials) {
         var selectedCredential = scope.selectedCredentials[key];
-        var claimsToFulfill = filterClaimsByQuery(scope.claimsForCredential(selectedCredential), scope.query);
+        var claimsToFulfill = filterClaimsByQuery(
+          scope.claimsForCredential(selectedCredential), scope.query);
         // Filter out claims that are already fulfilled by
         // other selected credentials.
-        var claimsToFulfill = claimsToFulfill.filter(function(claim) {
+        claimsToFulfill = claimsToFulfill.filter(function(claim) {
           for(key in scope.selectedCredentials) {
             var otherCredential = scope.selectedCredentials[key];
             if(otherCredential === selectedCredential) {
