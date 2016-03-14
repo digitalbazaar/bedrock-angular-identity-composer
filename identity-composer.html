@@ -11,21 +11,22 @@
     </div>
     <div ng-show="model.page == 'front'" class="row text-center front-page">
       <h4 class="">A site is requesting the following credentials:</h4>
-      <h5>
+      <h4>
         Truecred IdP has automatically selected the following credential(s)
         to satisfy the request:
       </h5>
       <div class="credential-container">
         <ul class="list-unstyled">
           <li class="br-item-hover well" ng-repeat="credential in model.selectedCredentials" ng-click="credential.hidden=!credential.hidden">
-            {{credential.name}} <span class="fa fa-search-plus" ng-class="{'fa-search-minus': credential.hidden}"></span>
+            <h5>
+              <strong>{{credential.name}}</strong> <span class="fa fa-search-plus" ng-class="{'fa-search-minus': credential.hidden}"></span>
+            </h5>
             <span ng-if="model.fulfillsExcessClaims(credential).length > 0"
               style="color: #FFBB36;" class="glyphicon glyphicon-alert"
               tooltip-html-unsafe="{{model.htmlExcessClaimsForCredential(credential)}}"
               tooltip-placement="right">
             </span>
-            <div ng-show="credential.hidden">
-              <hr>
+            <div ng-if="credential.hidden">
               <br-credential br-credential="credential" br-show-actions="false"
                 br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
               </br-credential>
@@ -58,14 +59,13 @@
     </div>
     <div ng-show="model.page == 'edit'" class="edit-page">
       <div class="row row-centered">
-        <div class="col-sm-2 col-xs-0"></div>
         <div class="col-sm-8 col-xs-12 cred-edit-container">
           <div ng-show="!model.isReplacing()" class="row row-centered">
             <div class="col-xs-12 text-center">
               <h3>Selected credentials</h3>
             </div>
             <div class="row">
-              <div class="col-xs-10 col-xs-offset-1 selectable-container-border"></div>
+              <div class="selectable-container-border"></div>
             </div>
           </div>
           <div class="cred-edit" ng-hide="credential.hidden"

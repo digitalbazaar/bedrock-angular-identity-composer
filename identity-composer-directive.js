@@ -35,13 +35,14 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
 
     model.library = scope.library;
     model.consumerQuery = scope.consumerQuery;
+    model.identity = scope.identity;
+    model.doneCallback = scope.doneCallback;
     model.processed = {};
     model.requestedProperties = {};
     model.output = null;
     model.composed = false;
     model.modal = {show: false};
     model.loading = false;
-
     model.page = 'front';
 
     model.selectedCredentials = [];
