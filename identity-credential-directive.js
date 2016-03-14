@@ -28,9 +28,18 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
   };
 
   function Link(scope, element, attrs) {
+    var model = scope.model = {};
+    model.allCredentials = scope.allCredentials;
+    model.credential = scope.credential;
+    model.doneCallback = scope.doneCallback;
+    model.library = scope.library;
+    model.processed = {};
+    model.query = scope.query;
+    model.selectedCredentials = scope.selectedCredentials;
+
     scope.$watch(function() {return scope.library;}, init, true);
 
-    scope.claimsForCredential = function(credential) {
+    model.claimsForCredential = function(credential) {
       // TODO: This only pulls in claims at the top level,
       //and does not recover nested claims.
       var claims = [];
@@ -62,7 +71,7 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
       }
     };
 
-    scope.replacementCredentials = function(credential) {
+    model.replacementCredentials = function(credential) {
       var substituteCredentials = [];
 
       // TODO: This doesn't really handle queries that take in a specific value
@@ -70,13 +79,13 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
       // (but shouldn't the consumer be verifying the returned values anyway?).
 
       // Get all of the passed in credential's claims.
-      var claims = scope.claimsForCredential(credential);
+      var claims = model.claimsForCredential(credential);
       // Filter the passed in claims that match with the properties requested
       // in the query, minus any claims that are already fulfilled by the
       // currently selected credentials.
       var requestedClaims = claims.filter(function(claim) {
-        for(var key in scope.selectedCredentials) {
-          var selectedCredential = scope.selectedCredentials[key];
+        for(var key in model.selectedCredentials) {
+          var selectedCredential = model.selectedCredentials[key];
           if(selectedCredential === credential) {
             continue;
           }
@@ -85,13 +94,13 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
             return false;
           }
         }
-        return jsonld.hasProperty(scope.query, claim);
+        return jsonld.hasProperty(model.query, claim);
       });
 
       // Filter through all of the user's credentials, returning those that
       // fulfill the requested claims
-      for(var key in scope.allCredentials) {
-        var substituteCredential = scope.allCredentials[key];
+      for(var key in model.allCredentials) {
+        var substituteCredential = model.allCredentials[key];
         var fulfillable = true;
         for(key in requestedClaims) {
           var requestedClaim = requestedClaims[key];
@@ -108,7 +117,7 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
       return substituteCredentials;
     };
 
-    scope.getCredentialsToReplace = function(credential) {
+    model.getCredentialsToReplace = function(credential) {
       // This differs from the above replacementCredentials() in that it
       // returns the credential that the given credential will replace if
       // selected, whereas replacementCredentials() gives all possible
@@ -123,18 +132,18 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
       // Filter the credential's claims that match with the properties
       // requested in the query.
       var claims =
-        filterClaimsByQuery(scope.claimsForCredential(credential), scope.query);
+        filterClaimsByQuery(model.claimsForCredential(credential), model.query);
       // Build the replaceable list with the currently selected credentials
       // that can be fully fulfilled by the given claims.
-      for(var key in scope.selectedCredentials) {
-        var selectedCredential = scope.selectedCredentials[key];
+      for(var key in model.selectedCredentials) {
+        var selectedCredential = model.selectedCredentials[key];
         var claimsToFulfill = filterClaimsByQuery(
-          scope.claimsForCredential(selectedCredential), scope.query);
+          model.claimsForCredential(selectedCredential), model.query);
         // Filter out claims that are already fulfilled by
         // other selected credentials.
         claimsToFulfill = claimsToFulfill.filter(function(claim) {
-          for(key in scope.selectedCredentials) {
-            var otherCredential = scope.selectedCredentials[key];
+          for(key in model.selectedCredentials) {
+            var otherCredential = model.selectedCredentials[key];
             if(otherCredential === selectedCredential) {
               continue;
             }
@@ -163,43 +172,43 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
       return replaceableCredentials;
     };
 
-    scope.isReplaceable = function(credential) {
-      var replaceableCredentials = scope.replacementCredentials(credential);
+    model.isReplaceable = function(credential) {
+      var replaceableCredentials = model.replacementCredentials(credential);
       return replaceableCredentials.length !== 0;
     };
 
-    scope.replacementCredentialClicked = function(replacementCredential) {
-      scope.useReplacementCredential(replacementCredential);
-      for(var key in scope.allCredentials) {
-        var credential = scope.allCredentials[key];
+    model.replacementCredentialClicked = function(replacementCredential) {
+      model.useReplacementCredential(replacementCredential);
+      for(var key in model.allCredentials) {
+        var credential = model.allCredentials[key];
         credential.hidden = false;
         credential.editing = false;
       }
     };
 
-    scope.useReplacementCredential = function(replacementCredential) {
+    model.useReplacementCredential = function(replacementCredential) {
       var replaceableCredentials =
-        scope.getCredentialsToReplace(replacementCredential);
+        model.getCredentialsToReplace(replacementCredential);
       for(var key in replaceableCredentials) {
         var credential = replaceableCredentials[key];
-        var index = scope.selectedCredentials.indexOf(credential);
+        var index = model.selectedCredentials.indexOf(credential);
         if(index !== -1) {
-          scope.selectedCredentials.splice(index, 1);
+          model.selectedCredentials.splice(index, 1);
         } else {
           // TODO: Should replace with error and appropriate handling.
           console.log('Expecting to replace a credential ' +
                       'that is not selected, this is unexpecteed');
         }
       }
-      scope.selectedCredentials.push(replacementCredential);
+      model.selectedCredentials.push(replacementCredential);
     };
 
-    scope.clickItem = function(credential) {
+    model.clickItem = function(credential) {
       // Mark the clicked credential editing, and hide all other credentials.
       credential.hidden = false;
       credential.editing = true;
-      for(var key in scope.selectedCredentials) {
-        var selectedCredential = scope.selectedCredentials[key];
+      for(var key in model.selectedCredentials) {
+        var selectedCredential = model.selectedCredentials[key];
         if(selectedCredential.name === credential.name) {
           continue;
         }
@@ -208,21 +217,22 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
     };
 
     function init() {
-      scope.loading = true;
-      scope.processed = {};
-      scope.requestedProperties = {};
-      scope.output = null;
-      scope.composed = false;
+      model.loading = true;
+      model.processed = {};
+      model.requestedProperties = {};
+      model.output = null;
+      model.composed = false;
+      model.library = scope.library;
 
       var libraryPromise;
-      if(scope.library) {
-        libraryPromise = Promise.resolve(scope.library);
+      if(model.library) {
+        libraryPromise = Promise.resolve(model.library);
       } else {
         libraryPromise = brCredentialLibraryService.getLibrary()
           .then(function(library) {
-            scope.library = library;
+            model.library = library;
             console.info(
-              '[Identity Composer] Using default library.', scope.library);
+              '[Identity Composer] Using default library.', model.library);
           });
       }
 
@@ -232,7 +242,7 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
           console.error('[Identity Composer] Error:', err);
         }).then(function() {
           console.log('loaded');
-          scope.loading = false;
+          model.loading = false;
           $rootScope.$apply();
         });
 
