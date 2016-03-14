@@ -1,56 +1,89 @@
-<div ng-show="page == 'edit'" class="row row-centered edit-header">
-  <div class="col-xs-2">
-    <a class="text-center" ng-click="back()"><span style="margin-top: 25px;" class="glyphicon glyphicon-chevron-left"/>Back</a>
-  </div>
-  <div class="col-xs-8">
-    <h2 class="text-center">Edit Selection</h2>
-  </div>
-</div>
-<div ng-show="page == 'front'" class="row text-center front-page">
-  <div class="row">
-    <h4 class="">A site is requesting the following credentials:</h4>
-  </div>
-  <div class="credential-container">
-    <p ng-repeat="credential in selectedCredentials">{{credential.name}} <a class="glyphicon glyphicon-info-sign" tooltip-html-unsafe="{{htmlClaimsForCredential(credential)}}" tooltip-placement="right"></a> <span ng-if="fulfillsExcessClaims(credential).length > 0" style="color: #FFBB36;" class="glyphicon glyphicon-alert" tooltip-html-unsafe="{{htmlExcessClaimsForCredential(credential)}}" tooltip-placement="right"></span></p>
-  </div>
-  <div class="row" style="margin-bottom: 30px;">
-    <a style="margin-bottom: 20px;" ng-click="page = 'edit'">
-      Edit which credentials you're sending
-    </a>
-    <h5 tooltip-html-unsafe="{{htmlClaims()}}" ng-if="selectedCredentials.length == 1">Why does this site need this credential?</h5>
-    <h5 tooltip-html-unsafe="{{htmlClaims()}}" ng-if="selectedCredentials.length > 1">Why does this site need these credentials?</h5>
-  </div>
-</div>
-<div ng-show="page == 'unfulfillable'" class="row text-center front-page">
-  <div class="row">
-    <h4 style="padding: 20px;" ng-if="!claimsPartiallyFulfillable">A site is requesting credentials that you do not possess:</h4>
-    <div ng-if="claimsPartiallyFulfillable">
-      <h4 style="padding: 20px;" class="">A site is requesting the following credentials, some if which you do not possess:</h4>
-    </div>
-    <div class="credential-container">
-      <p ng-repeat="claim in requestedProperties">{{claim.label}} <span style="color: red" class="glyphicon glyphicon-remove" ng-if="!claim.fulfillable"></span><span style="color: green" class="glyphicon glyphicon-ok" ng-if="claim.fulfillable"></a></span>
-    </div>
-  </div>
-</div>
-<div ng-show="page == 'edit'" class="edit-page">
-  <div class="row row-centered">
-    <div class="col-sm-2 col-xs-0"></div>
-    <div class="col-sm-8 col-xs-12 cred-edit-container">
-      <div ng-show="!isReplacing()" class="row row-centered">
-        <div class="col-xs-12 text-center">
-          <h3>Selected credentials</h3>
-        </div>
-        <div class="row">
-          <div class="col-xs-10 col-xs-offset-1 selectable-container-border"></div>
-        </div>
+<div class="row">
+  <div class="col-sm-offset-2 col-sm-8">
+    <div ng-show="model.page == 'edit'" class="row row-centered edit-header">
+      <div class="col-xs-2">
+        <a class="text-center" ng-click="model.back()"><span style="margin-top: 25px;"
+          class="glyphicon glyphicon-chevron-left"/>Back</a>
       </div>
-      <div class="cred-edit" ng-hide="credential.hidden" ng-repeat="credential in selectedCredentials | orderBy:hasReplaceableCredentials:true">
-        <br-identity-credential br-credential="credential" br-selected-credentials="selectedCredentials" br-all-credentials="allCredentials" br-query="processed.consumerQuery" br-library="library"></br-identity-credential>
+      <div class="col-xs-8">
+        <h2 class="text-center">Edit Selection</h2>
       </div>
     </div>
+    <div ng-show="model.page == 'front'" class="row text-center front-page">
+      <h4 class="">A site is requesting the following credentials:</h4>
+      <h5>
+        Truecred IdP has automatically selected the following credential(s)
+        to satisfy the request:
+      </h5>
+      <div class="credential-container">
+        <ul class="list-unstyled">
+          <li class="br-item-hover well" ng-repeat="credential in model.selectedCredentials" ng-click="credential.hidden=!credential.hidden">
+            {{credential.name}} <span class="fa fa-search-plus" ng-class="{'fa-search-minus': credential.hidden}"></span>
+            <span ng-if="model.fulfillsExcessClaims(credential).length > 0"
+              style="color: #FFBB36;" class="glyphicon glyphicon-alert"
+              tooltip-html-unsafe="{{model.htmlExcessClaimsForCredential(credential)}}"
+              tooltip-placement="right">
+            </span>
+            <div ng-show="credential.hidden">
+              <hr>
+              <br-credential br-credential="credential" br-show-actions="false"
+                br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
+              </br-credential>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="row" style="margin-bottom: 30px;">
+        <a style="margin-bottom: 20px;" ng-click="model.page = 'edit'">
+          Edit which credentials you're sending
+        </a>
+        <h5 tooltip-html-unsafe="{{model.htmlClaims()}}"
+          ng-if="model.selectedCredentials.length == 1">Why does this site need this credential?</h5>
+        <h5 tooltip-html-unsafe="{{model.htmlClaims()}}"
+          ng-if="model.selectedCredentials.length > 1">Why does this site need these credentials?</h5>
+      </div>
+    </div>
+    <div ng-show="model.page == 'unfulfillable'" class="row text-center front-page">
+      <div class="row">
+        <h4 style="padding: 20px;" ng-if="!claimsPartiallyFulfillable">A site is requesting credentials that you do not possess:</h4>
+        <div ng-if="claimsPartiallyFulfillable">
+          <h4 style="padding: 20px;" class="">A site is requesting the following credentials, some if which you do not possess:</h4>
+        </div>
+        <div class="credential-container">
+          <p ng-repeat="claim in model.requestedProperties">{{claim.label}}
+            <span style="color: red" class="glyphicon glyphicon-remove" ng-if="!claim.fulfillable"></span>
+            <span style="color: green" class="glyphicon glyphicon-ok" ng-if="claim.fulfillable"></span>
+        </div>
+      </div>
+    </div>
+    <div ng-show="model.page == 'edit'" class="edit-page">
+      <div class="row row-centered">
+        <div class="col-sm-2 col-xs-0"></div>
+        <div class="col-sm-8 col-xs-12 cred-edit-container">
+          <div ng-show="!model.isReplacing()" class="row row-centered">
+            <div class="col-xs-12 text-center">
+              <h3>Selected credentials</h3>
+            </div>
+            <div class="row">
+              <div class="col-xs-10 col-xs-offset-1 selectable-container-border"></div>
+            </div>
+          </div>
+          <div class="cred-edit" ng-hide="credential.hidden"
+            ng-repeat="credential in model.selectedCredentials | orderBy:model.hasReplaceableCredentials:true">
+            <br-identity-credential br-credential="credential"
+              br-selected-credentials="model.selectedCredentials"
+              br-all-credentials="model.allCredentials"
+              br-query="model.processed.consumerQuery"
+              br-library="model.library">
+            </br-identity-credential>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row row-centered">
+      <a class="col-xs-3 col-xs-offset-2 btn btn-default text-center" ng-click="">Cancel</a>
+      <a class="col-xs-3 col-xs-offset-1 btn btn-primary text-center"
+        ng-class="{disabled: model.page == 'unfulfillable'}" ng-click="model.done()">Continue</a>
+    </div>
   </div>
-</div>
-<div class="row row-centered">
-  <a class="col-xs-3 col-xs-offset-2 btn btn-default text-center" ng-click="">Cancel</a>
-  <a class="col-xs-3 col-xs-offset-1 btn btn-primary text-center" ng-class="{disabled: page == 'unfulfillable'}" ng-click="done()">Continue</a>
 </div>
