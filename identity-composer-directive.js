@@ -5,7 +5,7 @@
  *
  * @author Dave Longley
  */
-define(['angular', 'jsonld', 'underscore'], function(angular, jsonld, _) {
+define(['angular', 'jsonld', 'lodash'], function(angular, jsonld, _) {
 
 'use strict';
 

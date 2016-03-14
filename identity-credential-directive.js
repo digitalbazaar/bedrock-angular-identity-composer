@@ -5,7 +5,7 @@
  *
  * @author Alex Lamar
  */
-define(['angular', 'jsonld', 'underscore'], function(angular, jsonld) {
+define(['angular', 'jsonld'], function(angular, jsonld) {
 
 'use strict';
 
