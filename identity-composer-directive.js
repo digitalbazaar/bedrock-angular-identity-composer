@@ -42,7 +42,7 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
     model.output = null;
     model.composed = false;
     model.modal = {show: false};
-    model.loading = false;
+    model.loading = scope.loading;
     model.page = 'front';
 
     model.selectedCredentials = [];

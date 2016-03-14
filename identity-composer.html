@@ -10,11 +10,13 @@
       </div>
     </div>
     <div ng-show="model.page == 'front'" class="row text-center front-page">
-      <h4 class="">A site is requesting the following credentials:</h4>
+      <h4>A site is requesting credentials with the following properties:</h4>
+      <span ng-repeat="property in model.requestedProperties" class="badge">
+        {{property.label}}
+      </span>
       <h4>
-        Truecred IdP has automatically selected the following credential(s)
-        to satisfy the request:
-      </h5>
+        These credential(s) have been selected to satisfy the request:
+      </h4>
       <div class="credential-container">
         <ul class="list-unstyled">
           <li class="br-item-hover well" ng-repeat="credential in model.selectedCredentials" ng-click="credential.hidden=!credential.hidden">
@@ -38,10 +40,6 @@
         <a style="margin-bottom: 20px;" ng-click="model.page = 'edit'">
           Edit which credentials you're sending
         </a>
-        <h5 tooltip-html-unsafe="{{model.htmlClaims()}}"
-          ng-if="model.selectedCredentials.length == 1">Why does this site need this credential?</h5>
-        <h5 tooltip-html-unsafe="{{model.htmlClaims()}}"
-          ng-if="model.selectedCredentials.length > 1">Why does this site need these credentials?</h5>
       </div>
     </div>
     <div ng-show="model.page == 'unfulfillable'" class="row text-center front-page">
@@ -59,16 +57,16 @@
     </div>
     <div ng-show="model.page == 'edit'" class="edit-page">
       <div class="row row-centered">
-        <div class="col-sm-8 col-xs-12 cred-edit-container">
+        <div class="cred-edit-container">
           <div ng-show="!model.isReplacing()" class="row row-centered">
-            <div class="col-xs-12 text-center">
+            <div class="text-center">
               <h3>Selected credentials</h3>
             </div>
             <div class="row">
               <div class="selectable-container-border"></div>
             </div>
           </div>
-          <div class="cred-edit" ng-hide="credential.hidden"
+          <div class="cred-edit"
             ng-repeat="credential in model.selectedCredentials | orderBy:model.hasReplaceableCredentials:true">
             <br-identity-credential br-credential="credential"
               br-selected-credentials="model.selectedCredentials"
