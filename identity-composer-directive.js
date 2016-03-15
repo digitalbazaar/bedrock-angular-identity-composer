@@ -10,7 +10,7 @@ define(['angular', 'jsonld', 'lodash'], function(angular, jsonld, _) {
 'use strict';
 
 /* @ngInject */
-function brIdentityComposer($rootScope, brCredentialLibraryService) {
+function brIdentityComposer($rootScope, $window, brCredentialLibraryService) {
   return {
     restrict: 'E',
     scope: {
@@ -55,6 +55,10 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
     scope.$watch(
       function() {return model.requestedProperties;},
       updateFulfilledProperties, true);
+
+    model.cancel = function() {
+      $window.close();
+    };
 
     model.prefillProperties = function() {
       model.page = 'front';
@@ -147,7 +151,6 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
 
     model.fulfillsExcessClaims = function(credential) {
       var claims = model.claimsForCredential(credential);
-
       var requestedClaims = model.requestedProperties;
       // TODO: Replace filtering logic with lodash.
       var excessClaims = [];
@@ -230,10 +233,6 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
         }
       }
       return property;
-    };
-
-    model.cancelButtonPressed = function() {
-      // TODO: Escape page
     };
 
     function init() {
@@ -327,7 +326,6 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
           model.loading = false;
           $rootScope.$apply();
         });
-
       // FIXME: this TODO partly handled. review and update
       // TODO: remove brTestFormLibraryService; only used for testing,
       // determine how to build groups without it or integrate it
@@ -338,7 +336,6 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
       if(!model.requestedProperties) {
         return;
       }
-
       // For every selected credential, mark other choices as selected
       // if the selected credential also contains the property for the choice.
       for(var property in model.processed.consumerQuery) {
@@ -357,7 +354,6 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
           }
         }
       }
-
       // Track if a full identity has now been composed
       model.composed = isComposed();
     }
