@@ -151,25 +151,8 @@ function brIdentityComposer($rootScope, $window, brCredentialLibraryService) {
 
     model.fulfillsExcessClaims = function(credential) {
       var claims = model.claimsForCredential(credential);
-      var requestedClaims = model.requestedProperties;
-      // TODO: Replace filtering logic with lodash.
-      var excessClaims = [];
-      for(var key in claims) {
-        var claim = claims[key];
-        if(!(claim in requestedClaims)) {
-          excessClaims.push(claim);
-        }
-      }
-      return excessClaims;
-    };
-
-    model.htmlClaims = function() {
-      var html = '<h6>The site is requesting the following information:</h6>';
-      for(var key in model.requestedProperties) {
-        var claim = model.requestedProperties[key];
-        html = html + '<h6>' + claim.label + '</h6>';
-      }
-      return html;
+      var requestedClaims = Object.keys(model.requestedProperties);
+      return _.difference(claims, requestedClaims);
     };
 
     model.replacementCredentials = function(credential) {
