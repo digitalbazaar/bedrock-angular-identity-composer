@@ -41,7 +41,7 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
 
     model.claimsForCredential = function(credential) {
       var excludeProperties = ['id', 'image', 'type', '@value'];
-      var claimProperites = Object.keys(credential.claim);
+      var claimProperties = Object.keys(credential.claim);
       return _.difference(claimProperties, excludeProperties);
 
       /* TODO: Matching against nested properties is problematic
