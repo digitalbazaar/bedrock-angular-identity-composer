@@ -10,24 +10,28 @@
       </div>
     </div>
     <div ng-show="model.page == 'front'" class="row text-center front-page">
-      <h4>A site is requesting credentials with the following properties:</h4>
-      <span ng-repeat="property in model.requestedProperties" class="badge">
-        {{property.label}}
+      <h4>A site is requesting credentials with the following claims:</h4>
+      <span ng-repeat="claim in model.requestedProperties" class="badge">
+        {{claim.label}}
       </span>
       <h4>
         These credential(s) have been selected to satisfy the request:
       </h4>
       <div class="credential-container">
         <ul class="list-unstyled">
-          <li class="br-item-hover well" ng-repeat="credential in model.selectedCredentials" ng-click="credential.hidden=!credential.hidden">
+          <li class="br-item-hover well" ng-repeat="credential in model.selectedCredentials"
+            ng-click="credential.hidden=!credential.hidden">
             <h5>
-              <strong>{{credential.name}}</strong> <span class="fa fa-search-plus" ng-class="{'fa-search-minus': credential.hidden}"></span>
+              <strong>{{credential.name}}</strong> <span class="fa fa-search-plus"
+                ng-class="{'fa-search-minus': credential.hidden}"></span>
             </h5>
-            <span ng-if="model.fulfillsExcessClaims(credential).length > 0"
-              style="color: #FFBB36;" class="glyphicon glyphicon-alert"
-              tooltip-html-unsafe="{{model.htmlExcessClaimsForCredential(credential)}}"
-              tooltip-placement="right">
-            </span>
+            <div ng-if="model.fulfillsExcessClaims(credential).length > 0" class="h5">
+              <span class="fa fa-exclamation-triangle"></span>
+              <span>Contains claims that the site did not request: </span>
+              <span ng-repeat="claim in model.fulfillsExcessClaims(credential)" class="badge">
+                {{model.labelForProperty(claim)}}
+              </span>
+            </div>
             <div ng-if="credential.hidden">
               <br-credential br-credential="credential" br-show-actions="false"
                 br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">

@@ -169,27 +169,6 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
       return html;
     };
 
-    // This is used to populate an html tooltip with valid html claims
-    model.htmlClaimsForCredential = function(credential) {
-      var claims = model.claimsForCredential(credential);
-      var html = '<h6>Contains the following information:</h6>';
-      for(var key in claims) {
-        var claim = claims[key];
-        html = html + '<h6>' + model.labelForProperty(claim) + '</h6>';
-      }
-      return html;
-    };
-
-    model.htmlExcessClaimsForCredential = function(credential) {
-      var claims = model.fulfillsExcessClaims(credential);
-      var html = '<h6>Will send info that the site did not ask for:</h6>';
-      for(var key in claims) {
-        var claim = claims[key];
-        html = html + '<h6>' + model.labelForProperty(claim) + '</h6>';
-      }
-      return html;
-    };
-
     model.replacementCredentials = function(credential) {
       var substituteCredentials = [];
       // TODO: This doesn't really handle queries that take in a specific value
