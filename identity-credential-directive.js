@@ -5,7 +5,7 @@
  *
  * @author Alex Lamar
  */
-define(['angular', 'jsonld'], function(angular, jsonld) {
+define(['angular', 'jsonld', 'lodash'], function(angular, jsonld, _) {
 
 'use strict';
 
@@ -40,35 +40,26 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
     scope.$watch(function() {return scope.library;}, init, true);
 
     model.claimsForCredential = function(credential) {
-      // TODO: This only pulls in claims at the top level,
-      //and does not recover nested claims.
-      var claims = [];
-      for(var key in credential.claim) {
-        // TODO: Need better filtering here (probably though some kind of
-        // grammar that maps claim types to a readable output), right now we're
-        // just taking the first level claims w/o any of their nested properties
-        if(key === 'id') {
-          continue;
-        }
-        if(key === 'image') {
-          continue;
-        }
-        claims.push(key);
-      }
+      var excludeProperties = ['id', 'image', 'type', '@value'];
+      var claimProperites = Object.keys(credential.claim);
+      return _.difference(claimProperties, excludeProperties);
+
+      /* TODO: Matching against nested properties is problematic
+       * disabling this for now
       var props = [];
       traverse(credential.claim);
       return props;
-
       function traverse(o) {
-        for(var i in o) {
-          if(typeof(o[i]) === 'object') {
-            props.push(i);
-            traverse(o[i]);
-          } else if(!(i === 'id' || i === 'type' || i === '@value')) {
-            props.push(i);
+        for(var key in o) {
+          if(typeof(o[key]) === 'object') {
+            props.push(key);
+            traverse(o[key]);
+          } else if(!_.includes(excludeProperties, key)) {
+            props.push(key);
           }
         }
       }
+      */
     };
 
     model.replacementCredentials = function(credential) {
