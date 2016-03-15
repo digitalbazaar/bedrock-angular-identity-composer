@@ -14,6 +14,12 @@
       <span ng-repeat="claim in model.requestedProperties" class="badge">
         {{claim.label}}
       </span>
+      <div class="callout callout-primary" ng-if="model.publicAccessRequested">
+        <h4>
+          Public Credential Request
+        </h4>
+        The credentials used to fulfill this request will be made public.
+      </div>
       <h4>
         These credential(s) have been selected to satisfy the request:
       </h4>

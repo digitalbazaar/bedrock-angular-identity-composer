@@ -49,6 +49,12 @@ function brIdentityComposer($rootScope, $window, brCredentialLibraryService) {
     model.allCredentials = [];
 
     model.claimsPartiallyFulfillable = false;
+    model.publicAccessRequested = false;
+
+    if(jsonld.hasProperty(model.consumerQuery, 'cred:requestPublicAccess')) {
+      model.publicAccessRequested = true;
+      delete(model.consumerQuery['cred:requestPublicAccess']);
+    }
 
     scope.$watch(function() {return scope.library;}, init, true);
     scope.$watch(function() {return scope.consumerQuery;}, init, true);
