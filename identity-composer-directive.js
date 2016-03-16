@@ -49,11 +49,19 @@ function brIdentityComposer($rootScope, $window, brCredentialLibraryService) {
     model.allCredentials = [];
 
     model.claimsPartiallyFulfillable = false;
-    model.publicAccessRequested = false;
+    model.publicAccess = {
+      requested: false,
+      acknowledged: false
+    };
 
+    // TODO: Consider changing "cred:requestPublicAccess" to
+    // "cred:requestPersistentAccess" with a value of "publicAccess" so we can
+    // support consumers/inspectors providing their ID as a value as well
     if(jsonld.hasProperty(model.consumerQuery, 'cred:requestPublicAccess')) {
-      model.publicAccessRequested = true;
-      delete(model.consumerQuery['cred:requestPublicAccess']);
+      model.publicAccess.requested = true;
+      // FIXME: if this property is not deleted from the query, the composer
+      // attempts to fulfill a request for this property
+      delete model.consumerQuery['cred:requestPublicAccess'];
     }
 
     scope.$watch(function() {return scope.library;}, init, true);

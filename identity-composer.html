@@ -14,12 +14,6 @@
       <span ng-repeat="claim in model.requestedProperties" class="badge">
         {{claim.label}}
       </span>
-      <div class="callout callout-primary" ng-if="model.publicAccessRequested">
-        <h4>
-          Public Credential Request
-        </h4>
-        The credentials used to fulfill this request will be made public.
-      </div>
       <h4>
         These credential(s) have been selected to satisfy the request:
       </h4>
@@ -88,10 +82,19 @@
         </div>
       </div>
     </div>
+    <div ng-if="model.publicAccess.requested" class="callout callout-primary">
+      <h4>
+        Public Credential Request
+      </h4>
+      <p>The credentials used to fulfill this request will be made public.</p>
+      <input type="checkbox" ng-model="model.publicAccess.acknowledged">
+      You <strong>must</strong> acknowledge this request by checking this box before proceeding.
+    </div>
     <div class="row row-centered">
       <a class="col-xs-3 col-xs-offset-2 btn btn-default text-center" ng-click="model.cancel()">Cancel</a>
       <a class="col-xs-3 col-xs-offset-1 btn btn-primary text-center"
-        ng-class="{disabled: model.page == 'unfulfillable'}" ng-click="model.done()">Continue</a>
+        ng-class="{disabled: model.page == 'unfulfillable' || (model.publicAccess.requested && !model.publicAccess.acknowledged)}"
+        ng-click="model.done()">Continue</a>
     </div>
   </div>
 </div>
