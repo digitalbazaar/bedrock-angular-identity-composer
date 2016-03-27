@@ -5,11 +5,11 @@
         <a class="text-center" ng-click="model.back()"><span style="margin-top: 25px;"
           class="glyphicon glyphicon-chevron-left"/>Back</a>
       </div>
-      <div class="col-xs-10">
-        <h2 class="text-center">Edit Selection</h2>
+      <div class="col-xs-offset-2 col-xs-8">
+        <h2>Edit Selection</h2>
       </div>
     </div>
-    <div ng-show="model.page == 'front'" class="row text-center front-page">
+    <div ng-show="model.page === 'front'" class="row text-center front-page">
       <h4>A site is requesting credentials with the following claims:</h4>
       <span ng-repeat="claim in model.requestedProperties" class="badge">
         {{claim.label}}
@@ -45,6 +45,20 @@
           Edit which credentials you're sending
         </a>
       </div>
+      <div ng-if="model.publicAccess.requested" class="callout callout-primary">
+        <h4>
+          Public Credential Request
+        </h4>
+        <p>The credentials used to fulfill this request will be made public.</p>
+        <input type="checkbox" ng-model="model.publicAccess.acknowledged">
+        You <strong>must</strong> acknowledge this request by checking this box before proceeding.
+      </div>
+      <div class="row">
+        <a class="col-xs-3 col-xs-offset-2 btn btn-default text-center" ng-click="model.cancel()">Cancel</a>
+        <a class="col-xs-3 col-xs-offset-1 btn btn-primary text-center"
+          ng-class="{disabled: model.page == 'unfulfillable' || (model.publicAccess.requested && !model.publicAccess.acknowledged)}"
+          ng-click="model.done()">Send</a>
+      </div>
     </div>
     <div ng-show="model.page == 'unfulfillable'" class="row text-center front-page">
       <div class="row">
@@ -59,8 +73,8 @@
         </div>
       </div>
     </div>
-    <div ng-show="model.page == 'edit'" class="edit-page">
-      <div class="row row-centered">
+    <div ng-show="model.page === 'edit'" class="edit-page">
+      <div class="row row-centered" style="margin-left: 0; margin-right: 0">
         <div>
           <div ng-show="!model.isReplacing()" class="row row-centered">
             <div class="text-center">
@@ -81,20 +95,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div ng-if="model.publicAccess.requested" class="callout callout-primary">
-      <h4>
-        Public Credential Request
-      </h4>
-      <p>The credentials used to fulfill this request will be made public.</p>
-      <input type="checkbox" ng-model="model.publicAccess.acknowledged">
-      You <strong>must</strong> acknowledge this request by checking this box before proceeding.
-    </div>
-    <div class="row row-centered">
-      <a class="col-xs-3 col-xs-offset-2 btn btn-default text-center" ng-click="model.cancel()">Cancel</a>
-      <a class="col-xs-3 col-xs-offset-1 btn btn-primary text-center"
-        ng-class="{disabled: model.page == 'unfulfillable' || (model.publicAccess.requested && !model.publicAccess.acknowledged)}"
-        ng-click="model.done()">Continue</a>
     </div>
   </div>
 </div>
