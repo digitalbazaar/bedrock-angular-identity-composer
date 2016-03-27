@@ -17,6 +17,8 @@
   cursor: pointer;
 }
 
+/* TODO: br-* scope classes below */
+
 .selectable-container {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -29,12 +31,6 @@
 
 .property-container {
   color: #777777;
-}
-
-.credential-container {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  min-height: 150px;
 }
 
 .edit-header {
@@ -55,28 +51,33 @@
   opacity: 0;
 }
 
+.credential-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  min-height: 150px;
+}
+
+.credential-container h5 {
+  text-align: left;
+}
+
 .credential-property.ng-enter {
   -webkit-transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
-
 .credential-property.ng-enter, .credential-property.ng-leave.ng-leave-active {
   opacity: 0;
 }
-
 .credential-property.ng-leave, .credential-property.ng-enter.ng-enter-active {
   opacity: 1;
 }
-
 .credential-property.ng-enter {
   -webkit-transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
-
 .credential-property.ng-enter, .credential-property.ng-leave.ng-leave-active {
   opacity: 0;
 }
-
 .credential-property.ng-leave, .credential-property.ng-enter.ng-enter-active {
   opacity: 1;
 }
