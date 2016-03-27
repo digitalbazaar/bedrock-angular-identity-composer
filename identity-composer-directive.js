@@ -71,7 +71,7 @@ function brIdentityComposer($rootScope, $window, brCredentialLibraryService) {
       updateFulfilledProperties, true);
 
     model.cancel = function() {
-      $window.close();
+      model.doneCallback({identity: null});
     };
 
     model.prefillProperties = function() {
