@@ -10,7 +10,7 @@ define(['angular', 'jsonld', 'lodash'], function(angular, jsonld, _) {
 'use strict';
 
 /* @ngInject */
-function brIdentityComposer($rootScope, $window, brCredentialLibraryService) {
+function brIdentityComposer($rootScope, brCredentialLibraryService) {
   return {
     restrict: 'E',
     scope: {
@@ -26,7 +26,7 @@ function brIdentityComposer($rootScope, $window, brCredentialLibraryService) {
     link: Link
   };
 
-  function Link(scope, element, attrs) {
+  function Link(scope) {
     var model = scope.model = {};
     var CONTEXT = [
       'https://w3id.org/identity/v1',
