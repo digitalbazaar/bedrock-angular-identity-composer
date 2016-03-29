@@ -133,10 +133,7 @@ function brIdentityComposer($rootScope, $window, brCredentialLibraryService) {
           credential.editing = false;
         }
       } else {
-        for(var key in model.selectedCredentials) {
-          var credential = model.selectedCredentials[key];
-          model.page = 'front';
-        }
+        model.page = 'front';
       }
     };
 

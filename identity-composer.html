@@ -22,18 +22,22 @@
         <ul class="list-unstyled">
           <li class="br-item-hover well" ng-repeat="credential in model.selectedCredentials"
             ng-click="credential.hidden=!credential.hidden">
+            <img ng-if="credential.image" ng-src="{{credential.image}}"
+              class="pull-left"
+              style="padding-right: 8px; max-width: 40px; max-height: 40px"></img>
             <h5>
               <strong>{{credential.name}}</strong> <span class="fa fa-search-plus"
                 ng-class="{'fa-search-minus': credential.hidden}"></span>
             </h5>
-            <div ng-if="model.fulfillsExcessClaims(credential).length > 0" class="h5">
-              <span class="fa fa-exclamation-triangle"></span>
+            <div ng-if="model.fulfillsExcessClaims(credential).length > 0"
+              class="h5" style="text-align: left; margin-left: 8px; margin-top: 20px; margin-bottom: -10px;">
+              <i class="fa fa-exclamation-triangle text-warning"></i>
               <span>Contains claims that the site did not request: </span>
               <span ng-repeat="claim in model.fulfillsExcessClaims(credential)" class="badge">
                 {{model.labelForProperty(claim)}}
               </span>
             </div>
-            <div ng-if="credential.hidden">
+            <div ng-if="credential.hidden" style="margin-top: 25px;">
               <br-credential br-credential="credential" br-show-actions="false"
                 br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
               </br-credential>
