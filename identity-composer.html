@@ -68,8 +68,9 @@
         </div>
         <div class="credential-container">
           <p ng-repeat="claim in model.requestedProperties">{{claim.label}}
-            <span style="color: red" class="glyphicon glyphicon-remove" ng-if="!claim.fulfillable"></span>
-            <span style="color: green" class="glyphicon glyphicon-ok" ng-if="claim.fulfillable"></span>
+            <i class="fa fa-remove text-danger" ng-if="!claim.fulfillable"></i>
+            <i class="fa fa-check text-success" ng-if="claim.fulfillable"></i>
+          </p>
         </div>
       </div>
     </div>
