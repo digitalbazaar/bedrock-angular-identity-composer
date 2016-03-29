@@ -5,12 +5,12 @@
  *
  * @author Alex Lamar
  */
-define(['angular', 'jsonld', 'lodash'], function(angular, jsonld, _) {
+define(['jsonld', 'lodash'], function(jsonld, _) {
 
 'use strict';
 
 /* @ngInject */
-function brIdentityCredential($rootScope, brCredentialLibraryService) {
+function brCredentialSelector($rootScope, brCredentialLibraryService) {
   return {
     restrict: 'E',
     scope: {
@@ -23,11 +23,11 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
     },
     /* jshint multistr: true */
     templateUrl: requirejs.toUrl(
-      'bedrock-angular-identity-composer/identity-credential.html'),
+      'bedrock-angular-identity-composer/credential-selector.html'),
     link: Link
   };
 
-  function Link(scope, element, attrs) {
+  function Link(scope) {
     var model = scope.model = {};
     model.allCredentials = scope.allCredentials;
     model.credential = scope.credential;
@@ -251,6 +251,6 @@ function brIdentityCredential($rootScope, brCredentialLibraryService) {
   }
 }
 
-return {brIdentityCredential: brIdentityCredential};
+return {brCredentialSelector: brCredentialSelector};
 
 });

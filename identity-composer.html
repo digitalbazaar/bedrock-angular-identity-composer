@@ -76,12 +76,12 @@
     <div ng-show="model.page === 'edit'" class="edit-page">
       <div class="row row-centered" style="margin-left: 0; margin-right: 0">
         <div ng-repeat="credential in model.selectedCredentials | orderBy:model.hasReplaceableCredentials:true">
-          <br-identity-credential br-credential="credential"
+          <br-credential-selector br-credential="credential"
             br-selected-credentials="model.selectedCredentials"
             br-all-credentials="model.allCredentials"
             br-query="model.processed.consumerQuery"
             br-library="model.library">
-          </br-identity-credential>
+          </br-credential-selector>
         </div>
       </div>
     </div>

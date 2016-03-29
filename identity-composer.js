@@ -8,15 +8,15 @@
 define([
   'angular',
   './identity-composer-directive',
-  './identity-credential-directive'
-], function(angular, identityComposer, identityCredential) {
+  './credential-selector-directive'
+], function(angular, identityComposer, credentialSelector) {
 
 'use strict';
 
 var module = angular.module('bedrock-identity-composer', ['ngAnimate']);
 
 module.directive(identityComposer);
-module.directive(identityCredential);
+module.directive(credentialSelector);
 
 return module.name;
 
