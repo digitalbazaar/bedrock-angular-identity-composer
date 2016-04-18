@@ -22,7 +22,7 @@
     "bedrock-angular-credential": "digitalbazaar/bedrock-angular-credential#master",
     "bedrock-angular-form": "^2.0.0",
     "bedrock-angular-lazy-compile": "^2.0.0",
-    "bedrock-angular-modal": "^2.0.0",
+    "bedrock-angular-modal": "^3.0.0",
     "lodash": "^4.6.1"
   }
 }
