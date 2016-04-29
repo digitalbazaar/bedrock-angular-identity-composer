@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "bedrock-angular": "^2.0.0",
-    "bedrock-angular-credential": "digitalbazaar/bedrock-angular-credential#master",
+    "bedrock-angular-credential": "^1.0.0",
     "bedrock-angular-form": "^2.0.0",
     "bedrock-angular-lazy-compile": "^2.0.0",
     "bedrock-angular-modal": "^3.0.0",
