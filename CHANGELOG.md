@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- Ignore test HTML during optimization.
+
 ## [1.0.0]
 
 - See git history for changes.

@@ -13,4 +13,12 @@ module.exports = function(bedrock) {
     protractor.suites['bedrock-angular-identity-composer'] =
       path.join(__dirname, './tests/**/*.js');
   }
+
+  var packages = bedrock.config.views.angular.optimize.templates.packages;
+  packages['bedrock-angular-identity-composer'] = {
+    src: [
+      '**/*.html',
+      '!bedrock/**/*.html'
+    ]
+  };
 };
