@@ -67,8 +67,8 @@
     </div>
     <div ng-show="model.page == 'unfulfillable'" class="row text-center front-page">
       <div class="row">
-        <h4 style="padding: 20px;" ng-if="!claimsPartiallyFulfillable">A site is requesting credentials that you do not possess:</h4>
-        <div ng-if="claimsPartiallyFulfillable">
+        <h4 style="padding: 20px;" ng-if="!model.claimsPartiallyFulfillable">A site is requesting credentials that you do not possess:</h4>
+        <div ng-if="model.claimsPartiallyFulfillable">
           <h4 style="padding: 20px;" class="">A site is requesting the following credentials, some if which you do not possess:</h4>
         </div>
         <div class="credential-container">
