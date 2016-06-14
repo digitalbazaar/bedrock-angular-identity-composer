@@ -1,5 +1,10 @@
 # bedrock-angular-identity-composer ChangeLog
 
+## 1.0.3 - 2016-06-14
+
+### Fixed
+- Fix typo in identity composer template.
+
 ## 1.0.2 - 2016-05-30
 
 ### Changed
