@@ -33,9 +33,11 @@
               class="h5" style="text-align: left; margin-left: 8px; margin-top: 20px; margin-bottom: -10px;">
               <i class="fa fa-exclamation-triangle text-warning"></i>
               <span>Contains claims that the site did not request: </span>
-              <span ng-repeat="claim in model.fulfillsExcessClaims(credential)" class="badge">
-                {{model.labelForProperty(claim)}}
-              </span>
+              <div>
+                <span ng-repeat="claim in model.fulfillsExcessClaims(credential)" class="badge">
+                  {{model.labelForProperty(claim)}}
+                </span>
+              </div>
             </div>
             <div ng-if="credential.hidden" style="margin-top: 25px;">
               <br-credential br-credential="credential" br-show-actions="false"
