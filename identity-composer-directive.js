@@ -44,8 +44,16 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
     model.modal = {show: false};
     model.loading = scope.loading;
     model.page = 'front';
+    model.modalVisible = false;
+    model.currentCredential = {};
 
+
+    // model.selectedCredentials = [];
+    var passport_credential = {"@context":["https://w3id.org/identity/v1","https://w3id.org/credentials/v1"],"id":"https://authorization.dev:33443/issuer/credentials/1473862731352","type":["Credential","urn:bedrock:test:PassportCredentia"],"image":"http://simpleicon.com/wp-content/uploads/global_1-128x128.png","name":"Passport","claim":{"id":"did:40b16795-73a6-446e-b06d-767087241f24","address":{"type":"PostalAddress","addressCountry":"US","addressLocality":"Blacksburg","addressRegion":"Virginia","postalCode":"24060","streetAddress":"1 Main St."},"schema:birthDate":{"type":"xsd:dateTime","@value":"1980-01-01T00:00:00Z"},"schema:gender":"female","schema:height":"65in","image":"http://simpleicon.com/wp-content/uploads/business-woman-2-128x128.png","name":"Pat Doe","schema:nationality":{"name":"United States"},"urn:bedrock:test:eyeColor":"blue","urn:bedrock:test:passport":{"type":"urn:bedrock:test:Passport","name":"Test Passport","issued":"2010-01-07T01:02:03Z","issuer":"https://example.gov/","expires":"2020-01-07T01:02:03Z","urn:bedrock:test:documentId":"1473862731352"}},"issued":"2016-09-14T14:18:51.352Z","issuer":"urn:issuer:test","signature":{"type":"GraphSignature2012","created":"2016-09-14T14:18:51Z","creator":"https://authorization.dev:33443/issuer/keys/1","signatureValue":"Dex6kqi8fZHbyHkscPcLz2gFvaWBUET5ZkjHN+SJNY2Rq7UfcQ0oOwI2A0NUOA7hivGszFszxbEaEloaUDyzrg=="}};
     model.selectedCredentials = [];
+    for (var i = 0; i < 4; i++) {
+      model.selectedCredentials.push(shallowCopy(passport_credential));
+    }
     model.allCredentials = [];
 
     model.claimsPartiallyFulfillable = false;
@@ -73,6 +81,31 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
     model.cancel = function() {
       model.doneCallback({identity: null});
     };
+
+    // START OF NEW CODE //
+
+
+    model.showModal = function(bool) {
+      model.modalVisible = bool;
+    };
+
+    model.setCurrentCredential = function(cred) {
+      model.currentCredential = cred;
+    };
+
+    model.clearCurrentCredential = function() {
+      model.currentCredential = {};
+    };
+
+    model.hideCredentialWarning = function(credential) {
+      credential.showWarning = false;
+    };
+
+
+
+    // END OF NEW CODE //
+
+
 
     model.prefillProperties = function() {
       model.page = 'front';
@@ -356,6 +389,25 @@ function brIdentityComposer($rootScope, brCredentialLibraryService) {
       return _.every(_.values(model.requestedProperties), function(choice) {
         return choice.selected;
       });
+    }
+
+    function shallowCopy( original )  
+    {
+        // First create an empty object with
+        // same prototype of our original source
+        var clone = Object.create( Object.getPrototypeOf( original ) ) ;
+
+        var i , keys = Object.getOwnPropertyNames( original ) ;
+
+        for ( i = 0 ; i < keys.length ; i ++ )
+        {
+            // copy each property into the clone
+            Object.defineProperty( clone , keys[ i ] ,
+                Object.getOwnPropertyDescriptor( original , keys[ i ] )
+            ) ;
+        }
+
+        return clone ;
     }
 
     function isOptional(queryValue) {
