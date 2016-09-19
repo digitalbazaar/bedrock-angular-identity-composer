@@ -1,0 +1,28 @@
+{
+  "name": "bedrock-angular-identity-composer",
+  "version": "1.0.4-dev",
+  "main": [
+    "./identity-composer.js",
+    "./identity-composer.less"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "ignore": [
+    "bedrock/bower.json",
+    "bedrock/components",
+    "bedrock/node_modules",
+    "bedrock/package.json",
+    "bedrock/prepare",
+    "bedrock/test",
+    "bedrock/views"
+  ],
+  "dependencies": {
+    "bedrock-angular": "^2.0.0",
+    "bedrock-angular-credential": "^2.0.0",
+    "bedrock-angular-form": "^2.0.0",
+    "bedrock-angular-lazy-compile": "^2.0.0",
+    "bedrock-angular-modal": "^3.0.0",
+    "lodash": "^4.6.1"
+  }
+}
