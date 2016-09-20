@@ -26,8 +26,11 @@
               class="pull-left"
               style="padding-right: 8px; max-width: 40px; max-height: 40px">
             <h5>
-              <strong>{{credential.name}}</strong> <span class="fa fa-search-plus"
-                ng-class="{'fa-search-minus': credential.hidden}"></span>
+              <strong>{{credential.name}}</strong> <span class="fa"
+                ng-class="{
+                  'fa-search-minus': credential.hidden,
+                  'fa-search-plus': !credential.hidden
+                }"></span>
             </h5>
             <div ng-if="model.fulfillsExcessClaims(credential).length > 0"
               class="h5" style="text-align: left; margin-left: 8px; margin-top: 20px; margin-bottom: -10px;">
