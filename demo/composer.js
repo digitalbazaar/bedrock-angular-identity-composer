@@ -5,6 +5,11 @@
  */
 var bedrock = require('bedrock');
 
+// load bedrock dependencies
+require('bedrock-express');
+require('bedrock-server');
+require('bedrock-views');
+
 require('./configs/composer');
 
 bedrock.start();

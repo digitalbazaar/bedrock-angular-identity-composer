@@ -6,11 +6,6 @@
 var config = require('bedrock').config;
 var path = require('path');
 
-// load bedrock dependencies
-require('bedrock-express');
-require('bedrock-server');
-require('bedrock-views');
-
 // server
 config.server.port = 8002;
 config.server.httpPort = 8001;
@@ -37,7 +32,6 @@ config.requirejs.bower.packages.push({
       __dirname, '../../..', 'bedrock-angular-identity-composer', 'bower.json')
 });
 
-
 // pseudo bower package
 config.requirejs.bower.packages.push({
   path: path.join(__dirname, '..', 'components'),
@@ -46,7 +40,7 @@ config.requirejs.bower.packages.push({
     moduleType: 'amd',
     main: './main.js',
     dependencies: {
-      angular: '~1.3.0'
+      angular: '~1.5.0'
     }
   }
 });

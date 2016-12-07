@@ -14,6 +14,7 @@ Array.prototype.slice.call(arguments, 1).forEach(function(register) {
   register(module);
 });
 
+/* @ngInject */
 module.config(function($routeProvider) {
   $routeProvider
     .when('/', {

@@ -1,24 +1,23 @@
 {
-  "name": "basic-skinning",
+  "name": "composer-demo",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "unskinned": "node unskinned.js",
-    "skinned": "node skinned.js",
     "composer": "node composer.js",
     "postinstall": "bower install"
   },
   "dependencies": {
-    "bedrock": "^1.0.6",
+    "bedrock": "^1.2.5",
     "bedrock-docs": "^2.0.2",
-    "bedrock-express": "^2.0.0",
+    "bedrock-express": "^2.0.6",
+    "bedrock-requirejs": "^2.1.1",
     "bedrock-server": "^2.0.0",
     "bedrock-validation": "^2.2.0",
-    "bedrock-views": "^2.0.0",
-    "bower": "^1.7.7"
+    "bedrock-views": "^4.0.0",
+    "bower": "^1.8.0"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=6.0.0"
   },
-  "main": "skinned.js"
+  "main": "composer.js"
 }
