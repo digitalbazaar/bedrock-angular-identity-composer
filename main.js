@@ -7,17 +7,16 @@
  */
 define([
   'angular',
-  './identity-composer-directive',
-  './credential-selector-directive'
-], function(angular, identityComposer, credentialSelector) {
+  './identity-composer-component',
+  './credential-selector-component'
+], function(angular) {
 
 'use strict';
 
 var module = angular.module('bedrock-identity-composer', ['ngAnimate']);
 
-module.directive(identityComposer);
-module.directive(credentialSelector);
-
-return module.name;
+Array.prototype.slice.call(arguments, 1).forEach(function(register) {
+  register(module);
+});
 
 });

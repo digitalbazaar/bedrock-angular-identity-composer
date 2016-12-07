@@ -2,7 +2,7 @@
   "name": "bedrock-angular-identity-composer",
   "version": "1.0.4-dev",
   "main": [
-    "./identity-composer.js",
+    "./main.js",
     "./identity-composer.less"
   ],
   "moduleType": [
