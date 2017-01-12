@@ -106,7 +106,7 @@ function Ctrl($scope, brCredentialLibraryService) {
       // "cred:requestPersistentAccess" with a value of "publicAccess" so we
       // can support consumers/inspectors providing their ID as a value as well
       if(jsonld.hasProperty(query, 'cred:requestPublicAccess')) {
-        model.publicAccess.requested = true;
+        self.publicAccess.requested = true;
         // FIXME: if this property is not deleted from the query, the composer
         // attempts to fulfill a request for this property
         delete query['cred:requestPublicAccess'];
