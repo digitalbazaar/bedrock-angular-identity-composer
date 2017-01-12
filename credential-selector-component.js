@@ -28,6 +28,7 @@ function register(module) {
 /* @ngInject */
 function Ctrl($rootScope, $scope, brCredentialLibraryService) {
   var self = this;
+  
   var scope = $scope;
   var model = scope.model = {};
   model.allCredentials = self.allCredentials;

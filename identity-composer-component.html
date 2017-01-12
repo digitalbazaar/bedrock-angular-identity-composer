@@ -11,48 +11,48 @@
 </style>
 
 <div class="row" ng-show="model.modalVisible">
-    <!-- Modal -->
-    <div class="modal fade col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position:absolute">
-      <div class="modal-dialog" role="document" ng-style="model.modalVisible && {'z-index': 9999, 'width': '100%', 'padding': '1vh 4vw'} || {'z-index': 1,'width': '0%', 'height':'0%'}">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">This credential contains claims the site did not request</h4>
-          </div>
-          <div class="modal-body row">
-            <div class="col-xs-6 text-center" style="border-right: 1px solid #e5e5e5;">
-              <div class="row">
-                {{model.currentCredential.name}}
-              </div>
-              <div class="row">
-                <img class="credential-container" ng-if="model.currentCredential.image" ng-src="{{model.currentCredential.image}}" >
-              </div>
+  <!-- Modal -->
+  <div class="modal fade col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position:absolute">
+    <div class="modal-dialog" role="document" ng-style="model.modalVisible && {'z-index': 9999, 'width': '100%', 'padding': '1vh 4vw'} || {'z-index': 1,'width': '0%', 'height':'0%'}">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">This credential contains claims the site did not request</h4>
+        </div>
+        <div class="modal-body row">
+          <div class="col-xs-6 text-center" style="border-right: 1px solid #e5e5e5;">
+            <div class="row">
+              {{model.currentCredential.name}}
             </div>
-            <div class="col-xs-6 text-center">
-              <div class="row" style="text-decoration: underline;">
-                Claims not Requested
-              </div>
-              <div class="row">
-                <div ng-if="model.fulfillsExcessClaims(model.currentCredential).length > 0"
-                    class="h5" style="">
-                    <ul class="list-unstyled row">
-                      <li ng-repeat="claim in model.fulfillsExcessClaims(model.currentCredential)" >
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="display:inline-block" class="badge" >
-                          {{model.labelForProperty(claim)}}
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-              </div>
+            <div class="row">
+              <img class="credential-container" ng-if="model.currentCredential.image" ng-src="{{model.currentCredential.image}}" >
             </div>
           </div>
-          <div class="modal-footer">
-            <button ng-click="model.showModal(false); model.clearCurrentCredential();" type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
-            <button ng-click="model.showModal(false)" type="button" class="btn btn-primary pull-right" data-dismiss="modal">Ignore Warning</button>
+          <div class="col-xs-6 text-center">
+            <div class="row" style="text-decoration: underline;">
+              Claims not Requested
+            </div>
+            <div class="row">
+              <div ng-if="model.fulfillsExcessClaims(model.currentCredential).length > 0"
+                  class="h5" style="">
+                  <ul class="list-unstyled row">
+                    <li ng-repeat="claim in model.fulfillsExcessClaims(model.currentCredential)" >
+                      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="display:inline-block" class="badge" >
+                        {{model.labelForProperty(claim)}}
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+            </div>
           </div>
+        </div>
+        <div class="modal-footer">
+          <button ng-click="model.showModal(false); model.clearCurrentCredential();" type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+          <button ng-click="model.showModal(false)" type="button" class="btn btn-primary pull-right" data-dismiss="modal">Ignore Warning</button>
         </div>
       </div>
     </div>
+  </div>
 </div>
 <div class="row" style="margin-left: 0; margin-right: 0;">
 <!-- TODO: remove custom margins and padding where possible -->

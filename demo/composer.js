@@ -1,5 +1,5 @@
 /*
- * Bedrock-based Template-skinning Example
+ * Identity composer test demo.
  *
  * Copyright (c) 2016 Digital Bazaar, Inc. All rights reserved.
  */
