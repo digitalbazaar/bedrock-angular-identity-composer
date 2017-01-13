@@ -1,5 +1,5 @@
 /*!
- * Identity Composer.
+ * Identity Profile Composer.
  *
  * Copyright (c) 2015-2017 Digital Bazaar, Inc. All rights reserved.
  *
@@ -30,13 +30,19 @@ function Ctrl($scope, brCredentialLibraryService) {
   self.loading = true;
   self.profiles = [];
 
-  // the @context this component is coded to
+  // the @context for outputting profiles
   var CONTEXT = {
     '@context': [
       'https://w3id.org/identity/v1',
       'https://w3id.org/credentials/v1'
     ]
   };
+  var RDF_PROPERTY = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property';
+  var RDFS_LABEL = 'http://www.w3.org/2000/01/rdf-schema#label';
+  var CRED = 'https://w3id.org/credentials#';
+  var CRED_CLAIM = CRED + 'claim';
+  var CRED_OPTIONAL = CRED + 'isOptional';
+  var CRED_CREDENTIAL = CRED + 'credential';
 
   self.publicAccess = {
     requested: false,
@@ -50,7 +56,7 @@ function Ctrl($scope, brCredentialLibraryService) {
     credential: []
   };
   for(var i = 0; i < 4; ++i) {
-    var copy = _.deepClone(mockCredential);
+    var copy = _.cloneDeep(mockCredential);
     copy.id += '' + i;
     self.identity.credential.push({'@graph': copy);
   }*/
@@ -63,7 +69,7 @@ function Ctrl($scope, brCredentialLibraryService) {
     // TODO: support more granular changes; init() will perform a number of
     // updates that do not necessarily need to happen, for example, if the
     // identity changes but the library does not, then there is no need to
-    // compact library properties again
+    // expand library properties again
     if((changes.identity && !changes.identity.isFirstChange()) ||
       (changes.library && !changes.library.isFirstChange()) ||
       (changes.query && !changes.query.isFirstChange())) {
@@ -72,22 +78,24 @@ function Ctrl($scope, brCredentialLibraryService) {
   };
 
   self.select = function(profile) {
+    self.loading = true;
     var identity = {
-      '@context': CONTEXT,
-      id: self.identity.id
+      '@id': self.identity.id
     };
-    identity.credential = profile.credentials.map(function(credential) {
+    identity[CRED_CREDENTIAL] = profile.credentials.map(function(credential) {
       return {'@graph': credential};
     });
-    self.onComposed(identity);
-  };
 
-  self.labelForProperty = function(property) {
-    var def = self.library.properties[property];
-    if(def && 'label' in def) {
-      return def.label;
-    }
-    return property;
+    jsonld.promises.compact(identity, CONTEXT).then(function(profile) {
+      self.loading = false;
+      $scope.$apply();
+      self.onComposed(profile);
+    }).catch(function(err) {
+      // FIXME: show on UI?
+      console.error('[Identity Composer] Error:', err);
+      self.loading = false;
+      $scope.$apply();
+    });
   };
 
   function init(identity) {
@@ -105,11 +113,11 @@ function Ctrl($scope, brCredentialLibraryService) {
       // TODO: Consider changing "cred:requestPublicAccess" to
       // "cred:requestPersistentAccess" with a value of "publicAccess" so we
       // can support consumers/inspectors providing their ID as a value as well
-      if(jsonld.hasProperty(query, 'cred:requestPublicAccess')) {
+      if(jsonld.hasProperty(query, CRED + 'requestPublicAccess')) {
         self.publicAccess.requested = true;
         // FIXME: if this property is not deleted from the query, the composer
         // attempts to fulfill a request for this property
-        delete query['cred:requestPublicAccess'];
+        delete query[CRED + 'requestPublicAccess'];
       }
 
       return compactDefinitions()
@@ -144,31 +152,31 @@ function Ctrl($scope, brCredentialLibraryService) {
     return brCredentialLibraryService.getLibrary().then(function(library) {
       self.library = library;
       console.info(
-        '[Identity Composer] Using default library.', model.library);
+        '[Identity Composer] Using default library.', library);
       return library;
     });
   }
 
   function compactCredentials(identity) {
-    // FIXME: frame identity and frame credentials or can we assume
-    //   the backend has performed this already?
     var credentials = jsonld.getValues(identity, 'credential');
     return Promise.all(credentials.map(function(credential) {
-      return jsonld.promises.compact(credential['@graph'], CONTEXT);
+      return jsonld.promises.compact(credential['@graph'], {});
     }));
   }
 
   function compactQuery(query) {
-    return jsonld.promises.compact(query, CONTEXT);
+    return jsonld.promises.compact(query, {});
   }
 
   function compactDefinitions() {
-    return jsonld.promises.compact(self.library.graph, CONTEXT)
+    return jsonld.promises.compact(self.library.graph, {})
       .then(function(graph) {
         var definitions = {};
         angular.forEach(graph['@graph'], function(node) {
           // TODO: support deep query
-          definitions[node.id] = node;
+          if(jsonld.hasValue(node, '@type', RDF_PROPERTY)) {
+            definitions[node['@id']] = node;
+          }
         });
         return definitions;
       });
@@ -199,18 +207,18 @@ function Ctrl($scope, brCredentialLibraryService) {
     //   (current algorithm assumes all are required)
 
     // build requested properties map
-    angular.forEach(query, function(property) {
+    for(var property in query) {
       if(property === '@context') {
         return;
       }
       var def = definitions[property] || {};
       self.requestedProperties[property] = {
-        label: ('label' in def) ? def.label : property,
+        label: (RDFS_LABEL in def) ? def[RDFS_LABEL]['@value'] : property,
         show: false,
         optional: isOptional(query[property]),
         definition: def
       };
-    });
+    }
 
     var candidates = computeCandidates(definitions, credentials);
 
@@ -222,7 +230,7 @@ function Ctrl($scope, brCredentialLibraryService) {
     // compose identity profiles to fulfill the query
     var profiles = [];
     angular.forEach(candidates, function(candidate, idx) {
-      profiles.concat(computeProfile(candidate, candidates.slice(idx + 1)));
+      profiles.push(computeProfile(candidate, candidates.slice(idx + 1)));
     });
     return profiles;
   }
@@ -259,9 +267,9 @@ function Ctrl($scope, brCredentialLibraryService) {
 
     // build candidates list by computing superfluous and missing properties
     var candidates = credentials.map(function(credential) {
-      var claim = jsonld.getValues(credential, 'claim')[0];
+      var claim = jsonld.getValues(credential, CRED_CLAIM)[0];
       var claimed = Object.keys(claim).filter(function(property) {
-        return property !== 'id';
+        return property !== '@id';
       });
 
       // build candidate info
@@ -317,7 +325,7 @@ function Ctrl($scope, brCredentialLibraryService) {
     var profile = {
       credentials: [candidate.credential],
       missing: _.clone(candidate.missing),
-      superflous: _.deepClone(candidate.superfluous)
+      superflous: _.cloneDeep(candidate.superfluous)
     };
 
     // TODO: consider self.requestedProperties[property].optional
@@ -349,10 +357,11 @@ function Ctrl($scope, brCredentialLibraryService) {
   }
 
   function isOptional(queryValue) {
-    if(!angular.isObject(queryValue)) {
-      return;
+    if(!angular.isObject(queryValue) ||
+      !angular.isObject(queryValue[CRED_OPTIONAL])) {
+      return false;
     }
-    return queryValue['cred:isOptional'] === true;
+    return queryValue[CRED_OPTIONAL]['@value'] === true;
   }
 }
 

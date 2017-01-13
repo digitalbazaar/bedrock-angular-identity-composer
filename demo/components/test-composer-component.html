@@ -1,9 +1,5 @@
-<div>
-  <div class="row">
-    <br-identity-composer
-      br-consumer-query="$ctrl.query"
-      br-identity="$ctrl.identity"
-      br-callback="$ctrl.complete(identity)">
-    </br-identity-composer>
-  </div>
-</div>
+<br-identity-composer
+  br-credential-query="$ctrl.query"
+  br-identity="$ctrl.identity"
+  br-on-composed="$ctrl.complete(identity)">
+</br-identity-composer>

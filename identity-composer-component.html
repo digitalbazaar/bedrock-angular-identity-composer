@@ -1,246 +1,61 @@
-<style type="text/css">
-
-  .credential-border {
-    margin-bottom: 10%;
-    width: 75%;
-    border: solid black 5px;
-    border-radius: 25px;
-    margin: 0 auto;
-  }
-
+<style>
 </style>
 
-<div class="row" ng-show="model.modalVisible">
-  <!-- Modal -->
-  <div class="modal fade col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position:absolute">
-    <div class="modal-dialog" role="document" ng-style="model.modalVisible && {'z-index': 9999, 'width': '100%', 'padding': '1vh 4vw'} || {'z-index': 1,'width': '0%', 'height':'0%'}">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">This credential contains claims the site did not request</h4>
-        </div>
-        <div class="modal-body row">
-          <div class="col-xs-6 text-center" style="border-right: 1px solid #e5e5e5;">
-            <div class="row">
-              {{model.currentCredential.name}}
-            </div>
-            <div class="row">
-              <img class="credential-container" ng-if="model.currentCredential.image" ng-src="{{model.currentCredential.image}}" >
-            </div>
-          </div>
-          <div class="col-xs-6 text-center">
-            <div class="row" style="text-decoration: underline;">
-              Claims not Requested
-            </div>
-            <div class="row">
-              <div ng-if="model.fulfillsExcessClaims(model.currentCredential).length > 0"
-                  class="h5" style="">
-                  <ul class="list-unstyled row">
-                    <li ng-repeat="claim in model.fulfillsExcessClaims(model.currentCredential)" >
-                      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="display:inline-block" class="badge" >
-                        {{model.labelForProperty(claim)}}
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button ng-click="model.showModal(false); model.clearCurrentCredential();" type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
-          <button ng-click="model.showModal(false)" type="button" class="btn btn-primary pull-right" data-dismiss="modal">Ignore Warning</button>
-        </div>
-      </div>
-    </div>
+<div class="row">
+  <div class="col-xs-12">
+    <span>Pick a set of credentials to send:</span>
   </div>
 </div>
-<div class="row" style="margin-left: 0; margin-right: 0;">
-<!-- TODO: remove custom margins and padding where possible -->
 
-  <div class="col-xs-offset-1 col-xs-10">
-    <div ng-show="model.page == 'edit'" class="row row-centered edit-header">
-      <div class="col-xs-2">
-        <a class="text-center" ng-click="model.back()"><i
-          class="fa fa-chevron-left" style="margin-top: 20px;"></i> Back</a>
-      </div>
-      <div class="col-xs-offset-2 col-xs-8">
-        <h2 style="margin-top: 10px;">Edit Selection</h2>
-      </div>
-    </div>
-    <div ng-show="model.page === 'front'" class="row text-center front-page">
-      <h4>A site is requesting credentials with the following claims:</h4>
-      <span ng-repeat="claim in model.requestedProperties" class="badge">
-        {{claim.label}}
-      </span>
-      <h4>
-        {{(model.selectedCredentials.length > 1 && 'These credentials have') || 'This credential has'}} been selected to satisfy the request:
-      </h4>
-
-      <div class="row">
-          <ul class="list-unstyled row">
-            <li ng-repeat="credential in model.selectedCredentials track by $index"
-              ng-click="credential.hidden=!credential.hidden; model.showModal(true); model.setCurrentCredential(credential);" data-toggle="modal" data-target="#myModal">
-              <div ng-if="model.selectedCredentials.length == 1" class="col-xs-offset-1 col-xs-10">
-                <div class="credential-border">
-                  <h4>
-                    <strong>{{credential.name}} {{$index}}</strong>
-                    <i ng-if="model.fulfillsExcessClaims(credential).length > 0" class="fa fa-exclamation-triangle text-warning"></i>
-                  </h4>
-                  <img width="65%" ng-if="credential.image" style="margin-bottom:2vh; " ng-src="{{credential.image}}" >
-  <!--                 <div ng-if="credential.hidden" class="">
-                    <div ng-if="model.fulfillsExcessClaims(credential).length > 0"
-                      class="h5" style="">
-                      <div>Contains claims that the site did not request: </div>
-                      <ul class="list-unstyled">
-                        <li ng-repeat="claim in model.fulfillsExcessClaims(credential)" >
-                          <div  style="display:inline-block" class="badge" >
-                            {{model.labelForProperty(claim)}}
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    <div style="margin-top: 25px;">
-                      <br-credential br-credential="credential" br-show-actions="false"
-                        br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
-                      </br-credential>
-                    </div>
-                  </div> -->
-                </div>
-              </div>
-
-              <div ng-if="model.selectedCredentials.length == 2" class="col-lg-3 col-lg-offset-2 col-md-6 col-sm-6 col-xs-6">
-                <div class="credential-border">
-                  <h4>
-                    <strong>{{credential.name}} {{$index}}</strong>
-                    <i ng-if="model.fulfillsExcessClaims(credential).length > 0" class="fa fa-exclamation-triangle text-warning"></i>
-                  </h4>
-                  <img width="75%" ng-if="credential.image" style="margin-bottom:2vh; " ng-src="{{credential.image}}" >
-  <!--                 <div ng-if="credential.hidden" class="">
-                    <div ng-if="model.fulfillsExcessClaims(credential).length > 0"
-                      class="h5" style="">
-                      <div>Contains claims that the site did not request: </div>
-                      <ul class="list-unstyled">
-                        <li ng-repeat="claim in model.fulfillsExcessClaims(credential)" >
-                          <div  style="display:inline-block" class="badge" >
-                            {{model.labelForProperty(claim)}}
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    <div style="margin-top: 25px;">
-                      <br-credential br-credential="credential" br-show-actions="false"
-                        br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
-                      </br-credential>
-                    </div>
-                  </div> -->
-                </div>
-              </div>
-
-              <div ng-if="model.selectedCredentials.length == 3" class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
-                <div class="credential-border">
-                  <h4>
-                    <strong>{{credential.name}} {{$index}}</strong>
-                    <i ng-if="model.fulfillsExcessClaims(credential).length > 0" class="fa fa-exclamation-triangle text-warning"></i>
-                  </h4>
-                  <img width="75%" ng-if="credential.image" style="margin-bottom:2vh; " ng-src="{{credential.image}}" >
-  <!--                 <div ng-if="credential.hidden" class="">
-                    <div ng-if="model.fulfillsExcessClaims(credential).length > 0"
-                      class="h5" style="">
-                      <div>Contains claims that the site did not request: </div>
-                      <ul class="list-unstyled">
-                        <li ng-repeat="claim in model.fulfillsExcessClaims(credential)" >
-                          <div  style="display:inline-block" class="badge" >
-                            {{model.labelForProperty(claim)}}
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    <div style="margin-top: 25px;">
-                      <br-credential br-credential="credential" br-show-actions="false"
-                        br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
-                      </br-credential>
-                    </div>
-                  </div> -->
-                </div>
-              </div>
-
-              <div ng-if="model.selectedCredentials.length > 3" class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-
-                <div class="credential-border">
-                  <h4>
-                    <strong>{{credential.name}} {{$index}}</strong>
-                    <i ng-if="model.fulfillsExcessClaims(credential).length > 0" class="fa fa-exclamation-triangle text-warning"></i>
-                  </h4>
-                  <img width="75%" ng-if="credential.image" style="margin-bottom:2vh; " ng-src="{{credential.image}}" >
-  <!--                 <div ng-if="credential.hidden" class="">
-                    <div ng-if="model.fulfillsExcessClaims(credential).length > 0"
-                      class="h5" style="">
-                      <div>Contains claims that the site did not request: </div>
-                      <ul class="list-unstyled">
-                        <li ng-repeat="claim in model.fulfillsExcessClaims(credential)" >
-                          <div  style="display:inline-block" class="badge" >
-                            {{model.labelForProperty(claim)}}
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    <div style="margin-top: 25px;">
-                      <br-credential br-credential="credential" br-show-actions="false"
-                        br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
-                      </br-credential>
-                    </div>
-                  </div> -->
-                </div>
-              </div>
-
-
-              <!--<img ng-if="credential.image" ng-src="{{credential.image}}"-->
-              <!--  class="pull-left"-->
-              <!--  style="padding-right: 8px; max-width: 40px; max-height: 40px">-->
-            </li>
-          </ul>
-      </div>
-
-      <div ng-if="model.publicAccess.requested" class="callout callout-primary">
-        <h4>
-          Public Credential Request
-        </h4>
-        <p>The credentials used to fulfill this request will be made public.</p>
-        <input type="checkbox" ng-model="model.publicAccess.acknowledged">
-        You <strong>must</strong> acknowledge this request by checking this box before proceeding.
-      </div>
-      <div class="row">
-        <a class="col-xs-3 col-xs-offset-2 btn btn-default text-center" ng-click="model.cancel()">Cancel</a>
-        <a class="col-xs-3 col-xs-offset-2 btn btn-primary text-center"
-          ng-class="{disabled: model.page == 'unfulfillable' || (model.publicAccess.requested && !model.publicAccess.acknowledged)}"
-          ng-click="model.done()">Send</a>
+<div class="row" ng-repeat="profile in $ctrl.profiles">
+  <div class="col-xs-12">
+    <div class="br-identity-profile-container">
+      <div class=".br-identity-profile-item"
+        ng-repeat="credential in profile.credentials"
+        ng-click="$ctrl.credential=credential; $ctrl.showCredentialDetails=true">
+        <!-- TODO: ng-class="alert alert-warning"/"alert-danger for superfluous
+          and sensitive properties -->
+        <!-- TODO: change simple to complex displayer -->
+        <br-credential br-credential="credential" br-show-actions="false"
+          br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
+        </br-credential>
       </div>
     </div>
-    <div ng-if="model.page == 'unfulfillable'" class="row text-center front-page">
-      <div class="row">
-        <h4 style="padding: 20px;" ng-if="!model.claimsPartiallyFulfillable">A site is requesting credentials that you do not possess:</h4>
-        <div ng-if="model.claimsPartiallyFulfillable">
-          <h4 style="padding: 20px;" class="">A site is requesting the following credentials, some if which you do not possess:</h4>
-        </div>
-        <div class="credential-container">
-          <p ng-repeat="claim in model.requestedProperties">{{claim.label}}
-            <i class="fa fa-remove text-danger" ng-if="!claim.fulfillable"></i>
-            <i class="fa fa-check text-success" ng-if="claim.fulfillable"></i>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div ng-if="model.page === 'edit'" class="edit-page">
-      <div class="row row-centered" style="margin-left: 0; margin-right: 0">
-        <div ng-repeat="credential in model.selectedCredentials | orderBy:model.hasReplaceableCredentials:true track by $index">
-          <br-credential-selector br-credential="credential"
-            br-selected-credentials="model.selectedCredentials"
-            br-all-credentials="model.allCredentials"
-            br-query="model.processed.consumerQuery"
-            br-library="model.library">
-          </br-credential-selector>
-        </div>
-      </div>
-    </div>
+    <!-- TODO: add warning for superfluous/sensitive properties -->
+    <!-- TODO: add send button -->
+    <!-- TODO: add confirmation alert modal if send is pressed on
+      warned a profile -->
   </div>
 </div>
+
+<!-- modals -->
+<stackable-modal stackable="$ctrl.showCredentialDetails"
+  br-lazy-compile="$ctrl.showCredentialDetails"
+  br-lazy-id="br-identity-composer-credential-details-modal">
+  <br-modal br-title="Credential Details">
+    <br-modal-body>
+      <br-demo-warning></br-demo-warning>
+      <!-- TODO: change simple to complex displayer -->
+      <br-credential br-credential="credential" br-show-actions="false"
+        br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
+      </br-credential>
+    </br-modal-body>
+    <br-modal-footer>
+      <button type="button" class="btn btn-default stackable-cancel">Close</button>
+    </br-modal-footer>
+  </br-modal>
+</stackable-modal>
+<stackable-modal stackable="$ctrl.showConfirm"
+  stackable-closed="$ctrl.confirmSend(err, result)"
+  br-lazy-compile="$ctrl.showConfirm"
+  br-lazy-id="br-identity-composer-confirm-send-modal">
+  <br-alert-modal
+    br-modal-header="Warning"
+    br-modal-ok="Send"
+    br-modal-cancel="Cancel">
+    <!-- TODO: handle superfluous vs. sensitive data -->
+    <p>Are you sure that you want to send these credentials? They contain
+      information that was not requested.</p>
+    <!-- TODO: show profile {{$ctrl.profile}} -->
+  </br-alert-modal>
+</stackable-modal>

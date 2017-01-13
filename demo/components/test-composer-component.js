@@ -27,8 +27,8 @@ function Ctrl() {
 
   self.query = {
     '@context': CONTEXT,
-    'urn:bedrock:test:passport': '',
-    //'email': ''
+    //'urn:bedrock:test:passport': '',
+    'email': ''
   };
 
   self.identity = {
