@@ -4,20 +4,20 @@
 <div class="row">
   <div class="col-xs-12">
     <span>Pick a set of credentials to send:</span>
+    <pre>{{$ctrl.query|json}}</pre>
   </div>
 </div>
 
 <div class="row" ng-repeat="profile in $ctrl.profiles">
   <div class="col-xs-12">
-    <div class="br-identity-profile-container">
-      <div class=".br-identity-profile-item"
+    <div class="br-identity-profile-container br-item-hover">
+      <div class="br-identity-profile-item"
         ng-repeat="credential in profile.credentials"
         ng-click="$ctrl.credential=credential; $ctrl.showCredentialDetails=true">
         <!-- TODO: ng-class="alert alert-warning"/"alert-danger for superfluous
           and sensitive properties -->
         <!-- TODO: change simple to complex displayer -->
-        <br-credential br-credential="credential" br-show-actions="false"
-          br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
+        <br-credential br-credential="credential" br-show-actions="false">
         </br-credential>
       </div>
     </div>
@@ -25,6 +25,13 @@
     <!-- TODO: add send button -->
     <!-- TODO: add confirmation alert modal if send is pressed on
       warned a profile -->
+  </div>
+</div>
+
+<div ng-if="$ctrl.profiles.length === 0" class="row">
+  <div class="col-xs-12">
+    <!-- TODO: improve -->
+    Oh no, you lack the credentials to fulfill this query!
   </div>
 </div>
 
@@ -36,8 +43,7 @@
     <br-modal-body>
       <br-demo-warning></br-demo-warning>
       <!-- TODO: change simple to complex displayer -->
-      <br-credential br-credential="credential" br-show-actions="false"
-        br-options="{display: 'simple', limit: 3, collapsable: true, hideTitle: true}">
+      <br-credential br-credential="$ctrl.credential" br-show-actions="false">
       </br-credential>
     </br-modal-body>
     <br-modal-footer>

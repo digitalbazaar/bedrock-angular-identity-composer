@@ -43,23 +43,12 @@ function Ctrl($scope, brCredentialLibraryService) {
   var CRED_CLAIM = CRED + 'claim';
   var CRED_OPTIONAL = CRED + 'isOptional';
   var CRED_CREDENTIAL = CRED + 'credential';
+  var IDENTITY = 'https://w3id.org/identity#identity';
 
   self.publicAccess = {
     requested: false,
     acknowledged: false
   };
-
-  /*var mockCredential = {"@context":["https://w3id.org/identity/v1","https://w3id.org/credentials/v1"],"id":"https://authorization.dev:33443/issuer/credentials/1473862731352","type":["Credential","urn:bedrock:test:PassportCredentia"],"image":"http://simpleicon.com/wp-content/uploads/global_1-128x128.png","name":"Passport","claim":{"id":"did:40b16795-73a6-446e-b06d-767087241f24","address":{"type":"PostalAddress","addressCountry":"US","addressLocality":"Blacksburg","addressRegion":"Virginia","postalCode":"24060","streetAddress":"1 Main St."},"schema:birthDate":{"type":"xsd:dateTime","@value":"1980-01-01T00:00:00Z"},"schema:gender":"female","schema:height":"65in","image":"http://simpleicon.com/wp-content/uploads/business-woman-2-128x128.png","name":"Pat Doe","schema:nationality":{"name":"United States"},"urn:bedrock:test:eyeColor":"blue","urn:bedrock:test:passport":{"type":"urn:bedrock:test:Passport","name":"Test Passport","issued":"2010-01-07T01:02:03Z","issuer":"https://example.gov/","expires":"2020-01-07T01:02:03Z","urn:bedrock:test:documentId":"1473862731352"}},"issued":"2016-09-14T14:18:51.352Z","issuer":"urn:issuer:test","signature":{"type":"GraphSignature2012","created":"2016-09-14T14:18:51Z","creator":"https://authorization.dev:33443/issuer/keys/1","signatureValue":"Dex6kqi8fZHbyHkscPcLz2gFvaWBUET5ZkjHN+SJNY2Rq7UfcQ0oOwI2A0NUOA7hivGszFszxbEaEloaUDyzrg=="}};
-  self.identity = {
-    @context: CONTEXT,
-    id: mockCredential.claim.id,
-    credential: []
-  };
-  for(var i = 0; i < 4; ++i) {
-    var copy = _.cloneDeep(mockCredential);
-    copy.id += '' + i;
-    self.identity.credential.push({'@graph': copy);
-  }*/
 
   self.$onInit = function() {
     init(self.identity);
@@ -80,7 +69,8 @@ function Ctrl($scope, brCredentialLibraryService) {
   self.select = function(profile) {
     self.loading = true;
     var identity = {
-      '@id': self.identity.id
+      '@id': self.identity.id,
+      '@type': IDENTITY
     };
     identity[CRED_CREDENTIAL] = profile.credentials.map(function(credential) {
       return {'@graph': credential};
@@ -125,7 +115,21 @@ function Ctrl($scope, brCredentialLibraryService) {
           return recommendProfiles(query, definitions, results[2]);
         });
     }).then(function(profiles) {
-      self.profiles = profiles;
+      // FIXME: should not need to compact, `br-credential` component should
+      // handle it
+      return Promise.all(profiles.map(function(profile) {
+        return Promise.all(profile.credentials.map(function(credential, idx) {
+          return jsonld.promises.compact(credential, CONTEXT)
+            .then(function(compacted) {
+              profile.credentials[idx] = compacted;
+            });
+        }));
+      })).then(function() {
+        self.profiles = profiles;
+        console.log('profiles', profiles);
+      });
+      // self.profiles = profiles;
+      // console.log('profiles', profiles);
     }).catch(function(err) {
       // FIXME: show on UI?
       console.error('[Identity Composer] Error:', err);
@@ -232,7 +236,17 @@ function Ctrl($scope, brCredentialLibraryService) {
     angular.forEach(candidates, function(candidate, idx) {
       profiles.push(computeProfile(candidate, candidates.slice(idx + 1)));
     });
-    return profiles;
+
+    // remove any profiles with missing properties
+    profiles = profiles.filter(function(profile) {
+      return profile.missing.length === 0;
+    });
+
+    // TODO: if N creds in a profile will fulfill the query, remove any
+    // profiles that include the same creds + more
+
+    // sort profiles by preferred selection
+    return profiles.sort(compareProperties);
   }
 
   /**
@@ -292,20 +306,7 @@ function Ctrl($scope, brCredentialLibraryService) {
     });
 
     // sort candidates by preferred selection
-    return candidates.sort(function(a, b) {
-      // 1. by number of highly sensitive superfluous properties
-      var d = a.superfluous.sensitive.length - b.superfluous.sensitive.length;
-      if(d !== 0) {
-        return d;
-      }
-      // 2. by number of superfluous properties
-      d = a.superfluous.total.length - b.superfluous.total.length;
-      if(d !== 0) {
-        return d;
-      }
-      // 3. by number of missing properties
-      return a.missing.length - b.missing.length;
-    });
+    return candidates.sort(compareProperties);
   }
 
   /**
@@ -325,19 +326,20 @@ function Ctrl($scope, brCredentialLibraryService) {
     var profile = {
       credentials: [candidate.credential],
       missing: _.clone(candidate.missing),
-      superflous: _.cloneDeep(candidate.superfluous)
+      superfluous: _.cloneDeep(candidate.superfluous)
     };
 
     // TODO: consider self.requestedProperties[property].optional
 
     // candidate fulfills query on its own
-    if(candidate.missing === 0) {
-      return [profile];
+    if(profile.missing.length === 0) {
+      return profile;
     }
 
     // for each missing property, find another candidate that can provide it
     angular.forEach(candidate.missing, function(p) {
-      for(var i = 0; i < others.length; ++i) {
+      for(var i = 0; profile.missing.indexOf(p) !== -1 &&
+        i < others.length; ++i) {
         // TODO: consider overlapping properties provided by other credentials
         // in the set and whether they have the same value or not
         var other = others[i];
@@ -354,6 +356,26 @@ function Ctrl($scope, brCredentialLibraryService) {
     });
 
     return profile;
+  }
+
+  function compareProperties(a, b) {
+    // 1. by number of highly sensitive superfluous properties
+    var d = a.superfluous.sensitive.length - b.superfluous.sensitive.length;
+    if(d !== 0) {
+      return d;
+    }
+    // 2. by number of superfluous properties
+    d = a.superfluous.total.length - b.superfluous.total.length;
+    if(d !== 0) {
+      return d;
+    }
+    // 3. by number of missing properties
+    d = a.missing.length - b.missing.length;
+    if(d !== 0 || !('credentials' in a)) {
+      return d;
+    }
+    // 4. by number of credentials
+    return a.credentials.length - b.credentials.length;
   }
 
   function isOptional(queryValue) {

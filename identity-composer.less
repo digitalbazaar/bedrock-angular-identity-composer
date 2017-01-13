@@ -70,9 +70,20 @@
 }
 
 .br-identity-profile-container {
+  align-content: flex-start;
+  background-color: darken(@body-bg, 5%);
+  border: 1px solid #ddd;
+  border-radius: 5px;
   display: flex;
   flex-flow: row wrap;
+  padding: 5px;
+  margin: 5px;
+}
+.br-identity-profile-container:hover {
+  background-color: @body-bg;
+  .transition(~"background-color ease-in-out .15s");
 }
 .br-identity-profile-item {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
+  padding: 5px;
 }
