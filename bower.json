@@ -3,7 +3,7 @@
   "version": "1.0.4-dev",
   "main": [
     "./main.js",
-    "./identity-composer.less"
+    "./main.less"
   ],
   "moduleType": [
     "amd"

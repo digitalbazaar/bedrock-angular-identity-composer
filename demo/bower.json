@@ -1,24 +1,16 @@
 {
-  "name": "bedrock-angular-identity-composer",
+  "name": "bedrock-angular-identity-composer-demo",
   "version": "1.0.4-dev",
   "main": [
-    "./identity-composer.js",
-    "./identity-composer.less"
+    "./composer.js"
   ],
   "moduleType": [
     "amd"
   ],
-  "ignore": [
-    "bedrock/bower.json",
-    "bedrock/components",
-    "bedrock/node_modules",
-    "bedrock/package.json",
-    "bedrock/prepare",
-    "bedrock/test",
-    "bedrock/views"
-  ],
+  "ignore": [],
   "dependencies": {
     "bedrock-angular": "^2.0.0",
+    "bedrock-angular-card-displayer": "git@github.com:digitalbazaar/bedrock-angular-card-displayer.git",
     "bedrock-angular-credential": "^2.0.0",
     "bedrock-angular-form": "^2.0.0",
     "bedrock-angular-lazy-compile": "^2.0.0",
