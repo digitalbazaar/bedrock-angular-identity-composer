@@ -1,14 +1,13 @@
 /*!
  * Identity Composer module.
  *
- * Copyright (c) 2015-2016 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2015-2017 Digital Bazaar, Inc. All rights reserved.
  *
  * @author Dave Longley
  */
 define([
   'angular',
-  './identity-composer-component',
-  './credential-selector-component'
+  './identity-composer-component'
 ], function(angular) {
 
 'use strict';
