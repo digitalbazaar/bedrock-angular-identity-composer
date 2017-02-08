@@ -25,7 +25,7 @@ function register(module) {
 }
 
 /* @ngInject */
-function Ctrl($scope, brCredentialLibraryService) {
+function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
   var self = this;
   self.loading = true;
   self.profiles = [];
@@ -50,8 +50,26 @@ function Ctrl($scope, brCredentialLibraryService) {
     acknowledged: false
   };
 
+  var unregisterMediaListener;
+  var credentialWidths = {
+    phone: '80vw',
+    tablet: '25vw',
+    desktop: '20vw'
+  };
+
   self.$onInit = function() {
+    unregisterMediaListener = brMediaQueryService.onMediaChange(
+      ['phone', 'tablet', 'desktop'], function(event) {
+        if(event.matches) {
+          self.selectCredentialWidth = credentialWidths[event.queryName];
+        }
+      });
+
     init(self.identity);
+  };
+
+  self.$onDestroy = function() {
+    unregisterMediaListener();
   };
 
   self.$onChanges = function(changes) {
@@ -242,8 +260,28 @@ function Ctrl($scope, brCredentialLibraryService) {
       return profile.missing.length === 0;
     });
 
-    // TODO: if N creds in a profile will fulfill the query, remove any
-    // profiles that include the same creds + more
+    // remove any profiles that contain a superset of another profile's
+    // credentials (if that other profile fulfills the query)
+    profiles = profiles.filter(function(profile) {
+      for(var i = 0; i < profiles.length; ++i) {
+        var other = profiles[i];
+        if(profile === other ||
+          other.credentials.length >= profile.credentials.length) {
+          continue;
+        }
+        // get what's in common between this profile and the other
+        var intersection = _.intersection(
+          profile.credentials, other.credentials);
+        // if there's something in common -- and it's the entire other
+        // profile, then drop this one as it provides more credentials
+        // than are necessary to fulfill the request
+        if(intersection.length > 0 &&
+          _.difference(other.credentials, intersection).length === 0) {
+          return false;
+        }
+      }
+      return true;
+    });
 
     // sort profiles by preferred selection
     return profiles.sort(compareProperties);
