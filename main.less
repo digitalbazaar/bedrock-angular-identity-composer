@@ -5,6 +5,7 @@
  */
 .br-identity-profile-container {
   align-content: flex-start;
+  align-items: center;
   background-color: darken(@body-bg, 5%);
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -12,6 +13,10 @@
   flex-flow: row wrap;
   padding: 5px;
   margin: 5px;
+
+  @media (max-width: 767px) {
+    justify-content: center;
+  }
 }
 .br-identity-profile-container:hover {
   background-color: @body-bg;

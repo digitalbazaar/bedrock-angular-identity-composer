@@ -58,6 +58,12 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
   };
 
   self.$onInit = function() {
+    angular.forEach(credentialWidths, function(width, name) {
+      if(brMediaQueryService.isMedia(name)) {
+        self.selectCredentialWidth = width;
+      }
+    });
+
     unregisterMediaListener = brMediaQueryService.onMediaChange(
       ['phone', 'tablet', 'desktop'], function(event) {
         if(event.matches) {
