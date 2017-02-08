@@ -127,7 +127,7 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
     jsonld.promises.compact(identity, CONTEXT).then(function(profile) {
       self.loading = false;
       $scope.$apply();
-      self.onComposed(profile);
+      self.onComposed({profile: profile});
     }).catch(function(err) {
       // FIXME: show on UI?
       console.error('[Identity Composer] Error:', err);
@@ -174,7 +174,6 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
         }));
       })).then(function() {
         self.profiles = profiles;
-        console.log('profiles', profiles);
       });
       // self.profiles = profiles;
       // console.log('profiles', profiles);

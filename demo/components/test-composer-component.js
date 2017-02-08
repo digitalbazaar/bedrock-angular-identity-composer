@@ -35,6 +35,10 @@ function Ctrl() {
 
   var dateTime = new Date().toISOString();
 
+  self.complete = function(profile) {
+    console.log('Profile selected', profile);
+  };
+
   self.identity = {
     "@context": [
       "https://w3id.org/identity/v1", "https://w3id.org/credentials/v1"

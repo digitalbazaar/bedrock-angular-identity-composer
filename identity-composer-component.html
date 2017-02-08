@@ -9,13 +9,17 @@
 <div class="row" ng-repeat="profile in $ctrl.profiles">
   <div class="col-xs-12">
     <!-- <h4 class="text-muted">Profile {{$index + 1}}</h4> -->
-    <h4><span class="label" ng-class="{
+    <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
+      ng-click="$ctrl.select(profile)">
+      <span class="label br-identity-profile-label" ng-class="{
       'label-default': !$hover,
       'label-primary': $hover,
       'br-identity-profile-label-hover': $hover
-      }">Profile {{$index + 1}}</span></h4>
+      }">Profile {{$index + 1}}</span>
+    </h4>
     <div class="br-identity-profile-container"
-      ng-mouseenter="$hover=true" ng-mouseleave="$hover=false">
+      ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
+      ng-class="{'br-identity-profile-container-hover': $hover}">
       <div class="br-identity-profile-item"
         ng-repeat="credential in profile.credentials"
         ng-click="$ctrl.credential=credential; $ctrl.showCredentialDetails=true">
