@@ -3,16 +3,20 @@
  *
  * Copyright (c) 2015-2017 Digital Bazaar, Inc. All rights reserved.
  */
+.br-identity-profile-label:hover,
+.br-identity-profile-label-hover {
+  .transition(~"background-color ease-in-out .15s");
+  cursor: pointer;
+}
 .br-identity-profile-container {
   align-content: flex-start;
   align-items: center;
   background-color: darken(@body-bg, 5%);
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 3px solid #aaa;
+  border-radius: 0.25em;
   display: flex;
   flex-flow: row wrap;
-  padding: 5px;
-  margin: 5px;
+  padding: 20px 5px;
 
   @media (max-width: 767px) {
     justify-content: center;
@@ -21,7 +25,7 @@
 .br-identity-profile-container:hover {
   background-color: @body-bg;
   .transition(~"background-color ease-in-out .15s");
-  border: 1px solid @input-border-focus !important;
+  border: 3px solid @input-border-focus !important;
   cursor: pointer;
   outline: 0;
   @color-rgba: rgba(
@@ -35,6 +39,9 @@
 .br-identity-profile-item {
   flex: 0 1 auto;
   padding: 5px;
+}
+.br-identity-profile-separator {
+  border: 1px solid #ddd;
 }
 
 .br-identity-credential-container {
