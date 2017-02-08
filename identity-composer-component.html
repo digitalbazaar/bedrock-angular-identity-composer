@@ -18,7 +18,7 @@
           and sensitive properties -->
         <!-- TODO: change simple to complex displayer -->
         <br-credential br-credential="credential" br-show-actions="false"
-          br-options="{displayer: {style: {width: $ctrl.selectCredentialWidth}}}">
+          br-options="{displayer: {style: {width: $ctrl.credentialWidth.select}}}">
         </br-credential>
       </div>
     </div>
@@ -43,9 +43,13 @@
   <br-modal br-title="Credential Details">
     <br-modal-body>
       <br-demo-warning></br-demo-warning>
-      <!-- TODO: change simple to complex displayer -->
-      <br-credential br-credential="$ctrl.credential" br-show-actions="false">
-      </br-credential>
+      <div class="br-identity-credential-container">
+        <div class="br-identity-credential-item">
+          <br-credential br-credential="$ctrl.credential" br-show-actions="false"
+            br-options="{displayer: {style: {width: $ctrl.credentialWidth.detail}}}">
+          </br-credential>
+        </div>
+      </div>
     </br-modal-body>
     <br-modal-footer>
       <button type="button" class="btn btn-default stackable-cancel">Close</button>

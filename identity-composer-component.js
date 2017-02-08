@@ -52,22 +52,46 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
 
   var unregisterMediaListener;
   var credentialWidths = {
-    phone: '80vw',
-    tablet: '25vw',
-    desktop: '20vw'
+    phone: {
+      select: '80vw',
+      detail: '85vw'
+    },
+    tablet: {
+      select: '25vw',
+      detail: '58vw'
+    },
+    desktopSmall: {
+      select: '20vw',
+      detail: '44vw'
+    },
+    desktopMedium: {
+      select: '20vw',
+      detail: '29.5vw'
+    },
+    desktopLarge: {
+      select: '20vw',
+      detail: '20vw'
+    }
   };
 
   self.$onInit = function() {
+    brMediaQueryService.registerQuery(
+      'desktopSmall', '(min-width: 980px) and (max-width: 1279px)');
+    brMediaQueryService.registerQuery(
+      'desktopMedium', '(min-width: 1280px) and (max-width: 1919px)');
+    brMediaQueryService.registerQuery(
+      'desktopLarge', '(min-width: 1920px)');
+
     angular.forEach(credentialWidths, function(width, name) {
       if(brMediaQueryService.isMedia(name)) {
-        self.selectCredentialWidth = width;
+        self.credentialWidth = width;
       }
     });
 
     unregisterMediaListener = brMediaQueryService.onMediaChange(
-      ['phone', 'tablet', 'desktop'], function(event) {
+      Object.keys(credentialWidths), function(event) {
         if(event.matches) {
-          self.selectCredentialWidth = credentialWidths[event.queryName];
+          self.credentialWidth = credentialWidths[event.queryName];
         }
       });
 
