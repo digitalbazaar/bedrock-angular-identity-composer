@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "composer": "node composer.js",
-    "postinstall": "bower install"
+    "postinstall": "bower install && node composer.js compile-less"
   },
   "dependencies": {
     "bedrock": "^1.2.5",
