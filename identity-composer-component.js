@@ -43,7 +43,7 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
   var CRED_CLAIM = CRED + 'claim';
   var CRED_OPTIONAL = CRED + 'isOptional';
   var CRED_CREDENTIAL = CRED + 'credential';
-  var IDENTITY = 'https://w3id.org/identity#identity';
+  var IDENTITY = 'https://w3id.org/identity#Identity';
 
   self.publicAccess = {
     requested: false,
