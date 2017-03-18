@@ -52,7 +52,7 @@ function Ctrl() {
             "https://w3id.org/identity/v1",
             "https://w3id.org/credentials/v1",
             {
-               "br": "urn:bedrock:"
+              "br": "urn:bedrock:"
             }
           ],
           "id": "urn:uuid:e3de5bc3-34de-4306-9a13-85932d2bdaa1",
@@ -85,7 +85,7 @@ function Ctrl() {
             "https://w3id.org/identity/v1",
             "https://w3id.org/credentials/v1",
             {
-               "br": "urn:bedrock:"
+              "br": "urn:bedrock:"
             }
           ],
           "id": "urn:uuid:e3de5bc3-34de-4306-9a13-85932d2bdaa2",
@@ -308,7 +308,7 @@ function Ctrl() {
             "https://w3id.org/identity/v1",
             "https://w3id.org/credentials/v1",
             {
-               "br": "urn:bedrock:"
+              "br": "urn:bedrock:"
             }
           ],
           "id": "urn:uuid:e3de5bc3-34de-4306-9a13-85932d2bdaa8",
@@ -341,7 +341,7 @@ function Ctrl() {
             "https://w3id.org/identity/v1",
             "https://w3id.org/credentials/v1",
             {
-               "br": "urn:bedrock:"
+              "br": "urn:bedrock:"
             }
           ],
           "id": "urn:uuid:e3de5bc3-34de-4306-9a13-85932d2bdaa9",

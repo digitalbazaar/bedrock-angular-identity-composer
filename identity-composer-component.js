@@ -144,7 +144,7 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
     Promise.all([
       ensureLibrary(self.library),
       compactQuery(self.query),
-      compactCredentials(identity),
+      compactCredentials(identity)
     ]).then(function(results) {
       var query = results[1];
 

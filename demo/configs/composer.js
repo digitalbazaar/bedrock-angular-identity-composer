@@ -43,4 +43,3 @@ config.requirejs.bower.packages.push({
     }
   }
 });
-
