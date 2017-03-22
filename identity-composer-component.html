@@ -1,21 +1,22 @@
-<div class="row">
+<!-- FIXME: commenting to conserve vertical space -->
+<!-- <div class="row">
   <div class="col-xs-12">
     <h4 class="text-muted">Please select a profile of yourself to present to the website:</h4>
-    <!-- <pre>{{$ctrl.query|json}}</pre> -->
     <hr ng-if="!$last" class="br-identity-profile-separator">
   </div>
-</div>
+</div> -->
 
 <div class="row" ng-repeat="profile in $ctrl.profiles">
   <div class="col-xs-12">
     <!-- <h4 class="text-muted">Profile {{$index + 1}}</h4> -->
     <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
       ng-click="$ctrl.select(profile)">
+      <i class="fa fa-clone"></i>
       <span class="label br-identity-profile-label" ng-class="{
       'label-default': !$hover,
       'label-primary': $hover,
       'br-identity-profile-label-hover': $hover
-      }">Profile {{$index + 1}}</span>
+    }"><strong>Profile {{$index + 1}}</strong></span>
     </h4>
     <div class="br-identity-profile-container"
       ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
