@@ -25,7 +25,7 @@ function register(module) {
 }
 
 /* @ngInject */
-function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
+function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
   var self = this;
   self.loading = true;
   self.profiles = [];
@@ -94,7 +94,6 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
           self.credentialWidth = credentialWidths[event.queryName];
         }
       });
-
     init(self.identity);
   };
 
@@ -124,16 +123,15 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
       return {'@graph': credential};
     });
 
-    jsonld.promises.compact(identity, CONTEXT).then(function(profile) {
-      self.loading = false;
-      $scope.$apply();
-      self.onComposed({profile: profile});
-    }).catch(function(err) {
-      // FIXME: show on UI?
-      console.error('[Identity Composer] Error:', err);
-      self.loading = false;
-      $scope.$apply();
-    });
+    $q.resolve(jsonld.promises.compact(identity, CONTEXT))
+      .then(function(profile) {
+        return self.onComposed({profile: profile});
+      }).catch(function(err) {
+        // FIXME: show on UI?
+        console.error('[Identity Composer] Error:', err);
+      }).then(function() {
+        self.loading = false;
+      });
   };
 
   function init(identity) {
@@ -141,7 +139,7 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
 
     // 1. Load and compact inputs
     // 2. Make identity profile recommendations
-    Promise.all([
+    $q.all([
       ensureLibrary(self.library),
       compactQuery(self.query),
       compactCredentials(identity)
@@ -165,9 +163,9 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
     }).then(function(profiles) {
       // FIXME: should not need to compact, `br-credential` component should
       // handle it
-      return Promise.all(profiles.map(function(profile) {
-        return Promise.all(profile.credentials.map(function(credential, idx) {
-          return jsonld.promises.compact(credential, CONTEXT)
+      return $q.all(profiles.map(function(profile) {
+        return $q.all(profile.credentials.map(function(credential, idx) {
+          return $q.resolve(jsonld.promises.compact(credential, CONTEXT))
             .then(function(compacted) {
               profile.credentials[idx] = compacted;
             });
@@ -182,7 +180,6 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
       console.error('[Identity Composer] Error:', err);
     }).then(function() {
       self.loading = false;
-      $scope.$apply();
     });
   }
 
@@ -197,7 +194,7 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
    */
   function ensureLibrary(library) {
     if(library) {
-      return Promise.resolve(library);
+      return $q.resolve(library);
     }
     // load default library
     return brCredentialLibraryService.getLibrary().then(function(library) {
@@ -210,17 +207,17 @@ function Ctrl($scope, brCredentialLibraryService, brMediaQueryService) {
 
   function compactCredentials(identity) {
     var credentials = jsonld.getValues(identity, 'credential');
-    return Promise.all(credentials.map(function(credential) {
-      return jsonld.promises.compact(credential['@graph'], {});
+    return $q.all(credentials.map(function(credential) {
+      return $q.resolve(jsonld.promises.compact(credential['@graph'], {}));
     }));
   }
 
   function compactQuery(query) {
-    return jsonld.promises.compact(query, {});
+    return $q.resolve(jsonld.promises.compact(query, {}));
   }
 
   function compactDefinitions() {
-    return jsonld.promises.compact(self.library.graph, {})
+    return $q.resolve(jsonld.promises.compact(self.library.graph, {}))
       .then(function(graph) {
         var definitions = {};
         angular.forEach(graph['@graph'], function(node) {

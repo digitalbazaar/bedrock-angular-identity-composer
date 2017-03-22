@@ -5,46 +5,55 @@
     <hr ng-if="!$last" class="br-identity-profile-separator">
   </div>
 </div> -->
-
-<div class="row" ng-repeat="profile in $ctrl.profiles">
-  <div class="col-xs-12">
-    <!-- <h4 class="text-muted">Profile {{$index + 1}}</h4> -->
-    <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
-      ng-click="$ctrl.select(profile)">
-      <i class="fa fa-clone"></i>
-      <span class="label br-identity-profile-label" ng-class="{
-      'label-default': !$hover,
-      'label-primary': $hover,
-      'br-identity-profile-label-hover': $hover
-    }"><strong>Profile {{$index + 1}}</strong></span>
-    </h4>
-    <div class="br-identity-profile-container"
-      ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
-      ng-class="{'br-identity-profile-container-hover': $hover}">
-      <div class="br-identity-profile-item"
-        ng-repeat="credential in profile.credentials"
-        ng-click="$ctrl.credential=credential; $ctrl.showCredentialDetails=true">
-        <!-- TODO: ng-class="alert alert-warning"/"alert-danger for superfluous
-          and sensitive properties -->
-        <!-- TODO: change simple to complex displayer -->
-        <br-credential br-credential="credential" br-show-actions="false"
-          br-options="{displayer: {style: {width: $ctrl.credentialWidth.select}}}">
-        </br-credential>
-      </div>
+<!-- FIXME: removing spinner for now -->
+<div ng-if="$ctrl.loading">
+  <div class="row">
+    <div class="col-xs-12" style="font-size: x-small">
+      <i class="fa fa-refresh fa-spin text-muted"></i> Building profiles...
     </div>
-    <!-- TODO: add warning for superfluous/sensitive properties -->
-    <!-- TODO: add send button -->
-    <!-- TODO: add confirmation alert modal if send is pressed on
-      warned a profile -->
-    <!-- <hr ng-if="!$last" class="br-identity-profile-separator"> -->
-    <p ng-if="!$last"></p>
   </div>
 </div>
+<div ng-if="!$ctrl.loading">
+  <div class="row" ng-repeat="profile in $ctrl.profiles">
+    <div class="col-xs-12">
+      <!-- <h4 class="text-muted">Profile {{$index + 1}}</h4> -->
+      <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
+        ng-click="$ctrl.select(profile)">
+        <i class="fa fa-clone"></i>
+        <span class="label br-identity-profile-label" ng-class="{
+        'label-default': !$hover,
+        'label-primary': $hover,
+        'br-identity-profile-label-hover': $hover
+      }"><strong>Profile {{$index + 1}}</strong></span>
+      </h4>
+      <div class="br-identity-profile-container"
+        ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
+        ng-class="{'br-identity-profile-container-hover': $hover}">
+        <div class="br-identity-profile-item"
+          ng-repeat="credential in profile.credentials"
+          ng-click="$ctrl.credential=credential; $ctrl.showCredentialDetails=true">
+          <!-- TODO: ng-class="alert alert-warning"/"alert-danger for superfluous
+            and sensitive properties -->
+          <!-- TODO: change simple to complex displayer -->
+          <br-credential br-credential="credential" br-show-actions="false"
+            br-options="{displayer: {style: {width: $ctrl.credentialWidth.select}}}">
+          </br-credential>
+        </div>
+      </div>
+      <!-- TODO: add warning for superfluous/sensitive properties -->
+      <!-- TODO: add send button -->
+      <!-- TODO: add confirmation alert modal if send is pressed on
+        warned a profile -->
+      <!-- <hr ng-if="!$last" class="br-identity-profile-separator"> -->
+      <p ng-if="!$last"></p>
+    </div>
+  </div>
 
-<div ng-if="$ctrl.profiles.length === 0" class="row">
-  <div class="col-xs-12">
-    <!-- TODO: improve -->
-    Oh no, you lack the credentials to fulfill this query!
+  <div ng-if="$ctrl.profiles.length === 0" class="row">
+    <div class="col-xs-12">
+      <!-- TODO: improve -->
+      Oh no, you lack the credentials to fulfill this query!
+    </div>
   </div>
 </div>
 
