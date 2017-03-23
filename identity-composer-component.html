@@ -8,7 +8,12 @@
 <div ng-if="!$ctrl.loading">
   <div ng-if="!!$ctrl.profiles.length" class="row" ng-repeat="profile in $ctrl.profiles">
     <div class="col-xs-12">
-      <span class="h5" ng-if="$first">Select a profile:</span>
+      <span class="h5" ng-if="$first && !$ctrl.sending">
+        <i class="fa fa-bullseye text-muted"></i> Select a profile:
+      </span>
+      <span class="h5" ng-if="$first && $ctrl.sending">
+        <i class="fa fa-refresh fa-spin text-muted"></i> Sending profile...
+      </span>
       <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
         ng-click="$ctrl.select(profile)">
         <i class="fa fa-clone"></i>

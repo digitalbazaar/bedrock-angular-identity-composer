@@ -28,6 +28,7 @@ function register(module) {
 function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
   var self = this;
   self.loading = true;
+  self.sending = false;
   self.profiles = [];
 
   // the @context for outputting profiles
@@ -114,7 +115,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
   };
 
   self.select = function(profile) {
-    self.loading = true;
+    self.sending = true;
     var identity = {
       '@id': self.identity.id,
       '@type': IDENTITY
@@ -130,13 +131,11 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
         // FIXME: show on UI?
         console.error('[Identity Composer] Error:', err);
       }).then(function() {
-        self.loading = false;
+        self.sending = false;
       });
   };
 
   function init(identity) {
-    self.loading = true;
-
     // 1. Load and compact inputs
     // 2. Make identity profile recommendations
     $q.all([
