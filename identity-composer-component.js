@@ -30,6 +30,9 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
   self.loading = true;
   self.sending = false;
   self.profiles = [];
+  self.profileContainerStyle = {
+    width: '100vw'
+  };
 
   // the @context for outputting profiles
   var CONTEXT = {
@@ -171,6 +174,10 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
         }));
       })).then(function() {
         self.profiles = profiles;
+        if(self.profiles.length > 1) {
+          // reduce width to account for vertical scrollbar
+          self.profileContainerStyle.width = '90vw';
+        }
       });
       // self.profiles = profiles;
       // console.log('profiles', profiles);
