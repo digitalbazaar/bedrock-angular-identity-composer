@@ -18,12 +18,14 @@
       </div>
       <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
         ng-click="$ctrl.select(profile)">
-        <i class="fa fa-clone"></i>
-        <span class="label br-identity-profile-label" ng-class="{
-        'label-default': !$hover,
-        'label-primary': $hover,
-        'br-identity-profile-label-hover': $hover
-      }"><strong>Profile {{$index + 1}}</strong></span>
+        <!-- <span class="label br-identity-profile-label" ng-class="{
+          'label-default': !$hover,
+          'label-primary': $hover,
+          'br-identity-profile-label-hover': $hover
+        }"> -->
+        <span class="label label-primary">
+          Select Profile {{$index + 1}}
+        </span>
       </h4>
       <div class="br-identity-profile-container"
         ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
