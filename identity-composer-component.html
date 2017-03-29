@@ -1,27 +1,14 @@
-<div ng-if="$ctrl.loading" style="width: 100vw">
-  <div style="font-size: x-small;">
-    <i class="fa fa-refresh fa-spin text-muted"></i> Building profiles...
-  </div>
+<div ng-if="$ctrl.loading" style="width: 100vw; font-size: x-small;">
+  <i class="fa fa-refresh fa-spin text-muted"></i> Building profiles...
 </div>
 <div ng-if="!$ctrl.loading" ng-style="$ctrl.profileContainerStyle">
   <div ng-if="!!$ctrl.profiles.length" ng-repeat="profile in $ctrl.profiles">
-    <div ng-if="$first" style="font-size: x-small">
-      <span ng-if="!$ctrl.sending">
-        <i class="fa fa-bullseye text-muted"></i> Select a profile:
-      </span>
-      <span ng-if="$ctrl.sending">
-        <i class="fa fa-refresh fa-spin text-muted"></i> Sending profile...
-      </span>
-    </div>
     <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
-      ng-click="$ctrl.select(profile)">
-      <!-- <span class="label br-identity-profile-label" ng-class="{
-        'label-default': !$hover,
-        'label-primary': $hover,
-        'br-identity-profile-label-hover': $hover
-      }"> -->
+      ng-click="$ctrl.select(profile, $index)">
       <span class="label label-primary" style="cursor: pointer;">
         Select Profile {{$index + 1}}
+        <i ng-if="$ctrl.sending && $ctrl.selectedIndex === $index"
+          class="fa fa-refresh fa-spin"></i>
       </span>
     </h4>
     <div class="br-identity-profile-container"

@@ -28,6 +28,7 @@ function register(module) {
 function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
   var self = this;
   self.loading = true;
+  self.selectedIndex = null;
   self.sending = false;
   self.profiles = [];
   self.profileContainerStyle = {
@@ -117,7 +118,8 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     }
   };
 
-  self.select = function(profile) {
+  self.select = function(profile, index) {
+    self.selectedIndex = index;
     self.sending = true;
     var identity = {
       '@id': self.identity.id,
