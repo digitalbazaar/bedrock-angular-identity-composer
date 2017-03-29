@@ -2,7 +2,8 @@
   <i class="fa fa-refresh fa-spin text-muted"></i> Building profiles...
 </div>
 <div ng-if="!$ctrl.loading" ng-style="$ctrl.profileContainerStyle">
-  <div ng-if="!!$ctrl.profiles.length" ng-repeat="profile in $ctrl.profiles">
+  <div ng-if="!!$ctrl.profiles.length" class="br-identity-profile-list"
+    ng-repeat="profile in $ctrl.profiles">
     <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
       ng-click="$ctrl.select(profile, $index)">
       <span class="label label-primary" style="cursor: pointer;">
