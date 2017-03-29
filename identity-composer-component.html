@@ -34,9 +34,11 @@
     <p ng-if="!$last"></p>
   </div>
 
-  <div ng-if="!$ctrl.profiles.length">
-    <!-- TODO: improve -->
-    Oh no, you lack the credentials to fulfill this query!
+  <div ng-if="!$ctrl.profiles.length" class="text-center">
+    <h4>We're sorry, but you don't have the credentials the site is looking for.</h4>
+    <button type="button" class="btn btn-primary" ng-click="$ctrl.cancel()">
+      Close
+    </button>
   </div>
 </div>
 

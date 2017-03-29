@@ -118,6 +118,10 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     }
   };
 
+  self.cancel = function() {
+    self.onComposed(null);
+  };
+
   self.select = function(profile, index) {
     self.selectedIndex = index;
     self.sending = true;
