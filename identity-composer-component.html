@@ -1,31 +1,122 @@
+<style>
+.text-element {
+  position: relative;
+  left: -50%;
+  font-size: 1.3em;
+}
+
+.text-container {
+  position: absolute;
+  margin-top: 1%;
+  margin-left: 7.2%;
+  cursor: pointer;
+}
+
+@media (max-width: 992px) {
+  .text-container {
+    margin-left: 10%;
+  }
+}
+
+@media (max-width: 767px) {
+  .text-container {
+    position: absolute;
+    margin-left: 50%;
+    margin-top: 1%;
+  }
+}
+
+.info-icon-container {
+  margin-left: calc(100% - 23px);
+}
+
+@media (max-width: 992px) {
+  .info-icon-container {
+    margin-left: calc(100% - 17px);
+  }
+}
+
+@media (max-width: 767px) {
+  .info-icon-container {
+    margin-left: calc(100% - 23px);
+  }
+}
+
+.info-icon-element {
+  position: absolute;
+  z-index: 2;
+  margin-top: 7px;
+  font-size: 1em;
+}
+
+@media (max-width: 992px) {
+  .info-icon-element {
+    margin-top:7px;
+    font-size: 0.7em;
+  }
+}
+
+@media (max-width: 767px) {
+  .info-icon-element {
+    margin-top: 7px;
+  }
+}
+
+.br-identity-profile-container {
+  padding-top: 3%;
+}
+
+@media (max-width: 767px) {
+  .br-identity-profile-container {
+    padding-top: 5.5%;
+  }
+}
+
+
+</style>
+
+
 <div ng-if="$ctrl.loading" style="width: 100vw; font-size: x-small;">
   <i class="fa fa-refresh fa-spin text-muted"></i> Building profiles...
 </div>
 <div ng-if="!$ctrl.loading" ng-style="$ctrl.profileContainerStyle">
   <div ng-if="!!$ctrl.profiles.length" class="br-identity-profile-list"
     ng-repeat="profile in $ctrl.profiles">
-    <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
-      ng-click="$ctrl.select(profile, $index)">
+<!--     <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false">
       <span class="label label-primary" style="cursor: pointer;">
+        
+      </span>
+    </h4> -->
+ 
+    <div class="text-container">
+      <div class="text-element">
         Select Profile {{$index + 1}}
         <i ng-if="$ctrl.sending && $ctrl.selectedIndex === $index"
-          class="fa fa-refresh fa-spin"></i>
-      </span>
-    </h4>
-    <div class="br-identity-profile-container"
+            class="fa fa-refresh fa-spin"></i>        
+      </div>        
+    </div>
+    <div class="br-identity-profile-container" 
       ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
-      ng-class="{'br-identity-profile-container-hover': $hover}">
+      ng-class="{'br-identity-profile-container-hover': $hover}"
+      ng-click="$ctrl.select(profile, $index)">
+
       <div class="br-identity-profile-item"
-        ng-repeat="credential in profile.credentials"
-        ng-click="$ctrl.credential=credential; $ctrl.showCredentialDetails=true">
+        ng-repeat="credential in profile.credentials">
         <!-- TODO: ng-class="alert alert-warning"/"alert-danger for superfluous
           and sensitive properties -->
         <!-- TODO: change simple to complex displayer -->
+        <div class="info-icon-container">
+          <i class="fa fa-info-circle info-icon-element" aria-hidden="true"
+          ng-click="$ctrl.credential=credential; $ctrl.showCredentialDetails=true">
+          </i>
+        </div>
         <br-credential br-credential="credential" br-show-actions="false"
           br-options="{displayer: {style: {width: $ctrl.credentialWidth.select}}}">
         </br-credential>
       </div>
     </div>
+    
+
     <!-- TODO: add warning for superfluous/sensitive properties -->
     <!-- TODO: add send button -->
     <!-- TODO: add confirmation alert modal if send is pressed on
