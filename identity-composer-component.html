@@ -1,8 +1,16 @@
 <style>
 .text-element {
   position: relative;
-  left: -50%;
-  font-size: 1.3em;
+  left: -45%;
+  font-size: 2.0em;
+  font-weight: bold;
+}
+
+@media (max-width: 1440px) {
+  .text-element {
+    font-size: 1.3em;
+    font-weight: bold;
+  }
 }
 
 .text-container {
@@ -27,38 +35,110 @@
 }
 
 .info-icon-container {
-  margin-left: calc(100% - 23px);
+  margin-left: 93%;
 }
+
+@media (max-width: 2200px) {
+  .info-icon-container {
+    margin-left: 91.5%;
+  }
+}
+
+@media (max-width: 1440px) {
+  .info-icon-container {
+    margin-left: 91.5%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .info-icon-container {
+    margin-left: 90%;
+  }
+}
+
 
 @media (max-width: 992px) {
   .info-icon-container {
-    margin-left: calc(100% - 17px);
+    margin-left: 91.5%;
   }
 }
 
 @media (max-width: 767px) {
   .info-icon-container {
-    margin-left: calc(100% - 23px);
+    margin-left: 92%;
   }
 }
+
+@media (max-width: 675px) {
+  .info-icon-container {
+    margin-left: 91.5%;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-icon-container {
+    margin-left: 92%;
+  }
+}
+
 
 .info-icon-element {
   position: absolute;
+  color: ivory;
   z-index: 2;
-  margin-top: 7px;
-  font-size: 1em;
+  margin-top: 0.6%;
+  font-size: 1.6em;
+}
+
+@media (max-width: 2200px) {
+  .info-icon-element {
+    font-size: 1.4em;
+    margin-top: 0.5%;
+  }
+}
+
+@media (max-width: 1440px) {
+  .info-icon-element {
+    font-size: 1em;
+    margin-top: 0.7%;
+  }
 }
 
 @media (max-width: 992px) {
   .info-icon-element {
-    margin-top:7px;
-    font-size: 0.7em;
+    font-size: 0.8em;
+    margin-top: 0.9%;
   }
 }
 
 @media (max-width: 767px) {
   .info-icon-element {
-    margin-top: 7px;
+    margin-top: 2.3%;
+    font-size: 1.8em;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-icon-element {
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 425px) {
+  .info-icon-element {
+    font-size: 1.3em;
+  }
+}
+
+@media (max-width: 375px) {
+  .info-icon-element {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 320px) {
+  .info-icon-element {
+    font-size: 1.1em;
   }
 }
 
