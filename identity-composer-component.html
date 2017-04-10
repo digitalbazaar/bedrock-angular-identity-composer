@@ -41,113 +41,19 @@
   }
 }
 
-.info-icon-container {
-  margin-left: 93%;
+.card-wrapper {
+  position: relative;
+
 }
-
-@media (max-width: 2200px) {
-  .info-icon-container {
-    margin-left: 91.5%;
-  }
-}
-
-@media (max-width: 1440px) {
-  .info-icon-container {
-    margin-left: 91.5%;
-  }
-}
-
-@media (max-width: 1200px) {
-  .info-icon-container {
-    margin-left: 90%;
-  }
-}
-
-
-@media (max-width: 992px) {
-  .info-icon-container {
-    margin-left: 91.5%;
-  }
-}
-
-@media (max-width: 767px) {
-  .info-icon-container {
-    margin-left: 92%;
-  }
-}
-
-@media (max-width: 675px) {
-  .info-icon-container {
-    margin-left: 91.5%;
-  }
-}
-
-@media (max-width: 480px) {
-  .info-icon-container {
-    margin-left: 92%;
-  }
-}
-
 
 .info-icon-element {
+
   position: absolute;
-  color: ivory;
+  right: 0.7%;
+  top: 4%;
   z-index: 2;
-  margin-top: 0.6%;
-  font-size: 1.6em;
 }
 
-@media (max-width: 2200px) {
-  .info-icon-element {
-    font-size: 1.4em;
-    margin-top: 0.5%;
-  }
-}
-
-@media (max-width: 1440px) {
-  .info-icon-element {
-    font-size: 1em;
-    margin-top: 0.7%;
-  }
-}
-
-@media (max-width: 992px) {
-  .info-icon-element {
-    font-size: 0.8em;
-    margin-top: 0.9%;
-  }
-}
-
-@media (max-width: 767px) {
-  .info-icon-element {
-    margin-top: 2.3%;
-    font-size: 1.8em;
-  }
-}
-
-@media (max-width: 480px) {
-  .info-icon-element {
-    font-size: 1.5em;
-  }
-}
-
-@media (max-width: 425px) {
-  .info-icon-element {
-    font-size: 1.3em;
-  }
-}
-
-@media (max-width: 375px) {
-  .info-icon-element {
-    font-size: 1.2em;
-  }
-}
-
-@media (max-width: 320px) {
-  .info-icon-element {
-    font-size: 1.1em;
-  }
-}
 
 .br-identity-profile-container {
   padding-top: 3.5%;
@@ -192,14 +98,15 @@
         <!-- TODO: ng-class="alert alert-warning"/"alert-danger for superfluous
           and sensitive properties -->
         <!-- TODO: change simple to complex displayer -->
-        <div class="info-icon-container">
+        <div class="card-wrapper" style="width: {{$ctrl.credentialWidth.select}}">
           <i class="fa fa-info-circle info-icon-element" aria-hidden="true"
-          ng-click="$ctrl.credential=credential; $ctrl.showCredentialDetails=true">
+          ng-click="$ctrl.credential=credential; $ctrl.showCredentialDetails=true;"
+          style="font-size: calc({{$ctrl.credentialWidth.select}} * 0.06)">
           </i>
+          <br-credential br-credential="credential" br-show-actions="false"
+            br-options="{displayer: {style: {width: $ctrl.credentialWidth.select}}}">
+          </br-credential>
         </div>
-        <br-credential br-credential="credential" br-show-actions="false"
-          br-options="{displayer: {style: {width: $ctrl.credentialWidth.select}}}">
-        </br-credential>
       </div>
     </div>
     
