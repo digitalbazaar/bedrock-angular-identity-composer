@@ -144,6 +144,13 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
       });
   };
 
+  self.detail = function(credential, showCredential, $event) {
+    $event.stopPropagation();
+    self.credential = credential;
+    self.showCredentialDetails = showCredential;
+
+  }
+
   function init(identity) {
     // 1. Load and compact inputs
     // 2. Make identity profile recommendations

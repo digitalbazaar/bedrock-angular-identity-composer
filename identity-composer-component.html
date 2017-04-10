@@ -100,7 +100,7 @@
         <!-- TODO: change simple to complex displayer -->
         <div class="card-wrapper" style="width: {{$ctrl.credentialWidth.select}}">
           <i class="fa fa-info-circle info-icon-element" aria-hidden="true"
-          ng-click="$ctrl.credential=credential; $ctrl.showCredentialDetails=true;"
+          ng-click="$ctrl.detail(credential, true, $event)"
           style="font-size: calc({{$ctrl.credentialWidth.select}} * 0.06)">
           </i>
           <br-credential br-credential="credential" br-show-actions="false"
