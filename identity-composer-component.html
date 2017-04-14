@@ -48,12 +48,24 @@
 
 .info-icon-element {
 
-  position: absolute;
-  right: 0.7%;
-  top: 4%;
-  z-index: 2;
+  position: relative;
+  color: rgba(0, 0, 0, 0.85);
+  right: 1.5%;
 }
 
+.icon-wrapper {
+  right: 0%;
+  top: 4.5%;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.6);
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .br-identity-profile-container {
   padding-top: 3.5%;
@@ -63,6 +75,8 @@
   .br-identity-profile-container {
     padding-top: 6.5%;
   }
+
+
 }
 
 
@@ -82,7 +96,8 @@
     </h4> -->
  
     <div class="text-container">
-      <div class="text-element">
+      <div class="text-element"
+        style="font-size: calc({{$ctrl.credentialWidth.select}} * 0.07)">
         Select Profile {{$index + 1}}
         <i ng-if="$ctrl.sending && $ctrl.selectedIndex === $index"
             class="fa fa-refresh fa-spin"></i>        
@@ -99,10 +114,14 @@
           and sensitive properties -->
         <!-- TODO: change simple to complex displayer -->
         <div class="card-wrapper" style="width: {{$ctrl.credentialWidth.select}}">
-          <i class="fa fa-info-circle info-icon-element" aria-hidden="true"
-          ng-click="$ctrl.detail(credential, true, $event)"
-          style="font-size: calc({{$ctrl.credentialWidth.select}} * 0.06)">
-          </i>
+          <div class="icon-wrapper"
+              style="width: calc({{$ctrl.credentialWidth.select}} * 0.083);
+                      height: calc({{$ctrl.credentialWidth.select}} * 0.083)">
+            <i class="fa fa-info-circle info-icon-element" aria-hidden="true"
+            ng-click="$ctrl.detail(credential, true, $event)"
+            style="font-size: calc({{$ctrl.credentialWidth.select}} * 0.075)">
+            </i>
+          </div>
           <br-credential br-credential="credential" br-show-actions="false"
             br-options="{displayer: {style: {width: $ctrl.credentialWidth.select}}}">
           </br-credential>
