@@ -55,7 +55,7 @@
 
 .icon-wrapper {
   right: 0%;
-  top: 4.5%;
+  top: 2.94%;
   z-index: 2;
   background-color: rgba(255, 255, 255, 0.6);
   position: absolute;
@@ -78,7 +78,9 @@
 
 
 }
-
+.modal-title {
+  font-size: 26px;
+}
 
 </style>
 
@@ -115,11 +117,11 @@
         <!-- TODO: change simple to complex displayer -->
         <div class="card-wrapper" style="width: {{$ctrl.credentialWidth.select}}">
           <div class="icon-wrapper"
-              style="width: calc({{$ctrl.credentialWidth.select}} * 0.083);
-                      height: calc({{$ctrl.credentialWidth.select}} * 0.083)">
+              style="width: calc({{$ctrl.credentialWidth.select}} * 0.0975);
+                      height: calc({{$ctrl.credentialWidth.select}} * 0.0975)">
             <i class="fa fa-info-circle info-icon-element" aria-hidden="true"
             ng-click="$ctrl.detail(credential, true, $event)"
-            style="font-size: calc({{$ctrl.credentialWidth.select}} * 0.075)">
+            style="font-size: calc({{$ctrl.credentialWidth.select}} * 0.10)">
             </i>
           </div>
           <br-credential br-credential="credential" br-show-actions="false"
