@@ -144,12 +144,18 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
       });
   };
 
-  self.detail = function(credential, showCredential, $event) {
+  self.scaleWidth = function(scale) {
+    // remove the vw unit
+    var width = self.credentialWidth.select.slice(0,-2);
+    var scaledWidth = (scale * width).toFixed(2);
+    return scaledWidth.toString() + 'vw';
+  };
+
+  self.onShowDetails = function(credential, showCredential, $event) {
     $event.stopPropagation();
     self.credential = credential;
     self.showCredentialDetails = showCredential;
-
-  }
+  };
 
   function init(identity) {
     // 1. Load and compact inputs

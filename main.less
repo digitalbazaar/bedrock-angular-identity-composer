@@ -20,7 +20,7 @@
   border-radius: 0.25em;
   display: flex;
   flex-flow: row wrap;
-  padding: 10px 5px;
+  padding: 3.5% 5px;
 
   @media (max-width: 767px) {
     justify-content: center;
@@ -48,7 +48,6 @@
 .br-identity-profile-separator {
   border: 1px solid #ddd;
 }
-
 .br-identity-credential-container {
   align-content: flex-start;
   align-items: center;
@@ -58,4 +57,66 @@
 }
 .br-identity-credential-item {
   flex: 0 1 auto;
+}
+.br-text-element {
+  position: relative;
+  left: -45%;
+  font-size: 2.0em;
+  font-weight: bold;
+}
+@media (max-width: 1440px) {
+  .br-text-element {
+    left: -35%;
+    font-size: 1.6em;
+    font-weight: bold;
+  }
+}
+@media (max-width: 767px) {
+  .br-text-element {
+    left: -50%;
+  }
+}
+.br-text-container {
+  position: absolute;
+  margin-top: 1%;
+  margin-left: 7.2%;
+  cursor: pointer;
+}
+@media (max-width: 992px) {
+  .br-text-container {
+    margin-left: 10%;
+  }
+}
+@media (max-width: 767px) {
+  .br-text-container {
+    position: absolute;
+    margin-left: 50%;
+    margin-top: 1%;
+  }
+}
+.br-card-wrapper {
+  position: relative;
+}
+.br-info-icon-element {
+  position: relative;
+  color: rgba(0, 0, 0, 0.85);
+  right: 1.5%;
+}
+.br-icon-wrapper {
+  right: 0%;
+  top: 2.94%;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.6);
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media (max-width: 767px) {
+  .br-identity-profile-container {
+    padding-top: 6.5%;
+  }
 }

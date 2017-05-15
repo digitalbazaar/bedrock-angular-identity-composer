@@ -1,109 +1,16 @@
-<style>
-.text-element {
-  position: relative;
-  left: -45%;
-  font-size: 2.0em;
-  font-weight: bold;
-}
-
-@media (max-width: 1440px) {
-  .text-element {
-    left: -35%;
-    font-size: 1.6em;
-    font-weight: bold;
-  }
-}
-
-@media (max-width: 767px) {
-  .text-element {
-    left: -50%;
-  }
-}
-
-.text-container {
-  position: absolute;
-  margin-top: 1%;
-  margin-left: 7.2%;
-  cursor: pointer;
-}
-
-@media (max-width: 992px) {
-  .text-container {
-    margin-left: 10%;
-  }
-}
-
-@media (max-width: 767px) {
-  .text-container {
-    position: absolute;
-    margin-left: 50%;
-    margin-top: 1%;
-  }
-}
-
-.card-wrapper {
-  position: relative;
-
-}
-
-.info-icon-element {
-
-  position: relative;
-  color: rgba(0, 0, 0, 0.85);
-  right: 1.5%;
-}
-
-.icon-wrapper {
-  right: 0%;
-  top: 2.94%;
-  z-index: 2;
-  background-color: rgba(255, 255, 255, 0.6);
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.br-identity-profile-container {
-  padding-top: 3.5%;
-}
-
-@media (max-width: 767px) {
-  .br-identity-profile-container {
-    padding-top: 6.5%;
-  }
-
-
-}
-.modal-title {
-  font-size: 26px;
-}
-
-</style>
-
-
 <div ng-if="$ctrl.loading" style="width: 100vw; font-size: x-small;">
   <i class="fa fa-refresh fa-spin text-muted"></i> Building profiles...
 </div>
 <div ng-if="!$ctrl.loading" ng-style="$ctrl.profileContainerStyle">
   <div ng-if="!!$ctrl.profiles.length" class="br-identity-profile-list"
     ng-repeat="profile in $ctrl.profiles">
-<!--     <h4 ng-mouseenter="$hover=true" ng-mouseleave="$hover=false">
-      <span class="label label-primary" style="cursor: pointer;">
-        
-      </span>
-    </h4> -->
- 
-    <div class="text-container">
-      <div class="text-element"
-        style="font-size: calc({{$ctrl.credentialWidth.select}} * 0.07)">
+    <div class="br-text-container">
+      <div class="br-text-element"
+        ng-style="{'font-size': $ctrl.scaleWidth(0.07)}">
         Select Profile {{$index + 1}}
         <i ng-if="$ctrl.sending && $ctrl.selectedIndex === $index"
-            class="fa fa-refresh fa-spin"></i>        
-      </div>        
+          class="fa fa-refresh fa-spin"></i>
+      </div>
     </div>
     <div class="br-identity-profile-container" 
       ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
@@ -115,13 +22,12 @@
         <!-- TODO: ng-class="alert alert-warning"/"alert-danger for superfluous
           and sensitive properties -->
         <!-- TODO: change simple to complex displayer -->
-        <div class="card-wrapper" style="width: {{$ctrl.credentialWidth.select}}">
-          <div class="icon-wrapper"
-              style="width: calc({{$ctrl.credentialWidth.select}} * 0.0975);
-                      height: calc({{$ctrl.credentialWidth.select}} * 0.0975)">
-            <i class="fa fa-info-circle info-icon-element" aria-hidden="true"
-            ng-click="$ctrl.detail(credential, true, $event)"
-            style="font-size: calc({{$ctrl.credentialWidth.select}} * 0.10)">
+        <div class="br-card-wrapper" ng-style="{width: $ctrl.credentialWidth.select}">
+          <div class="br-icon-wrapper" 
+            ng-style="{width: $ctrl.scaleWidth(0.098), height: $ctrl.scaleWidth(0.098)}">
+            <i class="fa fa-info-circle br-info-icon-element" aria-hidden="true"
+              ng-click="$ctrl.onShowDetails(credential, true, $event)"
+              ng-style="{'font-size': $ctrl.scaleWidth(0.098)}">
             </i>
           </div>
           <br-credential br-credential="credential" br-show-actions="false"
@@ -136,7 +42,6 @@
     <!-- TODO: add send button -->
     <!-- TODO: add confirmation alert modal if send is pressed on
       warned a profile -->
-    <!-- <hr ng-if="!$last" class="br-identity-profile-separator"> -->
     <p ng-if="!$last"></p>
   </div>
 
