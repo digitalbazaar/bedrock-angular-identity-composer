@@ -144,6 +144,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
       });
   };
 
+  // TODO: could be improved, seems hacky
   self.scaleWidth = function(scale) {
     // remove the vw unit
     var width = self.credentialWidth.select.slice(0,-2);
