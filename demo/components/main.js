@@ -1,19 +1,14 @@
 /*!
- * Copyright (c) 2016 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2016-2017 Digital Bazaar, Inc. All rights reserved.
  */
-define([
-  'angular',
-  './test-composer-component'
-], function(angular) {
-
-'use strict';
+import angular from 'angular';
+import TestComposerComponent from './test-composer-component.js';
 
 var module = angular.module('bedrock.composer-test', [
-  'bedrock.credential', 'bedrock.card-displayer', 'bedrock.identity-composer']);
+  'bedrock.credential', 'bedrock.card-displayer'
+]);
 
-Array.prototype.slice.call(arguments, 1).forEach(function(register) {
-  register(module);
-});
+module.component('brTestComposer', TestComposerComponent);
 
 /* @ngInject */
 module.config(function($routeProvider) {
@@ -49,6 +44,4 @@ module.config(function($routeProvider) {
       directive: 'br-credential-card-displayer'
     });
   });
-});
-
 });

@@ -5,24 +5,21 @@
  *
  * @author Dave Longley
  */
-define(['angular', 'jsonld', 'lodash'], function(angular, jsonld, _) {
+import angular from 'angular';
+import jsonld from 'jsonld';
+import _ from 'lodash';
 
-'use strict';
-
-function register(module) {
-  // TODO: rename to `brProfileComposer` or `brIdentityProfileComposer`?
-  module.component('brIdentityComposer', {
-    bindings: {
-      identity: '<brIdentity',
-      library: '<?brLibrary',
-      onComposed: '&brOnComposed',
-      query: '<brCredentialQuery'
-    },
-    controller: Ctrl,
-    templateUrl: requirejs.toUrl(
-      'bedrock-angular-identity-composer/identity-composer-component.html')
-  });
-}
+export default {
+  bindings: {
+    identity: '<brIdentity',
+    library: '<?brLibrary',
+    onComposed: '&brOnComposed',
+    query: '<brCredentialQuery'
+  },
+  controller: Ctrl,
+  templateUrl:
+    'bedrock-angular-identity-composer/identity-composer-component.html'
+};
 
 /* @ngInject */
 function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
@@ -94,7 +91,8 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     });
 
     unregisterMediaListener = brMediaQueryService.onMediaChange(
-      Object.keys(credentialWidths), function(event) {
+      Object.keys(credentialWidths),
+      function(event) {
         if(event.matches) {
           self.credentialWidth = credentialWidths[event.queryName];
         }
@@ -147,7 +145,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
   // TODO: could be improved, seems hacky
   self.scaleWidth = function(scale) {
     // remove the vw unit
-    var width = self.credentialWidth.select.slice(0,-2);
+    var width = self.credentialWidth.select.slice(0, -2);
     var scaledWidth = (scale * width).toFixed(2);
     return scaledWidth.toString() + 'vw';
   };
@@ -186,7 +184,8 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
       // FIXME: should not need to compact, `br-credential` component should
       // handle it
       return $q.all(profiles.map(function(profile) {
-        return $q.all(profile.credentials.map(function(credential, idx) {
+        return $q.all(profile.credentials.map(function(credential,
+          idx) {
           return $q.resolve(jsonld.promises.compact(credential, CONTEXT))
             .then(function(compacted) {
               profile.credentials[idx] = compacted;
@@ -476,7 +475,3 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     return queryValue[CRED_OPTIONAL]['@value'] === true;
   }
 }
-
-return register;
-
-});

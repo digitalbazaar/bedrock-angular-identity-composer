@@ -1,0 +1,27 @@
+{
+  "name": "bedrock-angular-identity-composer",
+  "version": "2.0.0",
+  "description": "bedrock-angular-identity-composer",
+  "main": "index.js",
+  "less": "main.less",
+  "dependencies": {
+    "angular": "~1.6.4",
+    "angular-animate": "~1.6.4",
+    "bedrock-angular-credential": "^3.0.0",
+    "bedrock-angular-form": "^3.0.0",
+    "bedrock-angular-lazy-compile": "^3.0.0",
+    "bedrock-angular-media-query": "^3.0.0",
+    "lodash": "^4.6.1"
+  },
+  "bedrock": {
+    "browserDependencies": "all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digitalbazaar/bedrock-angular-identity-composer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/digitalbazaar/bedrock-angular-identity-composer/issues"
+  },
+  "homepage": "https://github.com/digitalbazaar/bedrock-angular-identity-composer#readme"
+}

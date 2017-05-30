@@ -1,9 +1,5 @@
-define([], function() {
-
-'use strict';
-
 /* @ngInject */
-function factory(brTestFormLibraryService) {
+export default function factory() {
   var self = this;
 
   var CONTEXT = [
@@ -70,7 +66,7 @@ function factory(brTestFormLibraryService) {
     }
   }];
 
-  self.consumer = null; //self.consumers[0];
+  self.consumer = null; // self.consumers[0];
 
   var credentials = [{
     "@context": [
@@ -359,18 +355,14 @@ function factory(brTestFormLibraryService) {
       "creator": "https://idp.identus.dev:38443/i/demo/keys/1",
       "signatureValue": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLM=="
     }
-}];
+  }];
 
   // input identity
   self.identity = {
     '@context': 'https://w3id.org/identity/v1',
-    id: 'did:2750995a-d4da-48bd-8d28-1ed73bb0d2da',
+    id: 'did:2750995a-d4da-48bd-8d28-1ed73bb0d2da'
   };
   self.identity.credential = credentials.map(function(credential) {
     return {'@graph': credential};
   });
 }
-
-return {brTestFormController: factory};
-
-});
