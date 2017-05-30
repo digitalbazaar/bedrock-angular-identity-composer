@@ -1,5 +1,10 @@
 # bedrock-angular-identity-composer ChangeLog
 
+## 2.0.0 - 2017-05-30
+
+### Changed
+- Overhaul identity composer to simplify display and user choices.
+
 ## 1.0.3 - 2016-06-14
 
 ### Fixed
