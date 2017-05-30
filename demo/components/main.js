@@ -2,13 +2,16 @@
  * Copyright (c) 2016-2017 Digital Bazaar, Inc. All rights reserved.
  */
 import angular from 'angular';
+import * as bedrock from 'bedrock-angular';
 import TestComposerComponent from './test-composer-component.js';
 
 var module = angular.module('bedrock.composer-test', [
-  'bedrock.credential', 'bedrock.card-displayer'
+  'bedrock.credential', 'bedrock.card-displayer', 'bedrock.identity-composer'
 ]);
 
 module.component('brTestComposer', TestComposerComponent);
+
+bedrock.setRootModule(module);
 
 /* @ngInject */
 module.config(function($routeProvider) {

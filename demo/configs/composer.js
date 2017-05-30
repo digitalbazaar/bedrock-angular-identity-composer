@@ -26,20 +26,13 @@ config.views.vars.siteTitle = config.brand.name;
 
 // pseudo bower package for composer
 var composerPath = path.resolve(path.join(__dirname, '../..'));
-config.requirejs.bower.packages.push({
+config.views.system.packages.push({
   path: composerPath,
-  manifest: path.join(composerPath, 'bower.json')
+  manifest: path.join(composerPath, 'package.json')
 });
 
 // pseudo bower package for test files
-config.requirejs.bower.packages.push({
+config.views.system.packages.push({
   path: path.join(__dirname, '..', 'components'),
-  manifest: {
-    name: 'bedrock-composer-test',
-    moduleType: 'amd',
-    main: './main.js',
-    dependencies: {
-      angular: '~1.5.0'
-    }
-  }
+  manifest: path.join(__dirname, '..', 'package.json')
 });

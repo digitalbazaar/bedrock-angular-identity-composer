@@ -4,20 +4,48 @@
   "private": true,
   "scripts": {
     "start": "node composer.js",
-    "postinstall": "bower install && node composer.js compile-less"
+    "postinstall": "node composer.js compile-less"
   },
   "dependencies": {
+    "angular-animate": "^1.6.4",
+    "angular-stackables": "^1.2.2",
     "bedrock": "^1.2.5",
+    "bedrock-angular": "digitalbazaar/bedrock-angular#systemjs",
+    "bedrock-angular-card-displayer": "^2.0.0",
+    "bedrock-angular-credential": "^3.0.0",
+    "bedrock-angular-form": "^3.0.2",
+    "bedrock-angular-lazy-compile": "^3.0.0",
+    "bedrock-angular-media-query": "^2.0.0",
+    "bedrock-angular-modal": "^5.0.0",
     "bedrock-docs": "^2.0.2",
     "bedrock-express": "^2.0.6",
     "bedrock-requirejs": "^2.1.1",
     "bedrock-server": "^2.0.0",
     "bedrock-validation": "^2.2.0",
-    "bedrock-views": "^4.0.0",
-    "bower": "^1.8.0"
+    "bedrock-views": "digitalbazaar/bedrock-views#remove-requirejs",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1",
+    "lodash": "^4.6.1"
+  },
+  "bedrock": {
+    "browserDependencies": [
+      "angular",
+      "angular-route",
+      "bedrock-angular",
+      "bedrock-angular-card-displayer",
+      "bedrock-angular-credential",
+      "bedrock-angular-form",
+      "bedrock-angular-lazy-compile",
+      "bedrock-angular-media-query",
+      "bedrock-angular-modal",
+      "bootstrap",
+      "font-awesome",
+      "jquery"
+    ]
   },
   "engines": {
     "node": ">=6.0.0"
   },
-  "main": "composer.js"
+  "main": "main.js"
 }

@@ -3,7 +3,7 @@
  */
 export default {
   controller: Ctrl,
-  templateUrl: 'bedrock-composer-test/test-composer-component.html'
+  templateUrl: 'composer-demo/test-composer-component.html'
 };
 
 /* @ngInject */
