@@ -9,7 +9,7 @@ define([
 'use strict';
 
 var module = angular.module('bedrock.composer-test', [
-  'bedrock.credential', 'bedrock.card-displayer']);
+  'bedrock.credential', 'bedrock.card-displayer', 'bedrock.identity-composer']);
 
 Array.prototype.slice.call(arguments, 1).forEach(function(register) {
   register(module);

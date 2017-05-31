@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "composer": "node composer.js",
+    "start": "node composer.js",
     "postinstall": "bower install && node composer.js compile-less"
   },
   "dependencies": {
