@@ -24,11 +24,11 @@
           and sensitive properties -->
         <!-- TODO: change simple to complex displayer -->
         <div class="br-card-wrapper" ng-style="{width: $ctrl.credentialWidth.select}">
-          <div class="br-icon-wrapper" 
-            ng-style="{width: $ctrl.scaleWidth(0.098), height: $ctrl.scaleWidth(0.098)}">
-            <i class="fa fa-info-circle br-info-icon-element" aria-hidden="true"
-              ng-click="$ctrl.onShowDetails(credential, true, $event)"
-              ng-style="{'font-size': $ctrl.scaleWidth(0.098)}">
+          <div class="br-icon-wrapper"
+            ng-style="{width: $ctrl.scaleWidth(0.085), height: $ctrl.scaleWidth(0.085)}"
+            ng-click="$ctrl.onShowDetails(credential, true, $event)">
+            <i class="fa fa-search br-info-icon-element" aria-hidden="true"
+              ng-style="{'font-size': $ctrl.scaleWidth(0.05)}">
             </i>
           </div>
           <br-credential br-credential="credential" br-show-actions="false"
@@ -37,7 +37,6 @@
         </div>
       </div>
     </div>
-    
     <!-- TODO: add warning for superfluous/sensitive properties -->
     <!-- TODO: add send button -->
     <!-- TODO: add confirmation alert modal if send is pressed on
