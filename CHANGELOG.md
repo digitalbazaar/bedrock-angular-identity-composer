@@ -1,5 +1,10 @@
 # bedrock-angular-identity-composer ChangeLog
 
+## 3.0.1 - 2017-05-31
+
+### Fixed
+- Fix info icon button positioning; use non-English specific icon.
+
 ## 3.0.0 - 2017-05-31
 
 ### Changed
