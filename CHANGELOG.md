@@ -1,5 +1,10 @@
 # bedrock-angular-identity-composer ChangeLog
 
+## 3.0.2 - 2017-06-21
+
+### Fixed
+- Fix `bedrock-angular-media-query` dependency.
+
 ## 3.0.1 - 2017-05-31
 
 ### Fixed
