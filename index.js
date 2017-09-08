@@ -8,7 +8,7 @@
 import angular from 'angular';
 import IdentityComposerComponent from './identity-composer-component.js';
 
-var module = angular.module(
+const module = angular.module(
   'bedrock.identity-composer', ['bedrock.credential', 'bedrock.form',
     'bedrock.lazyCompile', 'bedrock.media-query', 'bedrock.modal',
     'ngAnimate']);

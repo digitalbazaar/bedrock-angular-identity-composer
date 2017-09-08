@@ -23,7 +23,7 @@ export default {
 
 /* @ngInject */
 function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
-  var self = this;
+  const self = this;
   self.loading = true;
   self.selectedIndex = null;
   self.sending = false;
@@ -33,27 +33,27 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
   };
 
   // the @context for outputting profiles
-  var CONTEXT = {
+  const CONTEXT = {
     '@context': [
       'https://w3id.org/identity/v1',
       'https://w3id.org/credentials/v1'
     ]
   };
-  var RDF_PROPERTY = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property';
-  var RDFS_LABEL = 'http://www.w3.org/2000/01/rdf-schema#label';
-  var CRED = 'https://w3id.org/credentials#';
-  var CRED_CLAIM = CRED + 'claim';
-  var CRED_OPTIONAL = CRED + 'isOptional';
-  var CRED_CREDENTIAL = CRED + 'credential';
-  var IDENTITY = 'https://w3id.org/identity#Identity';
+  const RDF_PROPERTY = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property';
+  const RDFS_LABEL = 'http://www.w3.org/2000/01/rdf-schema#label';
+  const CRED = 'https://w3id.org/credentials#';
+  const CRED_CLAIM = CRED + 'claim';
+  const CRED_OPTIONAL = CRED + 'isOptional';
+  const CRED_CREDENTIAL = CRED + 'credential';
+  const IDENTITY = 'https://w3id.org/identity#Identity';
 
   self.publicAccess = {
     requested: false,
     acknowledged: false
   };
 
-  var unregisterMediaListener;
-  var credentialWidths = {
+  let unregisterMediaListener;
+  const credentialWidths = {
     phone: {
       select: '80vw',
       detail: '85vw'
@@ -76,7 +76,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     }
   };
 
-  self.$onInit = function() {
+  self.$onInit = () => {
     brMediaQueryService.registerQuery(
       'desktopSmall', '(min-width: 980px) and (max-width: 1279px)');
     brMediaQueryService.registerQuery(
@@ -84,7 +84,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     brMediaQueryService.registerQuery(
       'desktopLarge', '(min-width: 1920px)');
 
-    angular.forEach(credentialWidths, function(width, name) {
+    angular.forEach(credentialWidths, (width, name) => {
       if(brMediaQueryService.isMedia(name)) {
         self.credentialWidth = width;
       }
@@ -92,7 +92,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
 
     unregisterMediaListener = brMediaQueryService.onMediaChange(
       Object.keys(credentialWidths),
-      function(event) {
+      event => {
         if(event.matches) {
           self.credentialWidth = credentialWidths[event.queryName];
         }
@@ -100,11 +100,11 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     init(self.identity);
   };
 
-  self.$onDestroy = function() {
+  self.$onDestroy = () => {
     unregisterMediaListener();
   };
 
-  self.$onChanges = function(changes) {
+  self.$onChanges = changes => {
     // TODO: support more granular changes; init() will perform a number of
     // updates that do not necessarily need to happen, for example, if the
     // identity changes but the library does not, then there is no need to
@@ -116,41 +116,41 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     }
   };
 
-  self.cancel = function() {
+  self.cancel = () => {
     self.onComposed(null);
   };
 
-  self.select = function(profile, index) {
+  self.select = (profile, index) => {
     self.selectedIndex = index;
     self.sending = true;
-    var identity = {
+    const identity = {
       '@id': self.identity.id,
       '@type': IDENTITY
     };
-    identity[CRED_CREDENTIAL] = profile.credentials.map(function(credential) {
+    identity[CRED_CREDENTIAL] = profile.credentials.map(credential => {
       return {'@graph': credential};
     });
 
     $q.resolve(jsonld.promises.compact(identity, CONTEXT))
-      .then(function(profile) {
+      .then(profile => {
         return self.onComposed({profile: profile});
-      }).catch(function(err) {
+      }).catch(err => {
         // FIXME: show on UI?
         console.error('[Identity Composer] Error:', err);
-      }).then(function() {
+      }).then(() => {
         self.sending = false;
       });
   };
 
   // TODO: could be improved, seems hacky
-  self.scaleWidth = function(scale) {
+  self.scaleWidth = scale => {
     // remove the vw unit
-    var width = self.credentialWidth.select.slice(0, -2);
-    var scaledWidth = (scale * width).toFixed(2);
+    const width = self.credentialWidth.select.slice(0, -2);
+    const scaledWidth = (scale * width).toFixed(2);
     return scaledWidth.toString() + 'vw';
   };
 
-  self.onShowDetails = function(credential, showCredential, $event) {
+  self.onShowDetails = (credential, showCredential, $event) => {
     $event.stopPropagation();
     self.credential = credential;
     self.showCredentialDetails = showCredential;
@@ -163,8 +163,8 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
       ensureLibrary(self.library),
       compactQuery(self.query),
       compactCredentials(identity)
-    ]).then(function(results) {
-      var query = results[1];
+    ]).then(results => {
+      const query = results[1];
 
       // TODO: Consider changing "cred:requestPublicAccess" to
       // "cred:requestPersistentAccess" with a value of "publicAccess" so we
@@ -177,21 +177,20 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
       }
 
       return compactDefinitions()
-        .then(function(definitions) {
+        .then(definitions => {
           return recommendProfiles(query, definitions, results[2]);
         });
-    }).then(function(profiles) {
+    }).then(profiles => {
       // FIXME: should not need to compact, `br-credential` component should
       // handle it
-      return $q.all(profiles.map(function(profile) {
-        return $q.all(profile.credentials.map(function(credential,
-          idx) {
+      return $q.all(profiles.map(profile => {
+        return $q.all(profile.credentials.map((credential, idx) => {
           return $q.resolve(jsonld.promises.compact(credential, CONTEXT))
-            .then(function(compacted) {
+            .then(compacted => {
               profile.credentials[idx] = compacted;
             });
         }));
-      })).then(function() {
+      })).then(() => {
         self.profiles = profiles;
         if(self.profiles.length > 1) {
           // reduce width to account for vertical scrollbar
@@ -200,10 +199,10 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
       });
       // self.profiles = profiles;
       // console.log('profiles', profiles);
-    }).catch(function(err) {
+    }).catch(err => {
       // FIXME: show on UI?
       console.error('[Identity Composer] Error:', err);
-    }).then(function() {
+    }).then(() => {
       self.loading = false;
     });
   }
@@ -222,7 +221,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
       return $q.resolve(library);
     }
     // load default library
-    return brCredentialLibraryService.getLibrary().then(function(library) {
+    return brCredentialLibraryService.getLibrary().then(library => {
       self.library = library;
       console.info(
         '[Identity Composer] Using default library.', library);
@@ -231,8 +230,8 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
   }
 
   function compactCredentials(identity) {
-    var credentials = jsonld.getValues(identity, 'credential');
-    return $q.all(credentials.map(function(credential) {
+    const credentials = jsonld.getValues(identity, 'credential');
+    return $q.all(credentials.map(credential => {
       return $q.resolve(jsonld.promises.compact(credential['@graph'], {}));
     }));
   }
@@ -243,9 +242,9 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
 
   function compactDefinitions() {
     return $q.resolve(jsonld.promises.compact(self.library.graph, {}))
-      .then(function(graph) {
-        var definitions = {};
-        angular.forEach(graph['@graph'], function(node) {
+      .then(graph => {
+        const definitions = {};
+        angular.forEach(graph['@graph'], node => {
           // TODO: support deep query
           if(jsonld.hasValue(node, '@type', RDF_PROPERTY)) {
             definitions[node['@id']] = node;
@@ -280,11 +279,11 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     //   (current algorithm assumes all are required)
 
     // build requested properties map
-    for(var property in query) {
+    for(let property in query) {
       if(property === '@context') {
         return;
       }
-      var def = definitions[property] || {};
+      const def = definitions[property] || {};
       self.requestedProperties[property] = {
         label: (RDFS_LABEL in def) ? def[RDFS_LABEL]['@value'] : property,
         show: false,
@@ -293,7 +292,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
       };
     }
 
-    var candidates = computeCandidates(definitions, credentials);
+    const candidates = computeCandidates(definitions, credentials);
 
     // no candidates, return empty set
     if(candidates.length === 0) {
@@ -301,27 +300,27 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     }
 
     // compose identity profiles to fulfill the query
-    var profiles = [];
-    angular.forEach(candidates, function(candidate, idx) {
+    let profiles = [];
+    angular.forEach(candidates, (candidate, idx) => {
       profiles.push(computeProfile(candidate, candidates.slice(idx + 1)));
     });
 
     // remove any profiles with missing properties
-    profiles = profiles.filter(function(profile) {
+    profiles = profiles.filter(profile => {
       return profile.missing.length === 0;
     });
 
     // remove any profiles that contain a superset of another profile's
     // credentials (if that other profile fulfills the query)
-    profiles = profiles.filter(function(profile) {
-      for(var i = 0; i < profiles.length; ++i) {
-        var other = profiles[i];
+    profiles = profiles.filter(profile => {
+      for(let i = 0; i < profiles.length; ++i) {
+        const other = profiles[i];
         if(profile === other ||
           other.credentials.length >= profile.credentials.length) {
           continue;
         }
         // get what's in common between this profile and the other
-        var intersection = _.intersection(
+        const intersection = _.intersection(
           profile.credentials, other.credentials);
         // if there's something in common -- and it's the entire other
         // profile, then drop this one as it provides more credentials
@@ -362,25 +361,25 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
    * @return a sorted array of candidate meta data.
    */
   function computeCandidates(definitions, credentials) {
-    var requested = Object.keys(self.requestedProperties);
+    const requested = Object.keys(self.requestedProperties);
     if(requested.length === 0) {
       // nothing requested by query
       return [];
     }
 
     // build candidates list by computing superfluous and missing properties
-    var candidates = credentials.map(function(credential) {
-      var claim = jsonld.getValues(credential, CRED_CLAIM)[0];
-      var claimed = Object.keys(claim).filter(function(property) {
+    const candidates = credentials.map(credential => {
+      const claim = jsonld.getValues(credential, CRED_CLAIM)[0];
+      const claimed = Object.keys(claim).filter(property => {
         return property !== '@id';
       });
 
       // build candidate info
-      var info = {credential: credential, missing: null, superfluous: {}};
+      const info = {credential: credential, missing: null, superfluous: {}};
       info.provides = _.intersection(requested, claimed);
       info.missing = _.difference(requested, info.provides);
       info.superfluous.total = _.difference(claimed, info.provides);
-      info.superfluous.sensitive = info.superfluous.total.filter(function(p) {
+      info.superfluous.sensitive = info.superfluous.total.filter(p => {
         if(!(p in definitions)) {
           // unknown properties are marked as insensitive
           return false;
@@ -426,12 +425,12 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     }
 
     // for each missing property, find another candidate that can provide it
-    angular.forEach(candidate.missing, function(p) {
-      for(var i = 0; profile.missing.indexOf(p) !== -1 &&
+    angular.forEach(candidate.missing, p => {
+      for(let i = 0; profile.missing.indexOf(p) !== -1 &&
         i < others.length; ++i) {
         // TODO: consider overlapping properties provided by other credentials
         // in the set and whether they have the same value or not
-        var other = others[i];
+        const other = others[i];
         if(other.provides.indexOf(p) !== -1) {
           profile.credentials.push(other.credential);
           profile.missing = _.difference(profile.missing, other.provides);
@@ -449,7 +448,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
 
   function compareProperties(a, b) {
     // 1. by number of highly sensitive superfluous properties
-    var d = a.superfluous.sensitive.length - b.superfluous.sensitive.length;
+    let d = a.superfluous.sensitive.length - b.superfluous.sensitive.length;
     if(d !== 0) {
       return d;
     }
