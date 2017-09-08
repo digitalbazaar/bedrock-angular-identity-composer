@@ -1,10 +1,11 @@
 {
-  "name": "composer-demo",
+  "name": "bedrock-angular-identity-composer-test",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node composer.js",
-    "postinstall": "node composer.js compile-less"
+    "start": "node test.js",
+    "test": "node test.js test",
+    "postinstall": "node test.js compile-less"
   },
   "dependencies": {
     "angular-animate": "^1.6.4",
@@ -13,7 +14,7 @@
     "bedrock-angular": "digitalbazaar/bedrock-angular#master",
     "bedrock-angular-card-displayer": "^2.0.0",
     "bedrock-angular-credential": "^3.0.0",
-    "bedrock-angular-form": "^3.0.2",
+    "bedrock-angular-form": "digitalbazaar/bedrock-angular-form#remove-legacy-code",
     "bedrock-angular-lazy-compile": "^3.0.0",
     "bedrock-angular-media-query": "^2.0.0",
     "bedrock-angular-modal": "^5.0.0",
@@ -47,5 +48,5 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "main": "main.js"
+  "main": "index.js"
 }

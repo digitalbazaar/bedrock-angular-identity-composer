@@ -5,7 +5,7 @@ import angular from 'angular';
 import * as bedrock from 'bedrock-angular';
 import TestComposerComponent from './test-composer-component.js';
 
-var module = angular.module('bedrock.composer-test', [
+const module = angular.module('bedrock.composer-test', [
   'bedrock.credential', 'bedrock.card-displayer', 'bedrock.identity-composer'
 ]);
 
@@ -14,13 +14,13 @@ module.component('brTestComposer', TestComposerComponent);
 bedrock.setRootModule(module);
 
 /* @ngInject */
-module.config(function($routeProvider) {
+module.config($routeProvider => {
   $routeProvider
     .when('/', {
       title: 'Test',
       template: '<br-test-composer></br-test-composer>'
     });
-}).run(function(brCredentialService) {
+}).run(brCredentialService => {
   brCredentialService.registerDisplayer({
     id: 'urn:bedrock:br-motor-vehicle-credential-displayer',
     accept: {
@@ -30,7 +30,7 @@ module.config(function($routeProvider) {
   });
 
   // generic card types
-  var cardTypes = [
+  const cardTypes = [
     "urn:bedrock:test:CableSubscriptionCredential",
     "urn:bedrock:test:LoyaltyCardCredential",
     "urn:bedrock:test:MessageBoardSubscription",
@@ -38,8 +38,8 @@ module.config(function($routeProvider) {
     "urn:bedrock:test:ProofOfResidenceCredential",
     "urn:bedrock:test:LegalNameCredential"
   ];
-  cardTypes.forEach(function(cardType) {
-    var accept = {};
+  cardTypes.forEach(cardType => {
+    const accept = {};
     accept[cardType] = {};
     brCredentialService.registerDisplayer({
       id: 'urn:bedrock:card:type:' + cardType,

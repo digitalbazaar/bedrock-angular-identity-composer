@@ -3,14 +3,14 @@
  */
 export default {
   controller: Ctrl,
-  templateUrl: 'composer-demo/test-composer-component.html'
+  templateUrl: 'bedrock-angular-identity-composer-test/test-composer-component.html'
 };
 
 /* @ngInject */
 function Ctrl() {
-  var self = this;
+  const self = this;
 
-  var CONTEXT = [
+  const CONTEXT = [
     'https://w3id.org/identity/v1',
     'https://w3id.org/credentials/v1',
     {
@@ -26,9 +26,9 @@ function Ctrl() {
     address: ''
   };
 
-  var dateTime = new Date().toISOString();
+  const dateTime = new Date().toISOString();
 
-  self.complete = function(profile) {
+  self.complete = profile => {
     console.log('Profile selected', profile);
   };
 
