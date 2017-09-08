@@ -4,39 +4,37 @@
 <div ng-if="!$ctrl.loading" ng-style="$ctrl.profileContainerStyle">
   <div ng-if="!!$ctrl.profiles.length" class="br-identity-profile-list"
     ng-repeat="profile in $ctrl.profiles">
-    <div class="br-text-container">
-      <div class="br-text-element"
-        ng-style="{'font-size': $ctrl.scaleWidth(0.07)}">
-        Select Profile {{$index + 1}}
-        <i ng-if="$ctrl.sending && $ctrl.selectedIndex === $index"
-          class="fa fa-refresh fa-spin"></i>
-      </div>
-    </div>
-    <div class="br-identity-profile-container"
+    <md-card class=" md-whiteframe-8dp br-identity-profile-container"
       ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
       ng-class="{'br-identity-profile-container-hover': $hover}"
       ng-click="$ctrl.select(profile, $index)">
-
-      <div class="br-identity-profile-item"
-        style="padding-top: 1vw;"
-        ng-repeat="credential in profile.credentials">
-        <!-- TODO: ng-class="alert alert-warning"/"alert-danger for superfluous
-          and sensitive properties -->
-        <!-- TODO: change simple to complex displayer -->
-        <div class="br-card-wrapper" ng-style="{width: $ctrl.credentialWidth.select}">
-          <div class="br-icon-wrapper"
-            ng-style="{width: $ctrl.scaleWidth(0.085), height: $ctrl.scaleWidth(0.085)}"
-            ng-click="$ctrl.onShowDetails(credential, true, $event)">
-            <i class="fa fa-search br-info-icon-element" aria-hidden="true"
-              ng-style="{'font-size': $ctrl.scaleWidth(0.05)}">
-            </i>
+      <md-card-title-text style="padding-left: 15px">
+        <span class="md-headline">Select Profile {{$index + 1}}</span>
+        <i ng-if="$ctrl.sending && $ctrl.selectedIndex === $index"
+          class="fa fa-refresh fa-spin"></i>
+      </md-card-title-text>
+      <md-card-content class="br-identity-card-container">
+        <div class="br-identity-profile-item"
+          style="padding-top: 1vw;"
+          ng-repeat="credential in profile.credentials">
+          <!-- TODO: ng-class="alert alert-warning"/"alert-danger for superfluous
+            and sensitive properties -->
+          <!-- TODO: change simple to complex displayer -->
+          <div class="br-card-wrapper" ng-style="{width: $ctrl.credentialWidth.select}">
+            <div class="br-icon-wrapper"
+              ng-style="{width: $ctrl.scaleWidth(0.085), height: $ctrl.scaleWidth(0.085)}"
+              ng-click="$ctrl.onShowDetails(credential, true, $event)">
+              <i class="fa fa-search br-info-icon-element" aria-hidden="true"
+                ng-style="{'font-size': $ctrl.scaleWidth(0.05)}">
+              </i>
+            </div>
+            <br-credential br-credential="credential" br-show-actions="false"
+              br-options="{displayer: {style: {width: $ctrl.credentialWidth.select}}}">
+            </br-credential>
           </div>
-          <br-credential br-credential="credential" br-show-actions="false"
-            br-options="{displayer: {style: {width: $ctrl.credentialWidth.select}}}">
-          </br-credential>
         </div>
-      </div>
-    </div>
+      </md-card-content>
+    </md-card>
     <!-- TODO: add warning for superfluous/sensitive properties -->
     <!-- TODO: add send button -->
     <!-- TODO: add confirmation alert modal if send is pressed on
@@ -46,9 +44,7 @@
 
   <div ng-if="!$ctrl.profiles.length" class="text-center">
     <h4>We're sorry, but you don't have the credentials the site is looking for.</h4>
-    <button type="button" class="btn btn-primary" ng-click="$ctrl.cancel()">
-      Close
-    </button>
+    <md-button class="md-primary" ng-click="$ctrl.cancel()">Close</md-button>
   </div>
 </div>
 
@@ -68,7 +64,7 @@
       </div>
     </br-modal-body>
     <br-modal-footer>
-      <button type="button" class="btn btn-default stackable-cancel">Close</button>
+      <md-button class="stackable-cancel md-primary md-raised">Close</md-button>
     </br-modal-footer>
   </br-modal>
 </stackable-modal>

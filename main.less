@@ -12,12 +12,10 @@
   .transition(~"background-color ease-in-out .15s");
   cursor: pointer;
 }
-.br-identity-profile-container {
+
+.br-identity-card-container {
   align-content: flex-start;
   align-items: center;
-  background-color: darken(@body-bg, 5%);
-  border: 3px solid #aaa;
-  border-radius: 0.25em;
   display: flex;
   flex-flow: row wrap;
   padding: 10px 5px;
@@ -26,6 +24,12 @@
     justify-content: center;
     padding-top: 6.5%;
   }
+}
+
+.br-identity-profile-container {
+  background-color: darken(@body-bg, 5%);
+  border: 3px solid #aaa;
+  border-radius: 1.00em;
 }
 .br-identity-profile-container:hover,
 .br-identity-profile-container-hover {
