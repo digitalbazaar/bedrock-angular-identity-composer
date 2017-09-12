@@ -24,9 +24,7 @@
     "bedrock-server": "^2.0.0",
     "bedrock-validation": "^2.2.0",
     "bedrock-views": "digitalbazaar/bedrock-views#master",
-    "bootstrap": "^3.3.7",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.2.1",
     "lodash": "^4.6.1"
   },
   "bedrock": {
@@ -40,9 +38,7 @@
       "bedrock-angular-lazy-compile",
       "bedrock-angular-media-query",
       "bedrock-angular-modal",
-      "bootstrap",
-      "font-awesome",
-      "jquery"
+      "font-awesome"
     ]
   },
   "engines": {
