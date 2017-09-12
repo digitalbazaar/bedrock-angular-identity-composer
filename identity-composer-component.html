@@ -8,14 +8,13 @@
       ng-mouseenter="$hover=true" ng-mouseleave="$hover=false"
       ng-class="{'br-identity-profile-container-hover': $hover}"
       ng-click="$ctrl.select(profile, $index)">
-      <md-card-title-text style="padding-left: 15px">
+      <md-card-title-text style="padding-left: 15px; padding-top: 5px">
         <span class="md-headline">Select Profile {{$index + 1}}</span>
         <i ng-if="$ctrl.sending && $ctrl.selectedIndex === $index"
           class="fa fa-refresh fa-spin"></i>
       </md-card-title-text>
       <md-card-content class="br-identity-card-container">
         <div class="br-identity-profile-item"
-          style="padding-top: 1vw;"
           ng-repeat="credential in profile.credentials">
           <!-- TODO: ng-class="alert alert-warning"/"alert-danger for superfluous
             and sensitive properties -->
