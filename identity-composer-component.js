@@ -279,7 +279,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
     //   (current algorithm assumes all are required)
 
     // build requested properties map
-    for(let property in query) {
+    for(const property in query) {
       if(property === '@context') {
         return;
       }
@@ -411,7 +411,7 @@ function Ctrl($q, brCredentialLibraryService, brMediaQueryService) {
    * @return the computed identity profile.
    */
   function computeProfile(candidate, others) {
-    var profile = {
+    const profile = {
       credentials: [candidate.credential],
       missing: _.clone(candidate.missing),
       superfluous: _.cloneDeep(candidate.superfluous)
