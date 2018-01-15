@@ -6,7 +6,7 @@
   "less": "main.less",
   "dependencies": {
     "bedrock-angular": "^4.0.0",
-    "bedrock-angular-credential": "^3.0.0",
+    "bedrock-angular-credential": "digitalbazaar/bedrock-angular-credential#material",
     "bedrock-angular-lazy-compile": "^3.0.0",
     "bedrock-angular-material": "^1.0.1",
     "bedrock-angular-media-query": "^2.0.0",
