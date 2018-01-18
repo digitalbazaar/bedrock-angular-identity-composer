@@ -1,15 +1,17 @@
 /*
  * Bedrock Identity Composer style.
  *
- * Copyright (c) 2015-2017 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2015-2018 Digital Bazaar, Inc. All rights reserved.
  */
+@body-bg: #fff;
+
 .br-identity-profile-list h4 {
   margin-top: 0px;
   margin-bottom: 9px;
 }
 .br-identity-profile-label:hover,
 .br-identity-profile-label-hover {
-  .transition(~"background-color ease-in-out .15s");
+  transition: background-color ease-in-out .15s;
   cursor: pointer;
 }
 .br-identity-card-container {
@@ -32,17 +34,18 @@
 .br-identity-profile-container:hover,
 .br-identity-profile-container-hover {
   background-color: @body-bg;
-  .transition(~"background-color ease-in-out .15s");
+  transition: background-color ease-in-out .15s;
   border: 3px solid @input-border-focus !important;
   cursor: pointer;
   outline: 0;
+  @input-border-focus: #66afe9;
   @color-rgba: rgba(
     red(@input-border-focus),
     green(@input-border-focus),
     blue(@input-border-focus),
     0.8);
-  .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 10px @{color-rgba}");
-  .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 10px @{color-rgba};
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 .br-identity-profile-item {
   flex: 0 1 auto;
