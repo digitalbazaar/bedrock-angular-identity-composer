@@ -1,6 +1,6 @@
 {
   "name": "bedrock-angular-identity-composer",
-  "version": "4.0.0",
+  "version": "4.0.1-0",
   "description": "bedrock-angular-identity-composer",
   "main": "index.js",
   "less": "main.less",
