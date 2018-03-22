@@ -1,5 +1,9 @@
 # bedrock-angular-identity-composer ChangeLog
 
+### Changed
+- **BREAKING**: Switch to material design.
+- Use ES6 syntax.
+
 ## 3.0.2 - 2017-06-21
 
 ### Fixed
